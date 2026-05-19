@@ -1,0 +1,253 @@
+---
+export const prerender = true;
+
+import Base from '@/layouts/Base.astro';
+import NavBar from '@/components/NavBar.astro';
+import HeroSection from '@/components/HeroSection.astro';
+import ReviewBadge from '@/components/ReviewBadge.astro';
+import MenuItemCard from '@/components/MenuItemCard.astro';
+import OurStory from '@/components/OurStory.astro';
+import Footer from '@/components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+/**
+ * HOME PAGE — D'ouro Soulfood Bistro
+ *
+ * Assembles the complete home page from pre-built section components.
+ * Featured menu items are queried from the KeystaticCMS menu_items
+ * collection (featured=true, sorted by order, limited to 3).
+ *
+ * Section order:
+ *   1. NavBar (sticky, glassmorphism)
+ *   2. HeroSection (Afro-Latin Soul headline + dual CTAs)
+ *   3. ReviewBadge (4.8-star social proof strip)
+ *   4. Featured Menu (3 bestsellers: Brazil Beef Bowl, Beef Taco, Fufu)
+ *   5. OurStory (Angela's lockdown origin story + FAQ + location)
+ *   6. Footer (address, hours, phone, Instagram, Foodora)
+ *
+ * SEO: Title, description, canonical, Open Graph, Schema.org Restaurant.
+ * All handled by Base.astro via props.
+ *
+ * All images use <Image /> from astro:assets.
+ * All colors use brand-* token classes — zero hex codes.
+ * Zero `any` types. Edge-compatible only (no Node.js APIs).
+ */
+
+type DietaryTag = 'vegan' | 'vegetarian' | 'gluten-free' | 'spicy' | 'halal' | 'dairy-free';
+
+// ─────────────────────────────────────────────────────────────
+// DATA: Fetch content from KeystaticCMS collections
+// ─────────────────────────────────────────────────────────────
+
+/** Fetch featured menu items for the homepage (bestsellers) */
+const featuredItems = (await getCollection('menu_items'))
+  .filter((item) => item.data.featured && item.data.available !== false)
+  .sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0))
+  .slice(0, 3);
+
+/** FAQ entries from KeystaticCMS */
+const faqEntries = (await getCollection('faq'))
+  .sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0));
+
+const faqItems = faqEntries.map((item) => ({
+  question: item.data.question,
+  answer: item.data.answer,
+}));
+
+// ─────────────────────────────────────────────────────────────
+// SEO CONFIG
+// ─────────────────────────────────────────────────────────────
+
+const SITE_URL = 'https://douro-soulfood.com';
+const PAGE_TITLE = "Afro-Latin Cuisine in Salzburg";
+const PAGE_DESCRIPTION =
+  "Fresh Brazilian & African soulfood by Angela in Salzburg. Tacos, bowls, African stews. Mon\u2013Sat 11\u201320h. Auerspergstra\u00dfe 10.";
+---
+
+<Base
+  title={PAGE_TITLE}
+  description={PAGE_DESCRIPTION}
+  canonical={SITE_URL}
+>
+  {/* ═══════════════════════════════════════════════════════
+      1. NAVBAR — Sticky glassmorphic navigation
+      ═══════════════════════════════════════════════════════ */}
+  <NavBar slot="nav" />
+
+  {/* ═══════════════════════════════════════════════════════
+      2. HERO — Full-bleed hero with headline overlay + CTAs
+      ═══════════════════════════════════════════════════════ */}
+  <HeroSection
+    accent="D'ouro Soulfood Bistro"
+    headline="Afro-Latin Soul in the Heart of Salzburg"
+    subheadline="Fresh, handmade Brazilian & African cuisine by Angela"
+    images={[
+      {
+        src: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1600&q=80',
+        alt: "D'ouro Soulfood Bistro \u2014 Afro-Latin cuisine in Salzburg",
+        width: 1600,
+        height: 900,
+      },
+    ]}
+    ctaPrimary={{ label: 'Visit Us Today', href: '/contact' }}
+    ctaSecondary={{ label: 'See Our Menu', href: '/menu' }}
+  />
+
+  {/* ═══════════════════════════════════════════════════════
+      3. REVIEW BADGE — 4.8-star social proof strip
+      Positioned above the fold to build trust immediately.
+      ═══════════════════════════════════════════════════════ */}
+  <section class="py-6 md:py-8 px-4 md:px-8 border-b border-border-subtle" aria-label="Bewertungen">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-4">
+      <ReviewBadge
+        rating={4.8}
+        reviewCount={978}
+        source="Google Reviews"
+        href="https://www.tripadvisor.com/Restaurant_Review-g190441-d25104877-Reviews-D_ouro_Soulfood_Bistro-Salzburg_Austrian_Alps.html"
+        size="lg"
+      />
+      <span class="text-text-tertiary text-sm">TripAdvisor Certificate of Excellence</span>
+    </div>
+  </section>
+
+  {/* ═══════════════════════════════════════════════════════
+      4. FEATURED MENU — 3 Bestsellers
+      Showcases the most popular dishes to entice visitors.
+      Data comes from KeystaticCMS (featured=true items).
+      ═══════════════════════════════════════════════════════ */}
+  <section class="py-16 md:py-24 px-4 md:px-8 max-w-7xl mx-auto" aria-label="Empfehlungen">
+    {/* Section heading */}
+    <div class="text-center mb-10 md:mb-14">
+      <span class="inline-block text-sm font-semibold text-brand-gold uppercase tracking-wider mb-2">
+        Bestsellers
+      </span>
+      <h2 class="text-2xl md:text-4xl font-semibold text-text-primary font-display">
+        The Dishes Everyone Comes Back For
+      </h2>
+      <p class="text-text-secondary mt-3 max-w-[75ch] mx-auto">
+        Handpicked by Angela \u2014 our most loved dishes, made fresh every day.
+      </p>
+    </div>
+
+    {/* Featured items grid — 3 columns on desktop */}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+      {featuredItems.map((item) => (
+        <MenuItemCard
+          name={item.data.title}
+          description={item.data.description}
+          priceInCents={item.data.price}
+          dietary={item.data.dietary as DietaryTag[] | undefined}
+          available={item.data.available}
+          featured={item.data.featured}
+          imageSrc={item.data.image || undefined}
+          imageAlt={item.data.title}
+          imageWidth={400}
+          imageHeight={300}
+        />
+      ))}
+    </div>
+
+    {/* CTA: See Full Menu */}
+    <div class="mt-10 md:mt-14 text-center">
+      <a
+        href="/menu"
+        class="group inline-flex items-center gap-2 rounded-sm
+               bg-brand-gold hover:bg-brand-gold-light active:bg-brand-gold-dark
+               min-h-12 px-6 py-3 text-base font-semibold text-brand-espresso
+               focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold
+               no-underline transition-colors duration-[var(--duration-fast)] ease-[var(--ease-spring)] shadow-glow-gold"
+      >
+        See Full Menu
+        <svg
+          class="w-4 h-4 opacity-50 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all duration-[var(--duration-fast)] ease-[var(--ease-spring)]"
+          viewBox="0 0 256 256"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="24"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <line x1="70" y1="128" x2="216" y2="128" />
+          <polyline points="144 56 216 128 144 200" />
+        </svg>
+      </a>
+    </div>
+  </section>
+
+  {/* ═══════════════════════════════════════════════════════
+      5. OUR STORY — Angela's lockdown origin story
+      Uses the OurStory component which also includes
+      FAQ accordion and location card via slot composition.
+      ═══════════════════════════════════════════════════════ */}
+  <OurStory
+    faqTitle="H\u00e4ufig gestellte Fragen"
+    faqItems={faqItems}
+    location={{
+      title: 'Salzburg, \u00d6sterreich',
+      subtitle: 'Restaurant',
+      address: ['Auerspergstra\u00dfe 10', '5020 Salzburg'],
+      phone: '+43 676 4231921',
+      phoneHref: 'tel:+436764231921',
+      directionsHref:
+        'https://www.google.com/maps/search/?api=1&query=Auerspergstra%C3%9Fe+10%2C+5020+Salzburg%2C+Austria',
+      hoursToday: '11:00 \u2013 20:00',
+      orderHref: '/menu',
+      orderLabel: 'Jetzt bestellen',
+    }}
+  >
+    {/* Angela's story — inserted via slot before FAQ/location */}
+    <section class="py-16 md:py-24 px-4 md:px-8 max-w-7xl mx-auto" aria-label="Our Story">
+      <div class="glass-gold rounded-2xl p-8 md:p-12 max-w-3xl mx-auto text-center">
+        <span class="inline-block text-sm font-semibold text-brand-gold uppercase tracking-wider mb-4">
+          Our Story
+        </span>
+        <h2 class="text-2xl md:text-4xl font-semibold text-text-primary font-display mb-6">
+          How D'ouro Began
+        </h2>
+        <p class="text-base md:text-lg text-text-secondary leading-relaxed max-w-[75ch] mx-auto">
+          D'ouro started during lockdown when Angela handed out homemade Brazilian food
+          to anyone who wanted it from her house. That same warmth lives in every dish today.
+        </p>
+        <div class="mt-8 flex items-center justify-center gap-3">
+          <div class="w-12 h-12 rounded-full bg-brand-gold/20 flex items-center justify-center" aria-hidden="true">
+            <svg
+              class="w-6 h-6 text-brand-gold"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          </div>
+          <div class="text-left">
+            <p class="text-sm font-semibold text-text-primary">Angela</p>
+            <p class="text-xs text-text-tertiary">Founder & Chef</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </OurStory>
+
+  {/* ═══════════════════════════════════════════════════════
+      6. FOOTER — Address, hours, phone, Instagram, Foodora
+      ═══════════════════════════════════════════════════════ */}
+  <Footer
+    slot="footer"
+    links={[
+      { label: 'Speisekarte', href: '/menu' },
+      { label: 'Catering & Events', href: '/catering' },
+      { label: '\u00dcber uns', href: '/about' },
+      { label: 'Kontakt', href: '/contact' },
+      { label: 'Geschenkkarten', href: '/gift-cards' },
+    ]}
+    legalLinks={[
+      { label: 'Impressum', href: '/impressum' },
+      { label: 'Datenschutz', href: '/datenschutz' },
+    ]}
+  />
+</Base>

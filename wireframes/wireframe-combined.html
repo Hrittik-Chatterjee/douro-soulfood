@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wireframe - Structural Layout</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    img[src="/placeholder.jpg"] {
+      background: #374151;
+      min-height: 100px;
+    }
+  </style>
+</head>
+<body class="bg-gray-900 text-gray-100">
+
+  <nav aria-label="Main menu" class="sticky top-0 z-30 bg-gray-900 transition-all duration-300">
+  <div class="mx-auto flex max-w-7xl items-center px-4 py-4 md:px-8 gap-2">
+
+    <!-- Logo -->
+    <div class="md:shrink-0">
+      <a href="/" class="flex max-h-14 md:max-h-full md:shrink-0">
+        <img src="/placeholder.jpg" alt="Brand logo" class="max-h-full object-contain" loading="eager" />
+      </a>
+    </div>
+
+    <!-- Desktop Navigation Links -->
+    <div class="hidden flex-1 justify-end items-center min-w-0 md:flex">
+      <div class="relative w-full max-w-full">
+        <div class="flex items-center justify-end gap-2 p-2">
+          <!-- Nav links -->
+          <div class="flex gap-2 items-center min-w-0">
+            <div class="flex gap-2 items-center">
+              <a href="/menu" class="flex min-h-10 items-center px-3 py-2 text-sm font-medium whitespace-nowrap text-gray-300 rounded-lg hover:bg-gray-800 no-underline">Menu</a>
+              <a href="/catering" class="flex min-h-10 items-center px-3 py-2 text-sm font-medium whitespace-nowrap text-gray-300 rounded-lg hover:bg-gray-800 no-underline">Catering</a>
+              <a href="/careers" class="flex min-h-10 items-center px-3 py-2 text-sm font-medium whitespace-nowrap text-gray-300 rounded-lg hover:bg-gray-800 no-underline">Careers</a>
+              <a href="/team" class="flex min-h-10 items-center px-3 py-2 text-sm font-medium whitespace-nowrap text-gray-300 rounded-lg hover:bg-gray-800 no-underline">Our Team</a>
+              <a href="/gift-cards" class="flex min-h-10 items-center px-3 py-2 text-sm font-medium whitespace-nowrap text-gray-300 rounded-lg hover:bg-gray-800 no-underline">Gift Cards</a>
+            </div>
+          </div>
+
+          <!-- Fixed right items -->
+          <div class="flex gap-2 items-center shrink-0">
+            <!-- Sign in -->
+            <a href="/login" class="flex min-h-10 items-center px-3 py-2 text-sm font-medium rounded-lg border border-gray-700 bg-gray-800 hover:bg-gray-700 text-gray-300 no-underline">Sign in</a>
+
+            <!-- Order CTA -->
+            <a href="/order" class="group flex min-h-10 items-center px-4 py-2 text-sm font-semibold rounded-lg bg-gray-500 hover:bg-gray-400 text-gray-900 no-underline">
+              <span class="flex items-center gap-1 whitespace-nowrap">Order online</span>
+              <svg class="ml-1 w-4 h-4 opacity-50 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="24" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="70" y1="128" x2="216" y2="128" />
+                <polyline points="144 56 216 128 144 200" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <div class="flex flex-1 justify-end items-center md:hidden">
+      <div class="flex shrink-0 items-center gap-2 p-1 rounded-lg border border-transparent bg-gray-900">
+        <a href="/menu" class="flex min-h-10 items-center px-3 py-2 text-sm font-medium rounded-lg border border-gray-700 bg-gray-800 text-gray-300 no-underline">Menu</a>
+        <button type="button" class="flex justify-center items-center w-10 h-10 rounded-lg hover:bg-gray-800" aria-label="Open navigation menu" aria-expanded="false">
+          <div class="flex flex-col gap-1.5 justify-center items-center w-6 h-6">
+            <span class="block h-0.5 w-6 bg-gray-100 rounded-full"></span>
+            <span class="block h-0.5 w-6 bg-gray-100 rounded-full"></span>
+            <span class="block h-0.5 w-6 bg-gray-100 rounded-full"></span>
+          </div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Menu Overlay -->
+  <div class="fixed top-20 right-0 bottom-0 left-0 z-40 bg-gray-900 opacity-0 pointer-events-none transition-opacity duration-300 md:hidden overflow-y-auto" role="dialog" aria-modal="true" aria-label="Navigation menu">
+    <div class="mx-auto max-w-7xl px-4 py-6">
+      <nav aria-label="Mobile navigation menu" class="flex flex-col gap-2">
+        <a href="/login" class="flex min-h-12 items-center px-4 py-3 text-base font-medium text-gray-300 rounded-lg hover:bg-gray-800 no-underline">Sign in</a>
+        <a href="/menu" class="flex min-h-12 items-center px-4 py-3 text-base font-medium text-gray-300 rounded-lg hover:bg-gray-800 no-underline">Menu</a>
+        <a href="/catering" class="flex min-h-12 items-center px-4 py-3 text-base font-medium text-gray-300 rounded-lg hover:bg-gray-800 no-underline">Catering</a>
+        <a href="/careers" class="flex min-h-12 items-center px-4 py-3 text-base font-medium text-gray-300 rounded-lg hover:bg-gray-800 no-underline">Careers</a>
+        <a href="/team" class="flex min-h-12 items-center px-4 py-3 text-base font-medium text-gray-300 rounded-lg hover:bg-gray-800 no-underline">Our Team</a>
+        <a href="/gift-cards" class="flex min-h-12 items-center px-4 py-3 text-base font-medium text-gray-300 rounded-lg hover:bg-gray-800 no-underline">Gift Cards</a>
+        <a href="/order" class="mt-4 flex items-center justify-center rounded-lg bg-gray-500 px-5 py-3 text-base font-semibold text-gray-900 no-underline">Order online</a>
+      </nav>
+    </div>
+  </div>
+</nav>
+
+
+  <main>
+    <header class="relative w-full overflow-hidden bg-gray-900">
+  <!-- Hero image carousel background -->
+  <div class="absolute top-0 left-0 w-full h-full overflow-hidden" role="region" aria-live="polite" aria-atomic="true" aria-label="Hero image carousel">
+    <div class="absolute top-0 left-0 w-full h-full">
+      <img src="/placeholder.jpg" alt="Restaurant hero image" class="absolute top-0 left-0 w-full h-full object-cover object-center" loading="eager" />
+    </div>
+    <!-- Gradient overlay -->
+    <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent via-transparent to-gray-900/75"></div>
+  </div>
+
+  <!-- Hero content -->
+  <div class="max-w-7xl mx-auto mt-4 mb-4 flex flex-col items-center pt-0 md:min-h-160 min-h-125 md:h-screen">
+    <div class="relative w-full flex-1 flex flex-col">
+      <div class="max-w-full flex-1 flex flex-col justify-end gap-6 px-4 md:px-8 py-6">
+        <div class="max-w-7xl">
+          <div class="flex flex-col gap-2 lg:gap-3">
+            <!-- Small headline -->
+            <h1 class="text-sm md:text-2xl lg:text-3xl font-semibold text-gray-100 leading-tight tracking-tight overflow-hidden text-ellipsis whitespace-nowrap inline-block max-w-full">
+              Restaurant Tagline Here
+            </h1>
+            <!-- Large promo text -->
+            <span class="text-3xl md:text-5xl font-semibold text-gray-100 leading-tight normal-case">
+              Featured promotional message with special offer details goes here
+            </span>
+          </div>
+
+          <!-- CTA button (desktop) -->
+          <div class="hidden md:flex mt-6">
+            <a href="/order" class="group flex min-h-12 items-center px-4 py-3 text-base font-semibold rounded-lg bg-gray-500 hover:bg-gray-400 text-gray-900 no-underline">
+              <span class="flex items-center gap-1 whitespace-nowrap">Order online</span>
+              <svg class="ml-1 w-4 h-4 opacity-50 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="24" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="70" y1="128" x2="216" y2="128" />
+                <polyline points="144 56 216 128 144 200" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+    <!-- ═══ Section: Brand Gallery + Catering Cards ═══ -->
+<section class="max-w-7xl mx-auto py-16 md:py-24 px-4 md:px-8">
+  <!-- Gallery heading -->
+  <div class="flex flex-col gap-2">
+    <h2 class="text-2xl md:text-4xl font-semibold text-gray-100">Restaurant Name</h2>
+    <p class="text-base text-gray-400">Short brand tagline goes here</p>
+  </div>
+
+  <!-- Image gallery grid -->
+  <div class="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-4 mt-8" role="region" aria-label="Food gallery">
+    <button type="button" class="relative aspect-square rounded-xl overflow-hidden bg-gray-800 focus-visible:ring-2 focus-visible:ring-gray-500">
+      <img src="/placeholder.jpg" alt="Gallery food image" class="w-full h-full object-cover" />
+    </button>
+    <button type="button" class="relative aspect-square rounded-xl overflow-hidden bg-gray-800 focus-visible:ring-2 focus-visible:ring-gray-500">
+      <img src="/placeholder.jpg" alt="Gallery food image" class="w-full h-full object-cover" />
+    </button>
+    <button type="button" class="relative aspect-square rounded-xl overflow-hidden bg-gray-800 focus-visible:ring-2 focus-visible:ring-gray-500">
+      <img src="/placeholder.jpg" alt="Gallery food image" class="w-full h-full object-cover" />
+    </button>
+    <button type="button" class="relative aspect-square rounded-xl overflow-hidden bg-gray-800 focus-visible:ring-2 focus-visible:ring-gray-500">
+      <img src="/placeholder.jpg" alt="Gallery food image" class="w-full h-full object-cover" />
+    </button>
+    <button type="button" class="relative aspect-square rounded-xl overflow-hidden bg-gray-800 focus-visible:ring-2 focus-visible:ring-gray-500">
+      <img src="/placeholder.jpg" alt="Gallery food image" class="w-full h-full object-cover" />
+    </button>
+    <button type="button" class="relative aspect-square rounded-xl overflow-hidden bg-gray-800 focus-visible:ring-2 focus-visible:ring-gray-500">
+      <img src="/placeholder.jpg" alt="Gallery food image" class="w-full h-full object-cover" />
+    </button>
+    <button type="button" class="relative aspect-square rounded-xl overflow-hidden bg-gray-800 focus-visible:ring-2 focus-visible:ring-gray-500">
+      <img src="/placeholder.jpg" alt="Gallery food image" class="w-full h-full object-cover" />
+    </button>
+    <button type="button" class="relative aspect-square rounded-xl overflow-hidden bg-gray-800 focus-visible:ring-2 focus-visible:ring-gray-500">
+      <img src="/placeholder.jpg" alt="Gallery food image" class="w-full h-full object-cover" />
+    </button>
+    <button type="button" class="relative aspect-square rounded-xl overflow-hidden bg-gray-800 focus-visible:ring-2 focus-visible:ring-gray-500">
+      <img src="/placeholder.jpg" alt="Gallery food image" class="w-full h-full object-cover" />
+    </button>
+  </div>
+</section>
+
+<!-- ═══ Section: Catering Card ═══ -->
+<article class="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-24">
+  <div class="flex flex-col md:flex-row gap-6 md:gap-10">
+    <!-- Image -->
+    <div class="w-full md:w-1/2 shrink-0">
+      <div class="relative aspect-square md:aspect-auto md:h-full rounded-2xl overflow-hidden bg-gray-800">
+        <img src="/placeholder.jpg" alt="Catering event image" class="w-full h-full object-cover" />
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="flex flex-col justify-center gap-4 md:gap-6">
+      <h2 class="text-2xl md:text-4xl font-semibold text-gray-100">Catering & Events</h2>
+      <p class="text-base md:text-lg text-gray-400 leading-relaxed">
+        Spice up your corporate and private events with our flavorful and festive catering services. We bring the fiesta to your workplace and private events, ensuring a memorable experience for all your colleagues and family!
+      </p>
+      <div>
+        <a href="/catering" class="inline-flex items-center gap-2 rounded-lg bg-gray-500 hover:bg-gray-400 px-6 py-3 text-base font-semibold text-gray-900 no-underline transition-colors">
+          Arrange Your Event
+          <svg class="w-4 h-4" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="24" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="70" y1="128" x2="216" y2="128" />
+            <polyline points="144 56 216 128 144 200" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</article>
+
+<!-- ═══ Section: Food Truck Card (reversed layout) ═══ -->
+<article class="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-24">
+  <div class="flex flex-col md:flex-row-reverse gap-6 md:gap-10">
+    <!-- Image -->
+    <div class="w-full md:w-1/2 shrink-0">
+      <div class="relative aspect-square md:aspect-auto md:h-full rounded-2xl overflow-hidden bg-gray-800">
+        <img src="/placeholder.jpg" alt="Food truck event image" class="w-full h-full object-cover" />
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="flex flex-col justify-center gap-4 md:gap-6">
+      <h2 class="text-2xl md:text-4xl font-semibold text-gray-100">Food Truck</h2>
+      <p class="text-base md:text-lg text-gray-400 leading-relaxed">
+        Bring our food truck to your next event and serve up something your guests will actually remember. Fresh, scratch-made, and packed with flavor — just tell us where to park.
+      </p>
+      <div>
+        <a href="/food-truck" class="inline-flex items-center gap-2 rounded-lg bg-gray-500 hover:bg-gray-400 px-6 py-3 text-base font-semibold text-gray-900 no-underline transition-colors">
+          Plan Your Event
+          <svg class="w-4 h-4" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="24" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="70" y1="128" x2="216" y2="128" />
+            <polyline points="144 56 216 128 144 200" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</article>
+
+    <!-- ═══ Section: Location Gallery ═══ -->
+<section class="max-w-7xl mx-auto py-16 md:py-24 px-4 md:px-8">
+  <!-- Gallery heading -->
+  <div class="flex flex-col gap-2">
+    <h2 class="text-2xl md:text-4xl font-semibold text-gray-100">City, State and Region — And Growing!</h2>
+    <p class="text-base text-gray-400">Visit us at any of our locations</p>
+  </div>
+
+  <!-- Interior/exterior gallery grid -->
+  <div class="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-4 mt-8" role="region" aria-label="Restaurant interior gallery">
+    <button type="button" class="relative aspect-square rounded-xl overflow-hidden bg-gray-800 focus-visible:ring-2 focus-visible:ring-gray-500">
+      <img src="/placeholder.jpg" alt="Restaurant interior" class="w-full h-full object-cover" />
+    </button>
+    <button type="button" class="relative aspect-square rounded-xl overflow-hidden bg-gray-800 focus-visible:ring-2 focus-visible:ring-gray-500">
+      <img src="/placeholder.jpg" alt="Restaurant exterior" class="w-full h-full object-cover" />
+    </button>
+    <button type="button" class="relative aspect-square rounded-xl overflow-hidden bg-gray-800 focus-visible:ring-2 focus-visible:ring-gray-500">
+      <img src="/placeholder.jpg" alt="Restaurant entrance" class="w-full h-full object-cover" />
+    </button>
+    <button type="button" class="relative aspect-square rounded-xl overflow-hidden bg-gray-800 focus-visible:ring-2 focus-visible:ring-gray-500">
+      <img src="/placeholder.jpg" alt="Restaurant dining area" class="w-full h-full object-cover" />
+    </button>
+    <button type="button" class="relative aspect-square rounded-xl overflow-hidden bg-gray-800 focus-visible:ring-2 focus-visible:ring-gray-500">
+      <img src="/placeholder.jpg" alt="Restaurant atmosphere" class="w-full h-full object-cover" />
+    </button>
+    <button type="button" class="relative aspect-square rounded-xl overflow-hidden bg-gray-800 focus-visible:ring-2 focus-visible:ring-gray-500">
+      <img src="/placeholder.jpg" alt="Restaurant seating" class="w-full h-full object-cover" />
+    </button>
+    <button type="button" class="relative aspect-square rounded-xl overflow-hidden bg-gray-800 focus-visible:ring-2 focus-visible:ring-gray-500">
+      <img src="/placeholder.jpg" alt="Outdoor dining" class="w-full h-full object-cover" />
+    </button>
+    <button type="button" class="relative aspect-square rounded-xl overflow-hidden bg-gray-800 focus-visible:ring-2 focus-visible:ring-gray-500">
+      <img src="/placeholder.jpg" alt="Restaurant decor" class="w-full h-full object-cover" />
+    </button>
+    <button type="button" class="relative aspect-square rounded-xl overflow-hidden bg-gray-800 focus-visible:ring-2 focus-visible:ring-gray-500">
+      <img src="/placeholder.jpg" alt="Restaurant ambiance" class="w-full h-full object-cover" />
+    </button>
+  </div>
+</section>
+
+<!-- ═══ Section: Featured Menu Items ═══ -->
+<section class="max-w-7xl mx-auto py-16 md:py-24 px-4 md:px-8">
+  <div class="flex items-center justify-between gap-4 mb-8">
+    <h2 class="text-xl md:text-2xl font-semibold text-gray-100">Featured</h2>
+    <a href="/menu" class="flex items-center gap-2 text-sm font-medium text-gray-400 hover:text-gray-200 no-underline">
+      View menu
+      <svg class="w-4 h-4" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="24" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="70" y1="128" x2="216" y2="128" />
+        <polyline points="144 56 216 128 144 200" />
+      </svg>
+    </a>
+  </div>
+
+  <!-- Horizontal scrollable menu items -->
+  <div class="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory pb-4 -mx-4 px-4">
+    <a href="/menu" class="flex flex-col gap-3 w-40 md:w-60 shrink-0 snap-start group no-underline">
+      <div class="relative aspect-square rounded-xl overflow-hidden bg-gray-800">
+        <img src="/placeholder.jpg" alt="Featured dish" class="w-full h-full object-cover" />
+      </div>
+      <p class="text-sm md:text-base text-gray-100 font-medium line-clamp-2 group-hover:text-gray-300 transition-colors">Signature Dish One</p>
+    </a>
+    <a href="/menu" class="flex flex-col gap-3 w-40 md:w-60 shrink-0 snap-start group no-underline">
+      <div class="relative aspect-square rounded-xl overflow-hidden bg-gray-800">
+        <img src="/placeholder.jpg" alt="Featured dish" class="w-full h-full object-cover" />
+      </div>
+      <p class="text-sm md:text-base text-gray-100 font-medium line-clamp-2 group-hover:text-gray-300 transition-colors">Signature Dish Two</p>
+    </a>
+    <a href="/menu" class="flex flex-col gap-3 w-40 md:w-60 shrink-0 snap-start group no-underline">
+      <div class="relative aspect-square rounded-xl overflow-hidden bg-gray-800">
+        <img src="/placeholder.jpg" alt="Featured dish" class="w-full h-full object-cover" />
+      </div>
+      <p class="text-sm md:text-base text-gray-100 font-medium line-clamp-2 group-hover:text-gray-300 transition-colors">Signature Dish Three</p>
+    </a>
+    <a href="/menu" class="flex flex-col gap-3 w-40 md:w-60 shrink-0 snap-start group no-underline">
+      <div class="relative aspect-square rounded-xl overflow-hidden bg-gray-800">
+        <img src="/placeholder.jpg" alt="Featured dish" class="w-full h-full object-cover" />
+      </div>
+      <p class="text-sm md:text-base text-gray-100 font-medium line-clamp-2 group-hover:text-gray-300 transition-colors">Signature Dish Four</p>
+    </a>
+    <a href="/menu" class="flex flex-col gap-3 w-40 md:w-60 shrink-0 snap-start group no-underline">
+      <div class="relative aspect-square rounded-xl overflow-hidden bg-gray-800">
+        <img src="/placeholder.jpg" alt="Featured dish" class="w-full h-full object-cover" />
+      </div>
+      <p class="text-sm md:text-base text-gray-100 font-medium line-clamp-2 group-hover:text-gray-300 transition-colors">Signature Dish Five</p>
+    </a>
+    <a href="/menu" class="flex flex-col gap-3 w-40 md:w-60 shrink-0 snap-start group no-underline">
+      <div class="relative aspect-square rounded-xl overflow-hidden bg-gray-800">
+        <img src="/placeholder.jpg" alt="Featured dish" class="w-full h-full object-cover" />
+      </div>
+      <p class="text-sm md:text-base text-gray-100 font-medium line-clamp-2 group-hover:text-gray-300 transition-colors">Signature Dish Six</p>
+    </a>
+    <a href="/menu" class="flex flex-col gap-3 w-40 md:w-60 shrink-0 snap-start group no-underline">
+      <div class="relative aspect-square rounded-xl overflow-hidden bg-gray-800">
+        <img src="/placeholder.jpg" alt="Featured dish" class="w-full h-full object-cover" />
+      </div>
+      <p class="text-sm md:text-base text-gray-100 font-medium line-clamp-2 group-hover:text-gray-300 transition-colors">Signature Dish Seven</p>
+    </a>
+    <a href="/menu" class="flex flex-col gap-3 w-40 md:w-60 shrink-0 snap-start group no-underline">
+      <div class="relative aspect-square rounded-xl overflow-hidden bg-gray-800">
+        <img src="/placeholder.jpg" alt="Featured dish" class="w-full h-full object-cover" />
+      </div>
+      <p class="text-sm md:text-base text-gray-100 font-medium line-clamp-2 group-hover:text-gray-300 transition-colors">Signature Dish Eight</p>
+    </a>
+  </div>
+</section>
+
+<!-- ═══ Section: Gift Cards ═══ -->
+<article class="max-w-7xl mx-auto py-16 md:py-24 px-4 md:px-8">
+  <div class="flex flex-col md:flex-row gap-6 md:gap-10">
+    <!-- Image -->
+    <div class="w-full md:w-1/2 shrink-0">
+      <div class="relative aspect-square md:aspect-auto md:h-full rounded-2xl overflow-hidden bg-gray-800">
+        <img src="/placeholder.jpg" alt="Gift cards" class="w-full h-full object-cover" />
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="flex flex-col justify-center gap-4 md:gap-6">
+      <h2 class="text-2xl md:text-4xl font-semibold text-gray-100">Gift Cards</h2>
+      <p class="text-base md:text-lg text-gray-400 leading-relaxed">
+        Give the gift of delicious experiences, treating your friends and family to a feast of taste at our restaurant. The perfect present for any occasion.
+      </p>
+      <div>
+        <a href="/gift-cards" class="inline-flex items-center gap-2 rounded-lg bg-gray-500 hover:bg-gray-400 px-6 py-3 text-base font-semibold text-gray-900 no-underline transition-colors">
+          Explore Gift Cards
+          <svg class="w-4 h-4" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="24" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="70" y1="128" x2="216" y2="128" />
+            <polyline points="144 56 216 128 144 200" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</article>
+
+<!-- ═══ Section: FAQ ═══ -->
+<section class="max-w-7xl mx-auto py-16 md:py-24 px-4 md:px-8">
+  <h2 class="text-xl md:text-2xl font-semibold text-gray-100 mb-8">Frequently Asked Questions</h2>
+  <div class="flex flex-col">
+    <details class="w-full border-b border-gray-800 group">
+      <summary class="flex items-center justify-between py-6 cursor-pointer list-none text-gray-100 font-medium">
+        <span>What are you known for?</span>
+        <svg class="w-5 h-5 text-gray-500 transition-transform duration-200 group-open:rotate-180" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 7.5L10 12.5L15 7.5" />
+        </svg>
+      </summary>
+      <div class="pb-6 text-gray-400 leading-relaxed">
+        We are known for our authentic, fresh, scratch-made dishes prepared daily by our chef. Each plate brings bold, vibrant flavors that keep our guests coming back.
+      </div>
+    </details>
+    <details class="w-full border-b border-gray-800 group">
+      <summary class="flex items-center justify-between py-6 cursor-pointer list-none text-gray-100 font-medium">
+        <span>What meals do you serve?</span>
+        <svg class="w-5 h-5 text-gray-500 transition-transform duration-200 group-open:rotate-180" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 7.5L10 12.5L15 7.5" />
+        </svg>
+      </summary>
+      <div class="pb-6 text-gray-400 leading-relaxed">
+        We serve lunch and dinner with a full menu of appetizers, main courses, and desserts. Our menu features a variety of options from light bites to hearty meals.
+      </div>
+    </details>
+    <details class="w-full border-b border-gray-800 group">
+      <summary class="flex items-center justify-between py-6 cursor-pointer list-none text-gray-100 font-medium">
+        <span>Do you offer delivery or takeout?</span>
+        <svg class="w-5 h-5 text-gray-500 transition-transform duration-200 group-open:rotate-180" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 7.5L10 12.5L15 7.5" />
+        </svg>
+      </summary>
+      <div class="pb-6 text-gray-400 leading-relaxed">
+        Yes! We offer both delivery through our partner platform and takeout directly from our restaurant. Order online for the fastest service.
+      </div>
+    </details>
+    <details class="w-full border-b border-gray-800 group">
+      <summary class="flex items-center justify-between py-6 cursor-pointer list-none text-gray-100 font-medium">
+        <span>What areas do you serve?</span>
+        <svg class="w-5 h-5 text-gray-500 transition-transform duration-200 group-open:rotate-180" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 7.5L10 12.5L15 7.5" />
+        </svg>
+      </summary>
+      <div class="pb-6 text-gray-400 leading-relaxed">
+        We have multiple locations across the region and are always expanding. Check our locations page for the nearest restaurant to you.
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ═══ Section: Location Card ═══ -->
+<section class="max-w-7xl mx-auto py-16 md:py-24 px-4 md:px-8">
+  <h2 class="text-xl md:text-2xl font-semibold text-gray-100 mb-8">Our Location</h2>
+
+  <article class="rounded-2xl overflow-hidden bg-gray-800">
+    <div class="flex flex-col md:flex-row gap-2">
+      <!-- Map placeholder -->
+      <div class="w-full md:w-1/3 rounded-xl overflow-hidden bg-gray-700 min-h-64">
+        <img src="/placeholder.jpg" alt="Map showing restaurant location" class="w-full h-full object-cover" />
+      </div>
+
+      <!-- Details -->
+      <div class="flex flex-col flex-1 gap-6 p-6 md:p-8">
+        <div class="flex flex-col gap-1">
+          <span class="text-sm text-gray-500">Restaurant Name</span>
+          <h3 class="text-xl font-semibold text-gray-100">City, Country</h3>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-8">
+          <div class="flex flex-col gap-1">
+            <span class="text-sm text-gray-500">Address</span>
+            <address class="not-italic text-sm text-gray-300">
+              <p>Street Name 10</p>
+              <p>Postal Code City</p>
+            </address>
+          </div>
+          <div class="flex flex-col gap-1">
+            <span class="text-sm text-gray-500">Contacts</span>
+            <a href="tel:+0000000000" class="text-sm text-gray-300 hover:text-gray-100 no-underline">+00 000 0000000</a>
+            <a href="mailto:info@example.com" class="text-sm text-gray-300 hover:text-gray-100 no-underline">info@example.com</a>
+          </div>
+        </div>
+
+        <a href="/directions" class="inline-flex items-center gap-2 text-sm font-medium text-gray-400 hover:text-gray-200 no-underline">
+          Get directions
+          <svg class="w-4 h-4" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="24" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="70" y1="128" x2="216" y2="128" />
+            <polyline points="144 56 216 128 144 200" />
+          </svg>
+        </a>
+
+        <div class="border-t border-gray-700 pt-4 flex items-center justify-between">
+          <span class="text-sm text-gray-300">Today: 11:00 AM - 10:00 PM</span>
+          <a href="/order" class="inline-flex items-center gap-2 rounded-lg bg-gray-500 hover:bg-gray-400 px-5 py-2.5 text-sm font-semibold text-gray-900 no-underline transition-colors">Order online</a>
+        </div>
+      </div>
+    </div>
+  </article>
+</section>
+
+  </main>
+
+  <footer class="bg-gray-900 pt-2 pb-18 md:pb-4">
+  <div class="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-20">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
+
+      <!-- Brand -->
+      <div class="flex flex-col gap-4">
+        <a href="/" class="inline-block no-underline">
+          <img src="/placeholder.jpg" alt="Brand logo" class="max-h-14 object-contain" />
+        </a>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="flex flex-col gap-4">
+        <nav class="flex flex-col gap-3" aria-label="Footer navigation">
+          <a href="/menu" class="text-sm text-gray-400 hover:text-gray-200 no-underline">Menu</a>
+          <a href="/catering" class="text-sm text-gray-400 hover:text-gray-200 no-underline">Catering & Events</a>
+          <a href="/careers" class="text-sm text-gray-400 hover:text-gray-200 no-underline">Careers</a>
+          <a href="/team" class="text-sm text-gray-400 hover:text-gray-200 no-underline">Our Team</a>
+          <a href="/gift-cards" class="text-sm text-gray-400 hover:text-gray-200 no-underline">Gift Cards</a>
+        </nav>
+      </div>
+
+      <!-- CTA / App download -->
+      <div class="flex flex-col gap-4">
+        <a href="/order" class="inline-flex items-center justify-center rounded-lg bg-gray-500 hover:bg-gray-400 px-5 py-3 text-base font-semibold text-gray-900 no-underline transition-colors">
+          Order online
+        </a>
+        <p class="text-sm text-gray-500">Download our app — earn points for free food</p>
+      </div>
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="mt-16 pt-8 border-t border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <nav class="flex items-center gap-4" aria-label="Legal links">
+        <a href="/terms" class="text-xs text-gray-500 hover:text-gray-400 no-underline">Terms of service</a>
+        <a href="/accessibility" class="text-xs text-gray-500 hover:text-gray-400 no-underline">Accessibility</a>
+      </nav>
+      <p class="text-xs text-gray-600">
+        &copy; 2026 Company Name, LLC. All rights reserved.
+      </p>
+    </div>
+  </div>
+</footer>
+
+
+</body>
+</html>

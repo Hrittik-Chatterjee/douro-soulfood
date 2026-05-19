@@ -1,0 +1,156 @@
+---
+/**
+ * Footer — Branded 3-column footer with legal links.
+ *
+ * Columns:
+ * 1. Brand name + tagline
+ * 2. Quick navigation links
+ * 3. CTA button + contact info
+ *
+ * Bottom bar: Legal links + copyright
+ *
+ * Slot composition: <slot /> before bottom bar for additional content
+ *
+ * Tokens: brand-gold, surface-primary, text-primary/secondary/tertiary, border-subtle.
+ * Zero hex codes. All colors from tokens.css @theme.
+ */
+
+interface FooterLink {
+  label: string;
+  href: string;
+}
+
+interface Props {
+  /** Brand name — rendered in display font */
+  brandName?: string;
+  /** Brand subtitle text */
+  brandSubtitle?: string;
+  /** Tagline — rendered below brand name */
+  tagline?: string;
+  /** Quick navigation links */
+  links?: FooterLink[];
+  /** Primary CTA config */
+  cta?: { label: string; href: string };
+  /** Address line(s) */
+  address?: string[];
+  /** Phone display text */
+  phone?: string;
+  /** Phone href (tel: link) */
+  phoneHref?: string;
+  /** Legal links (Impressum, Datenschutz, etc.) */
+  legalLinks?: FooterLink[];
+  /** Copyright name */
+  copyrightName?: string;
+}
+
+const currentYear = new Date().getFullYear();
+
+const {
+  brandName = "D'ouro",
+  brandSubtitle = 'Soulfood',
+  tagline = 'Brasilianische Seele. Afro-Lateinische Aromen. Mitten in Salzburg. Mit Liebe gekocht, mit Herz serviert.',
+  links = [
+    { label: 'Speisekarte', href: '/menu' },
+    { label: 'Catering & Events', href: '/catering' },
+    { label: 'Über uns', href: '/about' },
+    { label: 'Kontakt', href: '/contact' },
+    { label: 'Geschenkkarten', href: '/gift-cards' },
+  ],
+  cta = { label: 'Jetzt bestellen', href: '/menu' },
+  address = ['Auerspergstraße 10, 5020 Salzburg'],
+  phone = '+43 676 4231921',
+  phoneHref = 'tel:+436764231921',
+  legalLinks = [
+    { label: 'Impressum', href: '/impressum' },
+    { label: 'Datenschutz', href: '/datenschutz' },
+  ],
+  copyrightName = "D'ouro Soulfood Bistro",
+} = Astro.props;
+---
+
+<footer class="bg-surface-primary pt-2 pb-18 md:pb-4 border-t border-border-subtle">
+  <div class="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-20">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
+
+      <!-- Brand — logo name in display font -->
+      <div class="flex flex-col gap-4">
+        <a href="/" class="inline-block no-underline hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold rounded-xs">
+          <span class="text-2xl font-bold text-brand-gold font-display">{brandName}</span>
+          <span class="text-sm text-text-secondary ml-1">{brandSubtitle}</span>
+        </a>
+        <p class="text-sm text-text-secondary max-w-xs max-w-[75ch] leading-relaxed">
+          {tagline}
+        </p>
+      </div>
+
+      <!-- Quick Links — secondary text, gold hover -->
+      <div class="flex flex-col gap-4">
+        <h3 class="text-sm font-semibold text-text-tertiary uppercase tracking-wider">Navigation</h3>
+        <nav class="flex flex-col gap-3" aria-label="Footer-Navigation">
+          {links.map((link) => (
+            <a
+              href={link.href}
+              class="text-sm text-text-secondary hover:text-text-primary
+                     focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold rounded-xs
+                     no-underline transition-colors duration-[var(--duration-fast)] ease-[var(--ease-spring)]"
+            >
+              {link.label}
+            </a>
+          ))}
+        </nav>
+      </div>
+
+      <!-- CTA + Contact -->
+      <div class="flex flex-col gap-4">
+        <a
+          href={cta.href}
+          class="group inline-flex items-center justify-center min-h-12 rounded-sm
+                 bg-brand-gold hover:bg-brand-gold-light active:bg-brand-gold-dark px-5 py-3
+                 text-base font-semibold text-brand-espresso
+                 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold
+                 no-underline transition-colors duration-[var(--duration-fast)] ease-[var(--ease-spring)] shadow-glow-gold"
+        >
+          {cta.label}
+        </a>
+        <div class="flex flex-col gap-1">
+          <span class="text-sm text-text-tertiary">Kontakt</span>
+          <address class="not-italic text-sm text-text-secondary">
+            {address.map((line) => (
+              <p>{line}</p>
+            ))}
+            <a
+              href={phoneHref}
+              class="hover:text-brand-gold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold rounded-xs
+                     transition-colors duration-[var(--duration-fast)] ease-[var(--ease-spring)] no-underline"
+            >
+              {phone}
+            </a>
+          </address>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slot for additional footer content -->
+    <slot />
+
+    <!-- Bottom bar -->
+    <div class="mt-16 pt-8 border-t border-border-subtle
+                flex flex-col sm:flex-row items-center justify-between gap-4">
+      <nav class="flex items-center gap-4 flex-wrap justify-center" aria-label="Rechtliche Links">
+        {legalLinks.map((link) => (
+          <a
+            href={link.href}
+            class="text-xs text-text-tertiary hover:text-text-secondary
+                   focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold rounded-xs
+                   no-underline transition-colors duration-[var(--duration-fast)] ease-[var(--ease-spring)]"
+          >
+            {link.label}
+          </a>
+        ))}
+      </nav>
+      <p class="text-xs text-text-tertiary">
+        &copy; {currentYear} {copyrightName}. Alle Rechte vorbehalten.
+      </p>
+    </div>
+  </div>
+</footer>

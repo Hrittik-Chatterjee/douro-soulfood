@@ -1,0 +1,11 @@
+{
+  "title": "African Stew",
+  "description": "Herzhafter Eintopf mit Erdnussbutter, Tomaten, Süßkartoffeln und zarten Hähnchenstücken — gewürzt mit afrikanischen Gewürzen.",
+  "price": 1290,
+  "image": "/images/menu/african-stew.jpg",
+  "category": "african-specials",
+  "dietary": ["gluten-free"],
+  "order": 20,
+  "featured": false,
+  "available": true
+}

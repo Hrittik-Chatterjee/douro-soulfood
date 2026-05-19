@@ -1,0 +1,30 @@
+{
+  "site_name": "D'ouro Soulfood Bistro",
+  "tagline": "Brasilianische & lateinamerikanische Küche in Salzburg",
+  "phone": "+43 676 4231921",
+  "email": "info@douro-soulfood.at",
+  "address_line1": "Auerspergstraße 10",
+  "address_line2": "",
+  "city": "Salzburg",
+  "postal_code": "5020",
+  "country": "Austria",
+  "google_maps_url": "https://www.google.com/maps/search/?api=1&query=Auerspergstra%C3%9Fe+10%2C+5020+Salzburg%2C+Austria",
+  "foodora_url": "https://www.foodora.at/en/restaurant/noch/douro-soulfood-bistro",
+  "logo": "/images/logo.svg",
+  "og_image": "/images/og-default.jpg",
+  "social": {
+    "instagram": "",
+    "facebook": "",
+    "tiktok": "",
+    "tripadvisor": "https://www.tripadvisor.com/Restaurant_Review-g190441-d25104877-Reviews-D_ouro_Soulfood_Bistro-Salzburg_Austrian_Alps.html"
+  },
+  "hours": [
+    { "day": "Montag", "time": "11:00 – 22:00" },
+    { "day": "Dienstag", "time": "11:00 – 22:00" },
+    { "day": "Mittwoch", "time": "11:00 – 22:00" },
+    { "day": "Donnerstag", "time": "11:00 – 22:00" },
+    { "day": "Freitag", "time": "11:00 – 22:00" },
+    { "day": "Samstag", "time": "11:00 – 22:00" },
+    { "day": "Sonntag", "time": "Geschlossen" }
+  ]
+}

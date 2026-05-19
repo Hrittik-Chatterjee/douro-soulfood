@@ -1,0 +1,72 @@
+---
+export const prerender = true;
+
+import Base from '@/layouts/Base.astro';
+import NavBar from '@/components/NavBar.astro';
+import Footer from '@/components/Footer.astro';
+import Button from '@/components/ui/Button.astro';
+---
+
+<Base title="Kontakt">
+  <NavBar slot="nav" />
+
+  <section class="py-16 md:py-24 px-4 md:px-8 max-w-7xl mx-auto">
+    <h1 class="text-[clamp(2rem,4vw,3rem)] font-bold text-brand-gold mb-4 font-display">Kontakt</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mt-12">
+      <!-- Info -->
+      <div class="flex flex-col gap-8">
+        <div class="flex flex-col gap-2">
+          <h2 class="text-lg font-semibold text-text-primary font-display">Adresse</h2>
+          <address class="not-italic text-text-secondary leading-relaxed">
+            Auerspergstraße 10<br />
+            5020 Salzburg, Austria
+          </address>
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <h2 class="text-lg font-semibold text-text-primary font-display">Telefon</h2>
+          <a href="tel:+436764231921" class="text-text-secondary hover:text-brand-gold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold transition-colors duration-[var(--duration-fast)] ease-[var(--ease-spring)] no-underline">
+            +43 676 4231921
+          </a>
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <h2 class="text-lg font-semibold text-text-primary font-display">Öffnungszeiten</h2>
+          <dl class="text-text-secondary space-y-1">
+            <div class="flex gap-4">
+              <dt class="text-text-tertiary">Mo – Sa</dt>
+              <dd>11:00 – 22:00</dd>
+            </div>
+            <div class="flex gap-4">
+              <dt class="text-text-tertiary">So</dt>
+              <dd>Geschlossen</dd>
+            </div>
+          </dl>
+        </div>
+
+        <div>
+          <Button
+            href="https://www.google.com/maps/dir/?api=1&destination=Auerspergstra%C3%9Fe+10%2C+5020+Salzburg"
+            variant="secondary" size="lg" arrow
+          >
+            Route planen
+          </Button>
+        </div>
+      </div>
+
+      <!-- Map placeholder -->
+      <div class="rounded-xl overflow-hidden bg-surface-card border border-border-subtle min-h-[400px] flex items-center justify-center" role="img" aria-label="Standort-Karte — Auerspergstraße 10, 5020 Salzburg">
+        <div class="flex flex-col items-center gap-3 text-text-tertiary">
+          <svg class="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+            <circle cx="12" cy="10" r="3" />
+          </svg>
+          <span class="text-sm">Karte wird geladen</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Footer slot="footer" />
+</Base>

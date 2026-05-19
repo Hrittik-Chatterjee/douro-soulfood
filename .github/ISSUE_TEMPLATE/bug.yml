@@ -1,0 +1,16 @@
+---
+name: Bug Report
+description: Report a bug or visual issue
+labels: ["bug"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+    validations:
+      required: true
+  - type: dropdown
+    id: page
+    attributes:
+      label: Which page?
+      options: [Home, Menu, About, Catering, Contact, CMS Admin]

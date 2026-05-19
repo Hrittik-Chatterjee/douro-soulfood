@@ -1,0 +1,11 @@
+{
+  "title": "Veggie Taco",
+  "description": "Gegrilltes Gemüse, schwarze Bohnen, Pickles und vegane Koriander-Limetten-Creme auf Maistortilla.",
+  "price": 790,
+  "image": "/images/menu/veggie-taco.jpg",
+  "category": "tacos",
+  "dietary": ["vegan", "gluten-free"],
+  "order": 30,
+  "featured": false,
+  "available": true
+}

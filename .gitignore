@@ -1,0 +1,34 @@
+node_modules/
+dist/
+.astro/
+.wrangler/
+.dev.vars
+
+# KeystaticCMS (NOT TinaCMS)
+keystatic/__generated__/
+
+# Environment
+.env
+.env.local
+.env.production
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/settings.json
+.idea/
+
+# Test results
+test-results/
+playwright-report/
+
+# Lighthouse CI
+.lighthouseci/
+
+# Use pnpm, not npm
+package-lock.json
+
+# Temp files
+/tmp/

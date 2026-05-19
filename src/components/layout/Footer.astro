@@ -1,0 +1,70 @@
+---
+const currentYear = new Date().getFullYear();
+
+const quickLinks = [
+  { label: 'Speisekarte', href: '/menu' },
+  { label: 'Über uns', href: '/about' },
+  { label: 'Catering & Events', href: '/catering' },
+  { label: 'Kontakt', href: '/contact' },
+];
+---
+
+<footer class="border-t border-[var(--color-border-subtle)] bg-[var(--color-surface-primary)]">
+  <div class="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-20">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
+
+      <!-- Brand -->
+      <div class="flex flex-col gap-4">
+        <span class="text-2xl font-bold text-[var(--color-text-brand)]">D'ouro Soulfood</span>
+        <p class="text-sm text-[var(--color-text-secondary)] max-w-xs leading-relaxed">
+          Brazilian & Latin soul food in the heart of Salzburg.
+          Fresh, flavorful, made with love by Angela.
+        </p>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="flex flex-col gap-4">
+        <h3 class="text-sm font-semibold text-[var(--color-text-tertiary)] uppercase tracking-wider">Navigation</h3>
+        <nav class="flex flex-col gap-2">
+          {quickLinks.map((link) => (
+            <a
+              href={link.href}
+              class="text-sm text-[var(--color-text-secondary)] transition-colors
+                     hover:text-[var(--color-text-primary)]"
+            >
+              {link.label}
+            </a>
+          ))}
+        </nav>
+      </div>
+
+      <!-- Contact -->
+      <div class="flex flex-col gap-4">
+        <h3 class="text-sm font-semibold text-[var(--color-text-tertiary)] uppercase tracking-wider">Kontakt</h3>
+        <address class="not-italic flex flex-col gap-2 text-sm text-[var(--color-text-secondary)]">
+          <span>Auerspergstraße 10</span>
+          <span>5020 Salzburg, Austria</span>
+          <a href="tel:+436764231921" class="hover:text-[var(--color-text-primary)] transition-colors">
+            +43 676 4231921
+          </a>
+        </address>
+      </div>
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="mt-16 pt-8 border-t border-[var(--color-border-subtle)]
+                flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p class="text-xs text-[var(--color-text-tertiary)]">
+        &copy; {currentYear} D'ouro Soulfood Bistro. Alle Rechte vorbehalten.
+      </p>
+      <div class="flex items-center gap-4">
+        <a href="/impressum" class="text-xs text-[var(--color-text-tertiary)] hover:text-[var(--color-text-secondary)] transition-colors">
+          Impressum
+        </a>
+        <a href="/datenschutz" class="text-xs text-[var(--color-text-tertiary)] hover:text-[var(--color-text-secondary)] transition-colors">
+          Datenschutz
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>

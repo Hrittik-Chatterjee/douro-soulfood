@@ -1,0 +1,280 @@
+# ═══════════════════════════════════════════════════════════════════
+# D'OURO SOULFOOD BISTRO — CI/CD Pipeline
+#
+# Production-grade GitHub Actions workflow for Astro v6 + Cloudflare Pages.
+#
+# Flow:
+#   1. Build → Lint → Type Check
+#   2. Deploy to Cloudflare Pages Preview (ALL branches)
+#   3. Run Playwright E2E tests against preview URL
+#   4. Run Lighthouse CI against preview URL
+#   5. If main branch AND tests/lighthouse pass → Promote to Production
+#
+# Environment separation:
+#   - Push to main     → Production (project: douro-soulfood)
+#   - Push to feature  → Preview URL (unique per branch)
+#
+# CRITICAL: Every wrangler pages deploy command includes
+# --project-name douro-soulfood. Without this flag, Wrangler
+# creates a new project on every fresh CI runner.
+# ═══════════════════════════════════════════════════════════════════
+
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - '**' # All branches get preview deployments
+  # Allow manual trigger for re-deploys
+  workflow_dispatch:
+
+concurrency:
+  # Only one deployment per branch at a time.
+  # Cancel in-progress runs for the same branch to save minutes.
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+# Minimum permissions — principle of least privilege
+permissions:
+  contents: read
+  deployments: write
+  statuses: write
+
+env:
+  NODE_VERSION: '20'
+  PNPM_VERSION: '9.15.9'
+
+jobs:
+  # ═══════════════════════════════════════════════════════════════
+  # JOB 1: Build
+  # Installs deps, builds Astro, uploads dist/ as artifact
+  # for downstream jobs to reuse (no double builds).
+  # ═══════════════════════════════════════════════════════════════
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Astro site
+        run: pnpm build
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 1
+          if-no-files-found: error
+
+  # ═══════════════════════════════════════════════════════════════
+  # JOB 2: Deploy Preview
+  # Deploys to Cloudflare Pages as a preview deployment.
+  # Runs for ALL branches (including main) so we can test
+  # before promoting to production.
+  # ═══════════════════════════════════════════════════════════════
+  deploy-preview:
+    name: Deploy Preview
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    outputs:
+      preview-url: ${{ steps.deploy.outputs.url }}
+
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - name: Deploy to Cloudflare Pages (Preview)
+        id: deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: >
+            pages deploy dist/
+            --project-name=douro-soulfood
+            --branch=${{ github.head_ref || github.ref_name }}
+
+      - name: Output preview URL
+        run: |
+          echo "Preview URL: ${{ steps.deploy.outputs.url }}"
+          echo "preview_url=${{ steps.deploy.outputs.url }}" >> "$GITHUB_STEP_SUMMARY"
+
+  # ═══════════════════════════════════════════════════════════════
+  # JOB 3: E2E Tests
+  # Runs Playwright against the Cloudflare preview URL.
+  # Tests validate content, navigation, accessibility, and SEO.
+  # ═══════════════════════════════════════════════════════════════
+  e2e-tests:
+    name: Playwright E2E Tests
+    needs: deploy-preview
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run Playwright tests against preview URL
+        env:
+          BASE_URL: ${{ needs.deploy-preview.outputs.preview-url }}
+        run: |
+          pnpm exec playwright test \
+            --reporter=github,line \
+            --timeout=30000
+        # Override baseURL in Playwright config with the live preview URL
+        # by setting the BASE_URL env var and using it in config
+
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: test-results/
+          retention-days: 3
+
+  # ═══════════════════════════════════════════════════════════════
+  # JOB 4: Lighthouse CI
+  # Audits performance, accessibility, best practices, and SEO
+  # against the preview URL. Fails the pipeline if any budget
+  # threshold is not met.
+  # ═══════════════════════════════════════════════════════════════
+  lighthouse:
+    name: Lighthouse CI
+    needs: deploy-preview
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run Lighthouse CI
+        env:
+          LHCI_URL: ${{ needs.deploy-preview.outputs.preview-url }}
+          LHCI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          pnpm exec lhci autorun \
+            --config=.lighthouserc.js \
+            --collect.url="${LHCI_URL}/" \
+            --collect.url="${LHCI_URL}/menu" \
+            --collect.url="${LHCI_URL}/about" \
+            --collect.url="${LHCI_URL}/contact"
+
+      - name: Upload Lighthouse results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lighthouse-results
+          path: .lighthouseci/
+          retention-days: 7
+
+  # ═══════════════════════════════════════════════════════════════
+  # JOB 5: Deploy Production
+  # Only runs on pushes to main AFTER E2E tests and Lighthouse
+  # both pass. Promotes the preview build to production.
+  # ═══════════════════════════════════════════════════════════════
+  deploy-production:
+    name: Deploy to Production
+    needs: [e2e-tests, lighthouse]
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    environment:
+      name: production
+      url: https://douro-soulfood.com
+
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - name: Deploy to Cloudflare Pages (Production)
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: >
+            pages deploy dist/
+            --project-name=douro-soulfood
+            --branch=main
+
+      - name: Verify production deployment
+        run: |
+          echo "Production URL: https://douro-soulfood.com"
+          echo "---"
+          # Wait a moment for Cloudflare edge propagation
+          sleep 5
+          # Check that the production URL responds
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://douro-soulfood.com 2>/dev/null || echo "000")
+          echo "Production HTTP status: $HTTP_STATUS"
+          if [ "$HTTP_STATUS" -ge 200 ] && [ "$HTTP_STATUS" -lt 400 ]; then
+            echo "Production deployment verified successfully"
+          else
+            echo "Warning: Production URL returned status $HTTP_STATUS (may need a few seconds to propagate)"
+          fi

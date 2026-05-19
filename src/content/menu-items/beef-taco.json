@@ -1,0 +1,11 @@
+{
+  "title": "Beef Taco",
+  "description": "Knusprige Maistortilla mit zartem Rindfleisch, frischem Koriander, Zwiebeln und hausgemachter Salsa Verde.",
+  "price": 990,
+  "image": "/images/menu/beef-taco.jpg",
+  "category": "tacos",
+  "dietary": ["gluten-free"],
+  "order": 2,
+  "featured": true,
+  "available": true
+}

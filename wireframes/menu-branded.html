@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="de" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>D'ouro Soulfood — Menu (Branded)</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;0,9..144,900;1,9..144,400;1,9..144,600&display=swap" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style type="text/tailwindcss">
+    @theme {
+      --color-brand-terracotta: oklch(0.52 0.13 24);
+      --color-brand-terracotta-light: oklch(0.63 0.12 24);
+      --color-brand-terracotta-dark: oklch(0.38 0.12 22);
+      --color-brand-gold: oklch(0.68 0.14 70);
+      --color-brand-gold-light: oklch(0.78 0.12 70);
+      --color-brand-gold-dark: oklch(0.53 0.12 68);
+      --color-brand-forest: oklch(0.35 0.07 152);
+      --color-brand-forest-light: oklch(0.44 0.09 152);
+      --color-brand-sage: oklch(0.60 0.08 140);
+      --color-brand-cream: oklch(0.95 0.015 80);
+      --color-brand-cream-warm: oklch(0.93 0.02 75);
+      --color-brand-mist: oklch(0.97 0.008 80);
+      --color-brand-espresso: oklch(0.14 0.03 40);
+      --color-brand-charcoal: oklch(0.12 0.01 0);
+      --color-brand-smoke: oklch(0.17 0.01 0);
+      --color-brand-ember: oklch(0.38 0.12 22);
+      --color-surface-primary: oklch(0.06 0.01 0);
+      --color-surface-elevated: oklch(0.10 0.012 0);
+      --color-surface-card: oklch(0.13 0.014 0);
+      --color-surface-glass: oklch(0.13 0.014 0 / 0.72);
+      --color-text-primary: oklch(0.96 0.006 80);
+      --color-text-secondary: oklch(0.68 0.012 60);
+      --color-text-tertiary: oklch(0.50 0.01 50);
+      --color-text-inverse: oklch(0.14 0.02 40);
+      --color-text-brand: oklch(0.68 0.14 70);
+      --color-border-subtle: oklch(0.96 0.006 80 / 0.08);
+      --color-border-default: oklch(0.96 0.006 80 / 0.12);
+      --color-border-emphasis: oklch(0.96 0.006 80 / 0.24);
+      --font-display: 'Fraunces', 'Georgia', serif;
+      --font-body: 'DM Sans', system-ui, sans-serif;
+    }
+    * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    html { background-color: var(--color-surface-primary); color: var(--color-text-primary); }
+    body { font-family: var(--font-body); line-height: 1.6; overflow-x: hidden; }
+    h1, h2, h3, h4, h5, h6 { font-family: var(--font-display); line-height: 1.15; letter-spacing: -0.02em; }
+  </style>
+</head>
+<body class="bg-surface-primary text-text-primary">
+
+  <!-- ═══ Section: Food Gallery — D'ouro Branded ═══ -->
+  <section class="max-w-7xl mx-auto py-16 md:py-24 px-4 md:px-8">
+    <!-- Gallery heading — display font, gold accent -->
+    <div class="flex flex-col gap-2">
+      <h2 class="text-2xl md:text-4xl font-semibold text-text-primary" style="font-family: var(--font-display)">D'ouro Soulfood</h2>
+      <p class="text-base text-text-secondary">Brasilianische Seele, Salzburgs Herz</p>
+    </div>
+
+    <!-- Image gallery grid -->
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-4 mt-8" role="region" aria-label="Food gallery">
+      <button type="button" class="relative aspect-square rounded-xl overflow-hidden bg-surface-card focus-visible:ring-2 focus-visible:ring-brand-gold transition-transform duration-200 hover:scale-105">
+        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&q=80" alt="Feijoada — Brazilian black bean stew" class="w-full h-full object-cover" />
+      </button>
+      <button type="button" class="relative aspect-square rounded-xl overflow-hidden bg-surface-card focus-visible:ring-2 focus-visible:ring-brand-gold transition-transform duration-200 hover:scale-105">
+        <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&q=80" alt="Coxinha — Brazilian chicken croquettes" class="w-full h-full object-cover" />
+      </button>
+      <button type="button" class="relative aspect-square rounded-xl overflow-hidden bg-surface-card focus-visible:ring-2 focus-visible:ring-brand-gold transition-transform duration-200 hover:scale-105">
+        <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&q=80" alt="Moqueca — Afro-Brazilian fish stew" class="w-full h-full object-cover" />
+      </button>
+      <button type="button" class="relative aspect-square rounded-xl overflow-hidden bg-surface-card focus-visible:ring-2 focus-visible:ring-brand-gold transition-transform duration-200 hover:scale-105">
+        <img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=400&q=80" alt="Pão de Queijo — Brazilian cheese bread" class="w-full h-full object-cover" />
+      </button>
+      <button type="button" class="relative aspect-square rounded-xl overflow-hidden bg-surface-card focus-visible:ring-2 focus-visible:ring-brand-gold transition-transform duration-200 hover:scale-105">
+        <img src="https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?w=400&q=80" alt="Brigadeiro — Brazilian chocolate truffles" class="w-full h-full object-cover" />
+      </button>
+      <button type="button" class="relative aspect-square rounded-xl overflow-hidden bg-surface-card focus-visible:ring-2 focus-visible:ring-brand-gold transition-transform duration-200 hover:scale-105">
+        <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400&q=80" alt="Açaí Bowl — Superfood from the Amazon" class="w-full h-full object-cover" />
+      </button>
+      <button type="button" class="relative aspect-square rounded-xl overflow-hidden bg-surface-card focus-visible:ring-2 focus-visible:ring-brand-gold transition-transform duration-200 hover:scale-105">
+        <img src="https://images.unsplash.com/photo-1547592180-85f173990554?w=400&q=80" alt="Bobó de Camarão — Shrimp in yuca cream" class="w-full h-full object-cover" />
+      </button>
+      <button type="button" class="relative aspect-square rounded-xl overflow-hidden bg-surface-card focus-visible:ring-2 focus-visible:ring-brand-gold transition-transform duration-200 hover:scale-105">
+        <img src="https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=400&q=80" alt="Empada — Brazilian savory pastry" class="w-full h-full object-cover" />
+      </button>
+      <button type="button" class="relative aspect-square rounded-xl overflow-hidden bg-surface-card focus-visible:ring-2 focus-visible:ring-brand-gold transition-transform duration-200 hover:scale-105">
+        <img src="https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=400&q=80" alt="Caipirinha — Brazil's national cocktail" class="w-full h-full object-cover" />
+      </button>
+    </div>
+  </section>
+
+  <!-- ═══ Section: Catering Card — D'ouro Branded (Glassmorphism) ═══ -->
+  <article class="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-24">
+    <div class="flex flex-col md:flex-row gap-6 md:gap-10 rounded-2xl bg-surface-glass backdrop-blur-sm border border-border-subtle p-6 md:p-8">
+      <!-- Image -->
+      <div class="w-full md:w-1/2 shrink-0">
+        <div class="relative aspect-square md:aspect-auto md:h-full rounded-2xl overflow-hidden bg-surface-card">
+          <img src="https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?w=800&q=80" alt="Catering event at D'ouro Soulfood" class="w-full h-full object-cover" />
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="flex flex-col justify-center gap-4 md:gap-6">
+        <h2 class="text-2xl md:text-4xl font-semibold text-text-primary" style="font-family: var(--font-display)">Catering & Events</h2>
+        <p class="text-base md:text-lg text-text-secondary leading-relaxed">
+          Verleihen Sie Ihren Firmen- und Privatfeiern brasilianisches Flair mit unserem authentischen Catering-Service. Wir bringen die Wärme und Aromen von D'ouro direkt zu Ihnen — für unvergessliche Momente mit Kollegen, Familie und Freunden.
+        </p>
+        <div>
+          <a href="/catering" class="inline-flex items-center gap-2 rounded-lg bg-brand-gold hover:bg-brand-gold-light px-6 py-3 text-base font-semibold text-brand-espresso no-underline transition-colors duration-200" style="box-shadow: 0 0 40px oklch(0.68 0.14 70 / 0.15)">
+            Event planen
+            <svg class="w-4 h-4" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="24" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="70" y1="128" x2="216" y2="128" />
+              <polyline points="144 56 216 128 144 200" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- ═══ Section: Food Truck Card (reversed) — D'ouro Branded (Glassmorphism) ═══ -->
+  <article class="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-24">
+    <div class="flex flex-col md:flex-row-reverse gap-6 md:gap-10 rounded-2xl bg-surface-glass backdrop-blur-sm border border-border-subtle p-6 md:p-8">
+      <!-- Image -->
+      <div class="w-full md:w-1/2 shrink-0">
+        <div class="relative aspect-square md:aspect-auto md:h-full rounded-2xl overflow-hidden bg-surface-card">
+          <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&q=80" alt="D'ouro Food Truck" class="w-full h-full object-cover" />
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="flex flex-col justify-center gap-4 md:gap-6">
+        <h2 class="text-2xl md:text-4xl font-semibold text-text-primary" style="font-family: var(--font-display)">Food Truck</h2>
+        <p class="text-base md:text-lg text-text-secondary leading-relaxed">
+          Bringen Sie unseren Food Truck zu Ihrer nächsten Veranstaltung und servieren Sie etwas, das Ihre Gäste wirklich in Erinnerung behalten werden. Frisch, handgemacht und voller Geschmack — sagen Sie uns nur, wo wir parken sollen.
+        </p>
+        <div>
+          <a href="/food-truck" class="inline-flex items-center gap-2 rounded-lg bg-brand-terracotta hover:bg-brand-terracotta-light px-6 py-3 text-base font-semibold text-brand-cream no-underline transition-colors duration-200" style="box-shadow: 0 0 40px oklch(0.52 0.13 24 / 0.12)">
+            Event planen
+            <svg class="w-4 h-4" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="24" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="70" y1="128" x2="216" y2="128" />
+              <polyline points="144 56 216 128 144 200" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </article>
+
+</body>
+</html>

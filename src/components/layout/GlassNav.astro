@@ -1,0 +1,147 @@
+---
+interface Props {
+  class?: string;
+}
+
+const navLinks = [
+  { label: 'Speisekarte', href: '/menu' },
+  { label: 'Über uns', href: '/about' },
+  { label: 'Catering', href: '/catering' },
+  { label: 'Kontakt', href: '/contact' },
+];
+---
+
+<nav
+  aria-label="Main menu"
+  class="fixed top-0 left-0 right-0 z-50 transition-all duration-[var(--duration-normal)] ease-[var(--ease-spring)]"
+  data-nav
+>
+  <div class="mx-auto flex max-w-7xl items-center px-4 py-4 md:px-8 gap-3">
+    <!-- Logo -->
+    <a href="/" class="flex shrink-0 items-center gap-2">
+      <span class="text-xl font-bold text-[var(--color-text-brand)]">D'ouro</span>
+      <span class="text-sm text-[var(--color-text-secondary)] hidden sm:inline">Soulfood</span>
+    </a>
+
+    <!-- Desktop Nav -->
+    <div class="hidden flex-1 justify-end items-center gap-1 md:flex">
+      {navLinks.map((link) => (
+        <a
+          href={link.href}
+          class="px-4 py-2 text-sm font-medium text-[var(--color-text-secondary)]
+                 rounded-[var(--radius-sm)] transition-all duration-[var(--duration-fast)]
+                 hover:text-[var(--color-text-primary)] hover:bg-white/5"
+        >
+          {link.label}
+        </a>
+      ))}
+      <a
+        href="/menu"
+        class="group ml-3 flex items-center gap-2 rounded-[var(--radius-sm)]
+               bg-[var(--color-douro-gold)] px-5 py-2.5 text-sm font-semibold
+               text-[var(--color-douro-espresso)]
+               transition-all duration-[var(--duration-normal)] ease-[var(--ease-spring)]
+               hover:bg-[var(--color-douro-gold-light)] hover:shadow-[var(--shadow-glow-gold)]"
+      >
+        <span>Jetzt bestellen</span>
+        <svg
+          class="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5"
+          viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round"
+        >
+          <path d="M7.5 5L12.5 10L7.5 15" />
+        </svg>
+      </a>
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <div class="flex flex-1 justify-end items-center md:hidden gap-2">
+      <a
+        href="/menu"
+        class="rounded-[var(--radius-sm)] border border-[var(--color-border-default)]
+               px-3 py-2 text-sm font-medium text-[var(--color-text-secondary)]
+               transition-colors hover:bg-white/5"
+      >
+        Speisekarte
+      </a>
+      <button
+        id="mobile-menu-btn"
+        type="button"
+        class="flex items-center justify-center w-10 h-10
+               rounded-[var(--radius-sm)] transition-colors hover:bg-white/5"
+        aria-label="Menü öffnen"
+        aria-expanded="false"
+      >
+        <div class="flex flex-col gap-1.5 w-5">
+          <span class="block h-[2px] w-full bg-[var(--color-text-primary)] rounded-full transition-transform" data-line-top></span>
+          <span class="block h-[2px] w-full bg-[var(--color-text-primary)] rounded-full transition-opacity" data-line-mid></span>
+          <span class="block h-[2px] w-full bg-[var(--color-text-primary)] rounded-full transition-transform" data-line-bot></span>
+        </div>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu Overlay -->
+  <div
+    id="mobile-menu"
+    class="fixed inset-x-0 top-[72px] bottom-0 z-40 glass opacity-0 pointer-events-none
+           transition-opacity duration-300 md:hidden overflow-y-auto"
+    data-open="false"
+  >
+    <div class="px-4 py-6 flex flex-col gap-2">
+      {navLinks.map((link) => (
+        <a
+          href={link.href}
+          class="flex items-center px-4 py-3 text-base font-medium
+                 text-[var(--color-text-secondary)] rounded-[var(--radius-sm)]
+                 transition-colors hover:bg-white/5 hover:text-[var(--color-text-primary)]"
+        >
+          {link.label}
+        </a>
+      ))}
+      <a
+        href="/menu"
+        class="mt-4 flex items-center justify-center rounded-[var(--radius-sm)]
+               bg-[var(--color-douro-gold)] px-5 py-3 text-base font-semibold
+               text-[var(--color-douro-espresso)]"
+      >
+        Jetzt bestellen
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- Spacer for fixed nav -->
+<div class="h-[72px]"></div>
+
+<script>
+  // Glass effect on scroll
+  const nav = document.querySelector('[data-nav]') as HTMLElement;
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      if (!entry.isIntersecting) {
+        nav.classList.add('glass');
+      } else {
+        nav.classList.remove('glass');
+      }
+    },
+    { threshold: 1, rootMargin: '-1px 0px 0px 0px' }
+  );
+  const sentinel = document.createElement('div');
+  sentinel.style.height = '1px';
+  document.body.prepend(sentinel);
+  observer.observe(sentinel);
+
+  // Mobile menu toggle
+  const btn = document.getElementById('mobile-menu-btn');
+  const menu = document.getElementById('mobile-menu');
+  btn?.addEventListener('click', () => {
+    const open = menu?.dataset.open === 'true';
+    if (menu) {
+      menu.dataset.open = String(!open);
+      menu.classList.toggle('opacity-0', open);
+      menu.classList.toggle('pointer-events-none', open);
+    }
+    btn.setAttribute('aria-expanded', String(!open));
+  });
+</script>

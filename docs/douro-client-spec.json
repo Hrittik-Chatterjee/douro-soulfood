@@ -1,0 +1,192 @@
+{
+  "brand": {
+    "name": "D'ouro Soulfood Bistro",
+    "legalName": "D'ouro Soulfood Bistro",
+    "tagline": "Frisch. Gewürzt. Mit Seele.",
+    "owner": {
+      "name": "Angela",
+      "origin": "Brazilian",
+      "role": "Founder, Head Chef, Sole Operator",
+      "personality": "warm, fun, generous, Brazilian energy",
+      "isBrand": true,
+      "story": "Angela cooks everything herself by hand, fresh daily. She is the heart and soul of the brand — a single operator whose personal touch defines every dish and every guest experience."
+    },
+    "vibe": ["warm", "vibrant", "authentic"],
+    "industry": "Afro-Latin American restaurant / bistro",
+    "differentiator": "Angela cooks everything herself by hand, fresh daily. Single operator. Every dish carries her personal touch — no shortcuts, no pre-made, no corporate kitchen."
+  },
+  "location": {
+    "street": "Auerspergstraße 10",
+    "city": "Salzburg",
+    "postalCode": "5020",
+    "country": "Austria",
+    "countryCode": "AT",
+    "coordinates": "REQUIRES_CLIENT_CONFIRMATION"
+  },
+  "contact": {
+    "phone": "+43 676 4231921",
+    "instagram": "@dourosoulfoodsalzburg",
+    "email": "REQUIRES_CLIENT_CONFIRMATION",
+    "website": "REQUIRES_CLIENT_CONFIRMATION"
+  },
+  "hours": {
+    "regular": [
+      { "day": "Monday", "open": "11:00", "close": "20:00" },
+      { "day": "Tuesday", "open": "11:00", "close": "20:00" },
+      { "day": "Wednesday", "open": "11:00", "close": "20:00" },
+      { "day": "Thursday", "open": "11:00", "close": "20:00" },
+      { "day": "Friday", "open": "11:00", "close": "20:00" },
+      { "day": "Saturday", "open": "11:00", "close": "20:00" }
+    ],
+    "sunday": "Closed",
+    "holidays": "REQUIRES_CLIENT_CONFIRMATION"
+  },
+  "cuisine": {
+    "primary": ["Brazilian", "Mexican", "African"],
+    "fusion": "Afro-Latin American",
+    "signatureDishes": ["tacos", "bowls", "African stews", "paella", "fufu", "brigadeiros"],
+    "dietaryOptions": {
+      "vegetarian": true,
+      "vegan": true,
+      "glutenFree": "REQUIRES_CLIENT_CONFIRMATION"
+    },
+    "priceRange": {
+      "min": 10,
+      "max": 20,
+      "currency": "EUR",
+      "symbol": "€",
+      "tier": "mid-range"
+    },
+    "madeFreshDaily": true,
+    "handmadeByOwner": true
+  },
+  "socialProof": {
+    "googleRating": {
+      "stars": 4.8,
+      "reviewCount": 978
+    },
+    "tripAdvisor": {
+      "award": "Travellers' Choice",
+      "rating": "REQUIRES_CLIENT_CONFIRMATION",
+      "reviewCount": "REQUIRES_CLIENT_CONFIRMATION"
+    },
+    "reviewKeywords": ["warm", "cozy", "authentic", "homemade", "welcoming", "vibrant", "personal", "community-driven"]
+  },
+  "targetAudience": {
+    "primary": [
+      "Tourists in Salzburg looking for non-Austrian food",
+      "Local expats seeking familiar flavors",
+      "Latin food lovers in Austria"
+    ],
+    "secondary": [
+      "Students seeking affordable vibrant dining",
+      "Couples wanting cozy dinner spots",
+      "Food adventurers exploring Afro-Latin cuisine"
+    ]
+  },
+  "offerings": {
+    "dineIn": true,
+    "takeaway": true,
+    "delivery": {
+      "available": true,
+      "platform": "Foodora",
+      "url": "https://www.foodora.at/en/restaurant/noch/douro-soulfood-bistro"
+    },
+    "catering": true,
+    "onlineOrdering": false,
+    "reservations": "REQUIRES_CLIENT_CONFIRMATION"
+  },
+  "cta": {
+    "primary": {
+      "text": "Reserve a table",
+      "action": "Call +43 676 4231921",
+      "type": "phone_call"
+    },
+    "secondary": {
+      "text": "Visit us today",
+      "action": "Show location and hours",
+      "type": "navigation"
+    },
+    "tertiary": {
+      "text": "Order delivery",
+      "action": "Open Foodora page",
+      "type": "external_link"
+    }
+  },
+  "pages": [
+    {
+      "slug": "/",
+      "title": "Home",
+      "sections": ["hero", "gallery", "catering", "story", "featured_menu", "gift_cards", "faq", "location"]
+    },
+    {
+      "slug": "/menu",
+      "title": "Menu",
+      "sections": ["menu_categories", "featured_items", "dietary_info"]
+    },
+    {
+      "slug": "/about",
+      "title": "Our Story",
+      "sections": ["angelas_story", "brand_values", "press_mentions"]
+    },
+    {
+      "slug": "/contact",
+      "title": "Contact",
+      "sections": ["location_map", "hours", "contact_form", "social_links"]
+    },
+    {
+      "slug": "/order",
+      "title": "Order Online",
+      "type": "external_redirect",
+      "destination": "https://www.foodora.at/en/restaurant/noch/douro-soulfood-bistro"
+    }
+  ],
+  "design": {
+    "direction": "Warm and vibrant — Afro-Latin soul meets European bistro",
+    "background": "dark, rich, deep tones like espresso and charcoal",
+    "accentColors": {
+      "primary": "warm gold — like Brazilian sunlight on aged wood",
+      "secondary": "terracotta — sun-baked clay, earthy warmth",
+      "tertiary": "deep forest green — lush tropical canopy",
+      "highlight": "ember red — smoldering fire, passion"
+    },
+    "neutralColors": {
+      "light": "warm cream and soft ivory",
+      "mid": "smoke and warm gray",
+      "dark": "espresso and deep charcoal"
+    },
+    "typography": {
+      "heading": "bold, confident, slightly condensed — commands attention without shouting",
+      "body": "clean, highly readable, warm — invites reading"
+    },
+    "effects": {
+      "glassmorphism": true,
+      "gradients": true,
+      "animations": "subtle, spring-like, iOS-inspired — never flashy, always smooth",
+      "depth": "layered surfaces with blur and translucency"
+    },
+    "imagery": {
+      "style": "rich, warm-toned food photography; close-up textures; candid kitchen moments",
+      "mood": "inviting, intimate, alive — as if Angela is welcoming you personally"
+    }
+  },
+  "content": {
+    "language": "de",
+    "secondaryLanguage": "en",
+    "tone": "warm, personal, inviting — as if Angela is speaking directly to you",
+    "voiceNotes": "Angela's personality IS the brand. She is the warmth behind every word. Copy should feel handwritten, not corporate."
+  },
+  "missingItems": [
+    "Exact coordinates for Google Maps embed",
+    "Business email address",
+    "Website domain URL",
+    "TripAdvisor rating and review count",
+    "Gluten-free menu options availability",
+    "Holiday hours policy",
+    "Reservation system or method (phone-only vs. online booking)",
+    "Legal business entity name (if different from brand name)",
+    "Foodora partner status and exact restaurant slug",
+    "Gift card availability and purchase method",
+    "Press mentions or media features"
+  ]
+}

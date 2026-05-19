@@ -1,0 +1,136 @@
+---
+/**
+ * ReviewBadge — Compact 4.8-star rating widget.
+ *
+ * Displays: Star rating + numeric score + review count.
+ * Uses gold accent tokens for star icons and score.
+ * Schema.org AggregateRating compatible.
+ *
+ * Tokens: brand-gold, text-primary/secondary/tertiary, surface-card.
+ * Zero hex codes. All colors from tokens.css @theme.
+ */
+
+interface Props {
+  /** Numeric rating value (e.g. 4.8) */
+  rating: number;
+  /** Maximum possible rating (e.g. 5) */
+  maxRating?: number;
+  /** Total number of reviews */
+  reviewCount: number;
+  /** Review source name (e.g. "TripAdvisor", "Google") */
+  source?: string;
+  /** Link to reviews page */
+  href?: string;
+  /** Size variant */
+  size?: 'sm' | 'md' | 'lg';
+  /** Additional CSS classes */
+  class?: string;
+}
+
+const {
+  rating,
+  maxRating = 5,
+  reviewCount,
+  source = 'Bewertungen',
+  href,
+  size = 'md',
+  class: className = '',
+} = Astro.props;
+
+/** Calculate how many full, half, and empty stars */
+const fullStars = Math.floor(rating);
+const hasHalfStar = rating - fullStars >= 0.25 && rating - fullStars < 0.75;
+const emptyStars = maxRating - fullStars - (hasHalfStar ? 1 : 0);
+
+const sizeClasses = {
+  sm: 'text-xs gap-1.5',
+  md: 'text-sm gap-2',
+  lg: 'text-base gap-2.5',
+};
+
+const starSizeClasses = {
+  sm: 'w-3.5 h-3.5',
+  md: 'w-4 h-4',
+  lg: 'w-5 h-5',
+};
+
+const Tag = href ? 'a' : 'div';
+---
+
+<Tag
+  href={href}
+  class:list={[
+    'inline-flex items-center rounded-sm px-3 py-1.5',
+    'bg-surface-card border border-border-subtle',
+    'transition-colors duration-[var(--duration-fast)] ease-[var(--ease-spring)]',
+    'hover:border-border-default',
+    href && 'no-underline cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold',
+    sizeClasses[size],
+    className,
+  ]}
+  aria-label={`${rating} von ${maxRating} Sternen — ${reviewCount} ${source}`}
+  itemScope
+  itemType="https://schema.org/AggregateRating"
+>
+  {/* Schema.org meta tags */}
+  <meta itemProp="ratingValue" content={String(rating)} />
+  <meta itemProp="bestRating" content={String(maxRating)} />
+  <meta itemProp="reviewCount" content={String(reviewCount)} />
+
+  {/* Star icons — brand gold */}
+  <div class="flex items-center gap-0.5" role="img" aria-hidden="true">
+    {/* Full stars */}
+    {Array.from({ length: fullStars }).map(() => (
+      <svg
+        class:list={[starSizeClasses[size], 'text-brand-gold']}
+        viewBox="0 0 20 20" fill="currentColor"
+      >
+        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+      </svg>
+    ))}
+
+    {/* Half star — uses clip-path to avoid SVG gradient ID conflicts */}
+    {hasHalfStar && (
+      <svg
+        class:list={[starSizeClasses[size]]}
+        viewBox="0 0 20 20"
+      >
+        {/* Empty star background */}
+        <path
+          class="text-text-tertiary"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1"
+          d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+        />
+        {/* Filled left half */}
+        <path
+          class="text-brand-gold"
+          fill="currentColor"
+          d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+          style="clip-path: inset(0 50% 0 0)"
+        />
+      </svg>
+    )}
+
+    {/* Empty stars */}
+    {Array.from({ length: emptyStars }).map(() => (
+      <svg
+        class:list={[starSizeClasses[size], 'text-text-tertiary']}
+        viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1"
+      >
+        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+      </svg>
+    ))}
+  </div>
+
+  {/* Numeric rating — brand gold */}
+  <span class="font-semibold text-brand-gold">
+    {rating.toFixed(1)}
+  </span>
+
+  {/* Review count — secondary text */}
+  <span class="text-text-tertiary">
+    ({reviewCount.toLocaleString('de-AT')})
+  </span>
+</Tag>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="de" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>D'ouro Soulfood — Hero (Branded)</title>
+
+  <!-- Google Fonts: Fraunces + DM Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;0,9..144,900;1,9..144,400;1,9..144,600&display=swap" />
+
+  <!-- Tailwind v4 via CDN (standalone wireframe) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style type="text/tailwindcss">
+    @theme {
+      --color-brand-terracotta: oklch(0.52 0.13 24);
+      --color-brand-terracotta-light: oklch(0.63 0.12 24);
+      --color-brand-terracotta-dark: oklch(0.38 0.12 22);
+      --color-brand-gold: oklch(0.68 0.14 70);
+      --color-brand-gold-light: oklch(0.78 0.12 70);
+      --color-brand-gold-dark: oklch(0.53 0.12 68);
+      --color-brand-forest: oklch(0.35 0.07 152);
+      --color-brand-forest-light: oklch(0.44 0.09 152);
+      --color-brand-sage: oklch(0.60 0.08 140);
+      --color-brand-cream: oklch(0.95 0.015 80);
+      --color-brand-cream-warm: oklch(0.93 0.02 75);
+      --color-brand-mist: oklch(0.97 0.008 80);
+      --color-brand-espresso: oklch(0.14 0.03 40);
+      --color-brand-charcoal: oklch(0.12 0.01 0);
+      --color-brand-smoke: oklch(0.17 0.01 0);
+      --color-brand-ember: oklch(0.38 0.12 22);
+      --color-surface-primary: oklch(0.06 0.01 0);
+      --color-surface-elevated: oklch(0.10 0.012 0);
+      --color-surface-card: oklch(0.13 0.014 0);
+      --color-surface-glass: oklch(0.13 0.014 0 / 0.72);
+      --color-surface-light: oklch(1.0 0 0);
+      --color-surface-light-elevated: oklch(0.96 0.005 270);
+      --color-text-primary: oklch(0.96 0.006 80);
+      --color-text-secondary: oklch(0.68 0.012 60);
+      --color-text-tertiary: oklch(0.50 0.01 50);
+      --color-text-inverse: oklch(0.14 0.02 40);
+      --color-text-brand: oklch(0.68 0.14 70);
+      --color-border-subtle: oklch(0.96 0.006 80 / 0.08);
+      --color-border-default: oklch(0.96 0.006 80 / 0.12);
+      --color-border-emphasis: oklch(0.96 0.006 80 / 0.24);
+      --font-display: 'Fraunces', 'Georgia', serif;
+      --font-body: 'DM Sans', system-ui, sans-serif;
+    }
+
+    * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+    html { scroll-behavior: smooth; background-color: var(--color-surface-primary); color: var(--color-text-primary); }
+
+    body { font-family: var(--font-body); line-height: 1.6; overflow-x: hidden; }
+
+    h1, h2, h3, h4, h5, h6 { font-family: var(--font-display); line-height: 1.15; letter-spacing: -0.02em; }
+  </style>
+</head>
+<body class="bg-surface-primary text-text-primary">
+
+  <!-- ═══ HERO SECTION — D'ouro Branded ═══ -->
+  <header class="relative w-full overflow-hidden bg-surface-primary">
+    <!-- Hero image carousel background -->
+    <div class="absolute top-0 left-0 w-full h-full overflow-hidden" role="region" aria-live="polite" aria-atomic="true" aria-label="Hero image carousel">
+      <div class="absolute top-0 left-0 w-full h-full">
+        <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1600&q=80" alt="D'ouro Soulfood Bistro — Afro-Latin cuisine in Salzburg" class="absolute top-0 left-0 w-full h-full object-cover object-center" loading="eager" />
+      </div>
+      <!-- Gradient overlay: dark espresso warmth from bottom -->
+      <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent via-transparent to-surface-primary/75"></div>
+    </div>
+
+    <!-- Hero content -->
+    <div class="max-w-7xl mx-auto mt-4 mb-4 flex flex-col items-center pt-0 md:min-h-160 min-h-125 md:h-screen">
+      <div class="relative w-full flex-1 flex flex-col">
+        <div class="max-w-full flex-1 flex flex-col justify-end gap-6 px-4 md:px-8 py-6">
+          <div class="max-w-7xl">
+            <div class="flex flex-col gap-2 lg:gap-3">
+              <!-- Small headline — brand gold accent -->
+              <h1 class="text-sm md:text-2xl lg:text-3xl font-semibold text-brand-gold leading-tight tracking-tight overflow-hidden text-ellipsis whitespace-nowrap inline-block max-w-full" style="font-family: var(--font-display)">
+                Brasilianische Seele. Salzburgs Küche.
+              </h1>
+              <!-- Large promo text — warm cream on dark -->
+              <span class="text-3xl md:text-5xl font-semibold text-text-primary leading-tight normal-case" style="font-family: var(--font-display)">
+                Authentische Afro-Lateinische Küche, mit Liebe zubereitet
+              </span>
+            </div>
+
+            <!-- CTA button (desktop) — brand gold with espresso text -->
+            <div class="hidden md:flex mt-6">
+              <a href="/order" class="group flex min-h-12 items-center px-4 py-3 text-base font-semibold rounded-lg bg-brand-gold hover:bg-brand-gold-light text-brand-espresso no-underline transition-colors duration-200" style="box-shadow: 0 0 40px oklch(0.68 0.14 70 / 0.15)">
+                <span class="flex items-center gap-1 whitespace-nowrap">Jetzt bestellen</span>
+                <svg class="ml-1 w-4 h-4 opacity-50 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="24" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="70" y1="128" x2="216" y2="128" />
+                  <polyline points="144 56 216 128 144 200" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+</body>
+</html>

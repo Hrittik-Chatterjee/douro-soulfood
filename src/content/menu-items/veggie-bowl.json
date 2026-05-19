@@ -1,0 +1,11 @@
+{
+  "title": "Veggie Bowl",
+  "description": "Farro mit geröstetem Gemüse, Avocado, Edamame, Rucola und Tahini-Limetten-Dressing.",
+  "price": 1190,
+  "image": "/images/menu/veggie-bowl.jpg",
+  "category": "bowls",
+  "dietary": ["vegan", "gluten-free"],
+  "order": 30,
+  "featured": false,
+  "available": true
+}

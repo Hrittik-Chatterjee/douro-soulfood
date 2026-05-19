@@ -1,0 +1,383 @@
+---
+import { Image } from 'astro:assets';
+
+/**
+ * OurStory — Interior gallery, featured menu, Angela's story, gift cards,
+ * FAQ accordion, and location card.
+ *
+ * This component composes the "below the fold" sections of the home page.
+ * Each sub-section is a distinct block, enabling future extraction into
+ * standalone components.
+ *
+ * Slot composition: <slot /> at the top for optional hero-adjacent content.
+ *
+ * Tokens: brand-gold, brand-terracotta, surface-glass/card, text-primary/secondary/tertiary.
+ * Zero hex codes. All colors from tokens.css @theme.
+ */
+
+interface GalleryImage {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+}
+
+interface FeaturedItem {
+  name: string;
+  image: GalleryImage;
+  href: string;
+}
+
+interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+interface LocationInfo {
+  title: string;
+  subtitle: string;
+  address: string[];
+  phone: string;
+  phoneHref: string;
+  email?: string;
+  emailHref?: string;
+  directionsHref: string;
+  hoursToday: string;
+  mapImage?: GalleryImage;
+  orderHref: string;
+  orderLabel: string;
+}
+
+interface Props {
+  /** Interior gallery heading */
+  galleryTitle?: string;
+  /** Interior gallery subtitle */
+  gallerySubtitle?: string;
+  /** Interior gallery images */
+  galleryImages?: GalleryImage[];
+
+  /** Featured menu section heading */
+  featuredTitle?: string;
+  /** Featured menu "view all" link label */
+  featuredViewAllLabel?: string;
+  /** Featured menu "view all" link href */
+  featuredViewAllHref?: string;
+  /** Featured menu items — horizontal scroll */
+  featuredItems?: FeaturedItem[];
+
+  /** Gift card section */
+  giftCards?: {
+    title: string;
+    description: string;
+    cta: { label: string; href: string };
+    image: GalleryImage;
+  };
+
+  /** FAQ section heading */
+  faqTitle?: string;
+  /** FAQ items — accordion */
+  faqItems?: FAQItem[];
+
+  /** Location card data */
+  location?: LocationInfo;
+}
+
+const {
+  galleryTitle = 'Salzburg — Unser Zuhause',
+  gallerySubtitle = 'Besuchen Sie uns in der Auerspergstraße',
+  galleryImages = [],
+  featuredTitle = 'Empfehlungen',
+  featuredViewAllLabel = 'Speisekarte',
+  featuredViewAllHref = '/menu',
+  featuredItems = [],
+  giftCards,
+  faqTitle = 'Häufig gestellte Fragen',
+  faqItems = [],
+  location,
+} = Astro.props;
+---
+
+<!-- Slot for content before the story sections -->
+<slot />
+
+<!-- ═══ Interior Gallery ═══ -->
+{galleryImages.length > 0 && (
+  <section class="max-w-7xl mx-auto py-16 md:py-24 px-4 md:px-8">
+    <div class="flex flex-col gap-2">
+      <h2 class="text-2xl md:text-4xl font-semibold text-text-primary font-display">
+        {galleryTitle}
+      </h2>
+      <p class="text-base text-text-secondary max-w-[75ch]">{gallerySubtitle}</p>
+    </div>
+
+    <div
+      class="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-4 mt-8"
+      role="region"
+      aria-label="Restaurant-Galerie"
+    >
+      {galleryImages.map((img) => (
+        <button
+          type="button"
+          class="relative aspect-square rounded-lg overflow-hidden bg-surface-card
+                 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold
+                 transition-transform duration-[var(--duration-normal)] ease-[var(--ease-out-quart)] hover:scale-105
+                 active:scale-100"
+        >
+          <Image
+            src={img.src}
+            alt={img.alt}
+            width={img.width}
+            height={img.height}
+            format="webp"
+            quality={85}
+            class="w-full h-full object-cover"
+            loading="lazy"
+          />
+        </button>
+      ))}
+    </div>
+  </section>
+)}
+
+<!-- ═══ Featured Menu Items ═══ -->
+{featuredItems.length > 0 && (
+  <section class="max-w-7xl mx-auto py-16 md:py-24 px-4 md:px-8">
+    <div class="flex items-center justify-between gap-4 mb-8">
+      <h2 class="text-xl md:text-2xl font-semibold text-text-primary font-display">
+        {featuredTitle}
+      </h2>
+      <a
+        href={featuredViewAllHref}
+        class="flex items-center gap-2 text-sm font-medium text-text-secondary
+               hover:text-brand-gold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold
+               no-underline transition-colors duration-[var(--duration-fast)] ease-[var(--ease-spring)]"
+      >
+        {featuredViewAllLabel}
+        <svg
+          class="w-4 h-4" aria-hidden="true"
+          viewBox="0 0 256 256" fill="none" stroke="currentColor"
+          stroke-width="24" stroke-linecap="round" stroke-linejoin="round"
+        >
+          <line x1="70" y1="128" x2="216" y2="128" />
+          <polyline points="144 56 216 128 144 200" />
+        </svg>
+      </a>
+    </div>
+
+    <!-- Horizontal scrollable menu items -->
+    <div class="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory pb-4 -mx-4 px-4">
+      {featuredItems.map((item) => (
+        <a
+          href={item.href}
+          class="flex flex-col gap-3 w-40 md:w-60 shrink-0 snap-start group no-underline
+                 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold rounded-lg"
+        >
+          <div class="relative aspect-square rounded-lg overflow-hidden bg-surface-card">
+            <Image
+              src={item.image.src}
+              alt={item.image.alt}
+              width={item.image.width}
+              height={item.image.height}
+              format="webp"
+              quality={85}
+              class="w-full h-full object-cover transition-transform duration-[var(--duration-normal)] ease-[var(--ease-out-quart)] group-hover:scale-105"
+              loading="lazy"
+            />
+          </div>
+          <p class="text-sm md:text-base text-text-primary font-medium line-clamp-2
+                    group-hover:text-brand-gold transition-colors duration-[var(--duration-fast)] ease-[var(--ease-spring)]">
+            {item.name}
+          </p>
+        </a>
+      ))}
+    </div>
+  </section>
+)}
+
+<!-- ═══ Gift Cards ═══ -->
+{giftCards && (
+  <article class="max-w-7xl mx-auto py-16 md:py-24 px-4 md:px-8">
+    <div class="flex flex-col md:flex-row gap-6 md:gap-10 rounded-2xl bg-surface-glass
+                backdrop-blur-sm border border-border-subtle p-6 md:p-8">
+      <div class="w-full md:w-1/2 shrink-0">
+        <div class="relative aspect-square md:aspect-auto md:h-full rounded-2xl overflow-hidden bg-surface-card">
+          <Image
+            src={giftCards.image.src}
+            alt={giftCards.image.alt}
+            width={giftCards.image.width}
+            height={giftCards.image.height}
+            format="webp"
+            quality={85}
+            class="w-full h-full object-cover"
+            loading="lazy"
+          />
+        </div>
+      </div>
+      <div class="flex flex-col justify-center gap-4 md:gap-6">
+        <h2 class="text-2xl md:text-4xl font-semibold text-text-primary font-display">
+          {giftCards.title}
+        </h2>
+        <p class="text-base md:text-lg text-text-secondary leading-relaxed max-w-[75ch]">
+          {giftCards.description}
+        </p>
+        <div>
+          <a
+            href={giftCards.cta.href}
+            class="group inline-flex items-center gap-2 rounded-sm bg-brand-gold hover:bg-brand-gold-light active:bg-brand-gold-dark
+                   px-6 py-3 text-base font-semibold text-brand-espresso
+                   focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold
+                   no-underline transition-colors duration-[var(--duration-fast)] ease-[var(--ease-spring)] shadow-glow-gold"
+          >
+            {giftCards.cta.label}
+            <svg
+              class="w-4 h-4 opacity-50 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all duration-[var(--duration-fast)] ease-[var(--ease-spring)]"
+              aria-hidden="true"
+              viewBox="0 0 256 256" fill="none" stroke="currentColor"
+              stroke-width="24" stroke-linecap="round" stroke-linejoin="round"
+            >
+              <line x1="70" y1="128" x2="216" y2="128" />
+              <polyline points="144 56 216 128 144 200" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </article>
+)}
+
+<!-- ═══ FAQ Accordion ═══ -->
+{faqItems.length > 0 && (
+  <section class="max-w-7xl mx-auto py-16 md:py-24 px-4 md:px-8">
+    <h2 class="text-xl md:text-2xl font-semibold text-text-primary font-display mb-8">
+      {faqTitle}
+    </h2>
+    <div class="flex flex-col">
+      {faqItems.map((item) => (
+        <details class="w-full border-b border-border-subtle group">
+          <summary
+            class="flex items-center justify-between py-6 cursor-pointer list-none
+                   text-text-primary font-medium
+                   focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold rounded-sm
+                   transition-colors duration-[var(--duration-fast)] ease-[var(--ease-spring)] hover:text-brand-gold"
+          >
+            <span>{item.question}</span>
+            <svg
+              class="w-5 h-5 text-text-tertiary transition-transform duration-[var(--duration-fast)] ease-[var(--ease-out-quint)] group-open:rotate-180 shrink-0 ml-4"
+              viewBox="0 0 20 20" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M5 7.5L10 12.5L15 7.5" />
+            </svg>
+          </summary>
+          <div class="pb-6 text-text-secondary leading-relaxed max-w-[75ch]">
+            {item.answer}
+          </div>
+        </details>
+      ))}
+    </div>
+  </section>
+)}
+
+<!-- ═══ Location Card ═══ -->
+{location && (
+  <section class="max-w-7xl mx-auto py-16 md:py-24 px-4 md:px-8">
+    <h2 class="text-xl md:text-2xl font-semibold text-text-primary font-display mb-8">
+      Unser Standort
+    </h2>
+
+    <article class="rounded-2xl overflow-hidden bg-surface-glass backdrop-blur-sm border border-border-subtle">
+      <div class="flex flex-col md:flex-row gap-2">
+        {/* Map / Image */}
+        <div class="w-full md:w-1/3 rounded-xl overflow-hidden bg-surface-card min-h-64">
+          {location.mapImage ? (
+            <Image
+              src={location.mapImage.src}
+              alt={location.mapImage.alt}
+              width={location.mapImage.width}
+              height={location.mapImage.height}
+              format="webp"
+              quality={85}
+              class="w-full h-full object-cover"
+              loading="lazy"
+            />
+          ) : (
+            <div class="w-full h-full min-h-64 bg-surface-card flex items-center justify-center text-text-tertiary text-sm" role="img" aria-label="Karte wird geladen">
+              Karte laden...
+            </div>
+          )}
+        </div>
+
+        {/* Details */}
+        <div class="flex flex-col flex-1 gap-6 p-6 md:p-8">
+          <div class="flex flex-col gap-1">
+            <span class="text-sm text-text-tertiary">Restaurant</span>
+            <h3 class="text-xl font-semibold text-text-primary font-display">
+              {location.title}
+            </h3>
+          </div>
+
+          <div class="flex flex-col sm:flex-row gap-8">
+            <div class="flex flex-col gap-1">
+              <span class="text-sm text-text-tertiary">Adresse</span>
+              <address class="not-italic text-sm text-text-secondary">
+                {location.address.map((line) => (
+                  <p>{line}</p>
+                ))}
+              </address>
+            </div>
+            <div class="flex flex-col gap-1">
+              <span class="text-sm text-text-tertiary">Kontakt</span>
+              <a
+                href={location.phoneHref}
+                class="text-sm text-text-secondary hover:text-brand-gold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold
+                       no-underline transition-colors duration-[var(--duration-fast)] ease-[var(--ease-spring)]"
+              >
+                {location.phone}
+              </a>
+              {location.email && location.emailHref && (
+                <a
+                  href={location.emailHref}
+                  class="text-sm text-text-secondary hover:text-brand-gold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold
+                         no-underline transition-colors duration-[var(--duration-fast)] ease-[var(--ease-spring)]"
+                >
+                  {location.email}
+                </a>
+              )}
+            </div>
+          </div>
+
+          <a
+            href={location.directionsHref}
+            class="inline-flex items-center gap-2 text-sm font-medium
+                   text-text-secondary hover:text-brand-gold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold
+                   no-underline transition-colors duration-[var(--duration-fast)] ease-[var(--ease-spring)]"
+          >
+            Wegbeschreibung
+            <svg
+              class="w-4 h-4" aria-hidden="true"
+              viewBox="0 0 256 256" fill="none" stroke="currentColor"
+              stroke-width="24" stroke-linecap="round" stroke-linejoin="round"
+            >
+              <line x1="70" y1="128" x2="216" y2="128" />
+              <polyline points="144 56 216 128 144 200" />
+            </svg>
+          </a>
+
+          <div class="border-t border-border-subtle pt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <span class="text-sm text-text-secondary">Heute: {location.hoursToday}</span>
+            <a
+              href={location.orderHref}
+              class="group inline-flex items-center gap-2 rounded-sm bg-brand-gold hover:bg-brand-gold-light active:bg-brand-gold-dark
+                     min-h-11 px-5 py-2.5 text-sm font-semibold text-brand-espresso
+                     focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold
+                     no-underline transition-colors duration-[var(--duration-fast)] ease-[var(--ease-spring)] shadow-glow-gold"
+            >
+              {location.orderLabel}
+            </a>
+          </div>
+        </div>
+      </div>
+    </article>
+  </section>
+)}

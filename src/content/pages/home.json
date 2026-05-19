@@ -1,0 +1,32 @@
+{
+  "hero_headline": "Soul Food aus Salzburg",
+  "hero_subheadline": "Brasilianische & lateinamerikanische Küche — frisch, voller Geschmack, mit Liebe gemacht.",
+  "hero_cta_primary_label": "Speisekarte",
+  "hero_cta_primary_href": "/menu",
+  "hero_cta_secondary_label": "Lieferung bestellen",
+  "hero_cta_secondary_href": "https://www.foodora.at/en/restaurant/noch/douro-soulfood-bistro",
+  "hero_images": [
+    { "src": "/images/hero-1.jpg", "alt": "D'ouro Soulfood Bistro dishes" },
+    { "src": "/images/hero-2.jpg", "alt": "Brazilian bowl with fresh ingredients" }
+  ],
+  "gallery_title": "D'ouro Soulfood Bistro",
+  "gallery_subtitle": "Frisch. Gewürzt. Mit Seele.",
+  "gallery_images": [
+    { "src": "/images/gallery-1.jpg", "alt": "Birria Tacos" },
+    { "src": "/images/gallery-2.jpg", "alt": "Brazil Beef Bowl" },
+    { "src": "/images/gallery-3.jpg", "alt": "Paella" },
+    { "src": "/images/gallery-4.jpg", "alt": "African Stew" },
+    { "src": "/images/gallery-5.jpg", "alt": "Nachos loaded" },
+    { "src": "/images/gallery-6.jpg", "alt": "Dessert selection" }
+  ],
+  "catering_title": "Catering & Events",
+  "catering_description": "Bringen Sie den Geschmack von D'ouro zu Ihrem nächsten Event! Ob Firmenfeier oder privates Fest — unsere frisch zubereiteten Gerichte sorgen für ein unvergessliches Erlebnis.",
+  "catering_cta_label": "Event anfragen",
+  "catering_cta_href": "/catering",
+  "catering_image": "/images/catering.jpg",
+  "story_title": "Angela's Geschichte",
+  "story_description": "Mit brasilianischen Wurzeln und einer Leidenschaft für gutes Essen hat Angela D'ouro Soulfood Bistro gegründet. Jedes Gericht erzählt eine Geschichte von Wärme, Gemeinschaft und authentischem Geschmack.",
+  "story_cta_label": "Mehr erfahren",
+  "story_cta_href": "/about",
+  "story_image": "/images/angela.jpg"
+}

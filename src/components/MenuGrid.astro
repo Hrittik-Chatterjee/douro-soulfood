@@ -1,0 +1,151 @@
+---
+import { Image } from 'astro:assets';
+
+/**
+ * MenuGrid — Food gallery grid + Catering & Food Truck feature cards.
+ *
+ * Sections:
+ * 1. Food gallery (2x3 → 3x3 responsive grid)
+ * 2. Catering card (glassmorphism, image + content + CTA)
+ * 3. Food Truck card (reversed layout, terracotta accent)
+ *
+ * Slot composition: <slot /> between gallery and feature cards
+ *
+ * Tokens: brand-gold, brand-terracotta, surface-glass/card, text-primary/secondary.
+ * Zero hex codes. All colors from tokens.css @theme.
+ */
+
+interface GalleryImage {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+}
+
+interface FeatureItem {
+  title: string;
+  description: string;
+  image: GalleryImage;
+  cta: { label: string; href: string };
+  /** Use terracotta accent instead of gold */
+  accentTerracotta?: boolean;
+}
+
+interface Props {
+  /** Gallery section heading */
+  galleryTitle: string;
+  /** Gallery section subtitle */
+  gallerySubtitle: string;
+  /** Gallery images — rendered in responsive grid */
+  galleryImages: GalleryImage[];
+  /** Feature cards (Catering, Food Truck, etc.) */
+  features: FeatureItem[];
+}
+
+const {
+  galleryTitle,
+  gallerySubtitle,
+  galleryImages,
+  features,
+} = Astro.props;
+---
+
+<!-- ═══ Food Gallery ═══ -->
+<section class="max-w-7xl mx-auto py-16 md:py-24 px-4 md:px-8">
+  <div class="flex flex-col gap-2">
+    <h2 class="text-2xl md:text-4xl font-semibold text-text-primary font-display">
+      {galleryTitle}
+    </h2>
+    <p class="text-base text-text-secondary">{gallerySubtitle}</p>
+  </div>
+
+  <div
+    class="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-4 mt-8"
+    role="region"
+    aria-label="Essensgalerie"
+  >
+    {galleryImages.map((img) => (
+      <button
+        type="button"
+        class="relative aspect-square rounded-lg overflow-hidden bg-surface-card
+               focus-visible:ring-2 focus-visible:ring-brand-gold
+               transition-transform duration-200 hover:scale-105"
+      >
+        <Image
+          src={img.src}
+          alt={img.alt}
+          width={img.width}
+          height={img.height}
+          format="webp"
+          quality={85}
+          class="w-full h-full object-cover"
+          loading="lazy"
+        />
+      </button>
+    ))}
+  </div>
+</section>
+
+<!-- Slot for content between gallery and feature cards -->
+<slot />
+
+<!-- ═══ Feature Cards (Catering, Food Truck, etc.) ═══ -->
+{features.map((feature, index) => (
+  <article class="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-24">
+    <div
+      class:list={[
+        'flex flex-col gap-6 md:gap-10 rounded-2xl bg-surface-glass backdrop-blur-sm',
+        'border border-border-subtle p-6 md:p-8',
+        'md:flex-row',
+        index % 2 !== 0 && 'md:flex-row-reverse',
+      ]}
+    >
+      {/* Image */}
+      <div class="w-full md:w-1/2 shrink-0">
+        <div class="relative aspect-square md:aspect-auto md:h-full rounded-2xl overflow-hidden bg-surface-card">
+          <Image
+            src={feature.image.src}
+            alt={feature.image.alt}
+            width={feature.image.width}
+            height={feature.image.height}
+            format="webp"
+            quality={85}
+            class="w-full h-full object-cover"
+            loading="lazy"
+          />
+        </div>
+      </div>
+
+      {/* Content */}
+      <div class="flex flex-col justify-center gap-4 md:gap-6">
+        <h2 class="text-2xl md:text-4xl font-semibold text-text-primary font-display">
+          {feature.title}
+        </h2>
+        <p class="text-base md:text-lg text-text-secondary leading-relaxed">
+          {feature.description}
+        </p>
+        <div>
+          <a
+            href={feature.cta.href}
+            class:list={[
+              'inline-flex items-center gap-2 rounded-sm px-6 py-3 text-base font-semibold no-underline transition-colors duration-200',
+              feature.accentTerracotta
+                ? 'bg-brand-forest hover:bg-brand-forest-light text-brand-cream shadow-glow-forest'
+                : 'bg-brand-gold hover:bg-brand-gold-light text-brand-espresso shadow-glow-gold',
+            ]}
+          >
+            {feature.cta.label}
+            <svg
+              class="w-4 h-4"
+              viewBox="0 0 256 256" fill="none" stroke="currentColor"
+              stroke-width="24" stroke-linecap="round" stroke-linejoin="round"
+            >
+              <line x1="70" y1="128" x2="216" y2="128" />
+              <polyline points="144 56 216 128 144 200" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </article>
+))}

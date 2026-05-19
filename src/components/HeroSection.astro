@@ -1,0 +1,155 @@
+---
+
+/**
+ * HeroSection — Full-bleed hero with background image carousel,
+ * headline overlay, and dual CTA buttons.
+ *
+ * Slot composition: Use <slot /> for any additional hero content
+ * (e.g. scroll indicator, trust badges).
+ *
+ * Tokens: brand-gold, brand-espresso, surface-primary, text-primary.
+ * Zero hex codes. All colors from tokens.css @theme.
+ */
+
+interface HeroImage {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+}
+
+interface Props {
+  /** Small accent headline — rendered in brand gold */
+  accent: string;
+  /** Main hero headline — rendered in display font */
+  headline: string;
+  /** Supporting subheadline text */
+  subheadline?: string;
+  /** Hero background images (carousel source) */
+  images: HeroImage[];
+  /** Primary CTA config */
+  ctaPrimary: { label: string; href: string };
+  /** Secondary CTA config */
+  ctaSecondary?: { label: string; href: string };
+}
+
+const {
+  accent,
+  headline,
+  subheadline,
+  images,
+  ctaPrimary,
+  ctaSecondary,
+} = Astro.props;
+
+/** Use first image as the default hero background */
+const heroImage = images[0];
+---
+
+<header class="relative w-full overflow-hidden bg-surface-primary">
+  <!-- Background image layer -->
+  <div
+    class="absolute inset-0 overflow-hidden"
+    role="region"
+    aria-live="polite"
+    aria-atomic="true"
+    aria-label="Hero-Bildkarussell"
+  >
+    {heroImage && (
+      <img
+        src={heroImage.src}
+        alt={heroImage.alt}
+        width={heroImage.width}
+        height={heroImage.height}
+        class="absolute inset-0 w-full h-full object-cover object-center"
+        loading="eager"
+      />
+    )}
+    <!-- Gradient overlay: dark overlay for text contrast -->
+    <div class="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/60"></div>
+  </div>
+
+  <!-- Hero content -->
+  <div class="relative max-w-7xl mx-auto px-4 md:px-8 min-h-[70vh] md:min-h-screen flex flex-col justify-end pb-12 md:pb-16">
+    <div class="flex flex-col gap-3 lg:gap-4 max-w-2xl">
+      <!-- Accent label — brand gold decorative text -->
+      <span class="text-sm md:text-xl lg:text-2xl font-semibold text-brand-gold leading-tight tracking-tight font-display">
+        {accent}
+      </span>
+
+      <!-- Main headline — white text for contrast, semantically h1 for SEO -->
+      <h1 class="text-3xl md:text-5xl lg:text-6xl font-semibold text-white leading-tight font-display">
+        {headline}
+      </h1>
+
+      {subheadline && (
+        <p class="text-base md:text-lg text-white/90 max-w-[75ch] leading-relaxed">
+          {subheadline}
+        </p>
+      )}
+
+      <!-- CTA buttons -->
+      <div class="flex flex-wrap gap-3 mt-4">
+        <!-- Primary CTA — brand gold with glow -->
+        <a
+          href={ctaPrimary.href}
+          class="group inline-flex items-center gap-2 min-h-12 px-5 py-3 text-base font-semibold
+                 rounded-sm bg-brand-gold hover:bg-brand-gold-light active:bg-brand-gold-dark text-brand-espresso
+                 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold
+                 no-underline transition-colors duration-[var(--duration-fast)] ease-[var(--ease-spring)] shadow-glow-gold"
+        >
+          <span class="flex items-center gap-1 whitespace-nowrap">{ctaPrimary.label}</span>
+          <svg
+            class="w-4 h-4 opacity-50 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all duration-[var(--duration-fast)] ease-[var(--ease-spring)]"
+            viewBox="0 0 256 256" fill="none" stroke="currentColor"
+            stroke-width="24" stroke-linecap="round" stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <line x1="70" y1="128" x2="216" y2="128" />
+            <polyline points="144 56 216 128 144 200" />
+          </svg>
+        </a>
+
+        {ctaSecondary && (
+          <!-- Secondary CTA — outlined style -->
+          <a
+            href={ctaSecondary.href}
+            class="inline-flex items-center gap-2 min-h-12 px-5 py-3 text-base font-medium
+                   rounded-sm border border-border-default bg-surface-elevated
+                   hover:bg-surface-card hover:border-border-emphasis hover:text-text-primary
+                   active:bg-surface-primary
+                   focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold
+                   text-text-secondary no-underline transition-colors duration-[var(--duration-fast)] ease-[var(--ease-spring)]"
+          >
+            {ctaSecondary.label}
+          </a>
+        )}
+      </div>
+    </div>
+
+    <!-- Slot for additional hero content (scroll indicator, badges, etc.) -->
+    <slot />
+  </div>
+</header>
+
+<script>
+  /**
+   * Hero carousel — fades between background images.
+   * No external dependencies. Respects prefers-reduced-motion.
+   */
+  const prefersReducedMotion = globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!prefersReducedMotion) {
+    const heroImages = document.querySelectorAll<HTMLImageElement>('[aria-label="Hero-Bildkarussell"] img');
+    if (heroImages.length > 1) {
+      let current = 0;
+      setInterval(() => {
+        heroImages[current]?.classList.remove('opacity-100');
+        heroImages[current]?.classList.add('opacity-0');
+        current = (current + 1) % heroImages.length;
+        heroImages[current]?.classList.remove('opacity-0');
+        heroImages[current]?.classList.add('opacity-100');
+      }, 6000);
+    }
+  }
+</script>

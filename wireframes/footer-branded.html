@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="de" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>D'ouro Soulfood — Footer (Branded)</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;0,9..144,900;1,9..144,400;1,9..144,600&display=swap" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style type="text/tailwindcss">
+    @theme {
+      --color-brand-terracotta: oklch(0.52 0.13 24);
+      --color-brand-terracotta-light: oklch(0.63 0.12 24);
+      --color-brand-terracotta-dark: oklch(0.38 0.12 22);
+      --color-brand-gold: oklch(0.68 0.14 70);
+      --color-brand-gold-light: oklch(0.78 0.12 70);
+      --color-brand-gold-dark: oklch(0.53 0.12 68);
+      --color-brand-forest: oklch(0.35 0.07 152);
+      --color-brand-forest-light: oklch(0.44 0.09 152);
+      --color-brand-sage: oklch(0.60 0.08 140);
+      --color-brand-cream: oklch(0.95 0.015 80);
+      --color-brand-cream-warm: oklch(0.93 0.02 75);
+      --color-brand-mist: oklch(0.97 0.008 80);
+      --color-brand-espresso: oklch(0.14 0.03 40);
+      --color-brand-charcoal: oklch(0.12 0.01 0);
+      --color-brand-smoke: oklch(0.17 0.01 0);
+      --color-brand-ember: oklch(0.38 0.12 22);
+      --color-surface-primary: oklch(0.06 0.01 0);
+      --color-surface-elevated: oklch(0.10 0.012 0);
+      --color-surface-card: oklch(0.13 0.014 0);
+      --color-surface-glass: oklch(0.13 0.014 0 / 0.72);
+      --color-text-primary: oklch(0.96 0.006 80);
+      --color-text-secondary: oklch(0.68 0.012 60);
+      --color-text-tertiary: oklch(0.50 0.01 50);
+      --color-text-inverse: oklch(0.14 0.02 40);
+      --color-text-brand: oklch(0.68 0.14 70);
+      --color-border-subtle: oklch(0.96 0.006 80 / 0.08);
+      --color-border-default: oklch(0.96 0.006 80 / 0.12);
+      --color-border-emphasis: oklch(0.96 0.006 80 / 0.24);
+      --font-display: 'Fraunces', 'Georgia', serif;
+      --font-body: 'DM Sans', system-ui, sans-serif;
+    }
+    * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    html { background-color: var(--color-surface-primary); color: var(--color-text-primary); }
+    body { font-family: var(--font-body); line-height: 1.6; overflow-x: hidden; }
+    h1, h2, h3, h4, h5, h6 { font-family: var(--font-display); line-height: 1.15; letter-spacing: -0.02em; }
+  </style>
+</head>
+<body class="bg-surface-primary text-text-primary">
+
+  <!-- ═══ FOOTER — D'ouro Branded ═══ -->
+  <footer class="bg-surface-primary pt-2 pb-18 md:pb-4 border-t border-border-subtle">
+    <div class="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-20">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
+
+        <!-- Brand — logo name in display font -->
+        <div class="flex flex-col gap-4">
+          <a href="/" class="inline-block no-underline">
+            <span class="text-2xl font-bold text-text-brand" style="font-family: var(--font-display)">D'ouro</span>
+            <span class="text-sm text-text-secondary ml-1">Soulfood</span>
+          </a>
+          <p class="text-sm text-text-secondary max-w-xs leading-relaxed">
+            Brasilianische Seele. Afro-Lateinische Aromen. Mitten in Salzburg. Mit Liebe gekocht, mit Herz serviert.
+          </p>
+        </div>
+
+        <!-- Quick Links — secondary text, gold hover -->
+        <div class="flex flex-col gap-4">
+          <h3 class="text-sm font-semibold text-text-tertiary uppercase tracking-wider">Navigation</h3>
+          <nav class="flex flex-col gap-3" aria-label="Footer navigation">
+            <a href="/menu" class="text-sm text-text-secondary hover:text-text-primary no-underline transition-colors">Speisekarte</a>
+            <a href="/catering" class="text-sm text-text-secondary hover:text-text-primary no-underline transition-colors">Catering & Events</a>
+            <a href="/ueber-uns" class="text-sm text-text-secondary hover:text-text-primary no-underline transition-colors">Über uns</a>
+            <a href="/kontakt" class="text-sm text-text-secondary hover:text-text-primary no-underline transition-colors">Kontakt</a>
+            <a href="/gift-cards" class="text-sm text-text-secondary hover:text-text-primary no-underline transition-colors">Geschenkkarten</a>
+          </nav>
+        </div>
+
+        <!-- CTA + Contact -->
+        <div class="flex flex-col gap-4">
+          <a href="/order" class="inline-flex items-center justify-center rounded-lg bg-brand-gold hover:bg-brand-gold-light px-5 py-3 text-base font-semibold text-brand-espresso no-underline transition-colors duration-200" style="box-shadow: 0 0 40px oklch(0.68 0.14 70 / 0.15)">
+            Jetzt bestellen
+          </a>
+          <div class="flex flex-col gap-1">
+            <span class="text-sm text-text-tertiary">Kontakt</span>
+            <address class="not-italic text-sm text-text-secondary">
+              <p>Auerspergstraße 10, 5020 Salzburg</p>
+              <a href="tel:+436764231921" class="hover:text-brand-gold transition-colors">+43 676 4231921</a>
+            </address>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom bar -->
+      <div class="mt-16 pt-8 border-t border-border-subtle flex flex-col sm:flex-row items-center justify-between gap-4">
+        <nav class="flex items-center gap-4" aria-label="Legal links">
+          <a href="/impressum" class="text-xs text-text-tertiary hover:text-text-secondary no-underline transition-colors">Impressum</a>
+          <a href="/datenschutz" class="text-xs text-text-tertiary hover:text-text-secondary no-underline transition-colors">Datenschutz</a>
+        </nav>
+        <p class="text-xs text-text-tertiary">
+          &copy; 2026 D'ouro Soulfood Bistro. Alle Rechte vorbehalten.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

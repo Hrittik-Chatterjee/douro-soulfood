@@ -1,0 +1,66 @@
+@import "tailwindcss";
+@import "./tokens.css";
+
+/* ═══════════════════════════════════════════════════════
+   D'OURO SOULFOOD — Global Stylesheet
+   ═══════════════════════════════════════════════════════
+   Architecture:
+     1. Tailwind v4 base (@import "tailwindcss")
+     2. Design tokens (@import "./tokens.css")
+     3. Utility & animation classes (below)
+   ═══════════════════════════════════════════════════════ */
+
+
+/* ── Scroll-driven fade-in animation ──
+   Uses ease-out-quint for natural deceleration.
+   No bounce/elastic — real objects decelerate smoothly. */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up var(--duration-entrance) var(--ease-out-quint) both;
+}
+
+/* ── Stagger children ── */
+.stagger > * {
+  opacity: 0;
+  animation: fade-up var(--duration-entrance) var(--ease-out-quint) both;
+}
+.stagger > *:nth-child(1) { animation-delay: 0ms; }
+.stagger > *:nth-child(2) { animation-delay: 80ms; }
+.stagger > *:nth-child(3) { animation-delay: 160ms; }
+.stagger > *:nth-child(4) { animation-delay: 240ms; }
+.stagger > *:nth-child(5) { animation-delay: 320ms; }
+.stagger > *:nth-child(6) { animation-delay: 400ms; }
+
+/* ── Image hover zoom (gallery) ── */
+.img-zoom {
+  overflow: hidden;
+}
+.img-zoom img {
+  transition: transform var(--duration-slow) var(--ease-out-quart);
+}
+.img-zoom:hover img {
+  transform: scale(1.04);
+}
+
+/* ── Gold accent text ──
+   Solid brand-gold color instead of gradient.
+   Gradient text is decorative and a common AI tell. */
+.text-gradient-gold {
+  color: var(--color-brand-gold);
+}
+
+/* ── Section divider ── */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-border-default), transparent);
+}

@@ -1,0 +1,37 @@
+---
+export const prerender = true;
+
+import Base from '@/layouts/Base.astro';
+import NavBar from '@/components/NavBar.astro';
+import Footer from '@/components/Footer.astro';
+import FeatureCard from '@/components/sections/FeatureCard.astro';
+---
+
+<Base title="Catering & Events">
+  <NavBar slot="nav" />
+
+  <section class="py-16 md:py-24 px-4 md:px-8 max-w-7xl mx-auto">
+    <h1 class="text-[clamp(2rem,4vw,3rem)] font-bold text-brand-gold mb-4 font-display">Catering & Events</h1>
+    <p class="text-text-secondary max-w-[75ch] leading-relaxed mb-12">
+      Bringen Sie den Geschmack von D'ouro zu Ihrem nächsten Event.
+      Von Firmenfeiern bis privaten Feiern — wir liefern Soul Food direkt zu Ihnen.
+    </p>
+  </section>
+
+  <FeatureCard
+    title="Firmenevents"
+    description="Von Team-Lunches bis Firmenfeieren — unsere Catering-Pakete passen sich Ihren Bedürfnissen an."
+    image={{ src: 'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?w=800&q=80', alt: 'Corporate catering setup', width: 800, height: 600 }}
+    cta={{ label: 'Anfrage senden', href: '/contact' }}
+  />
+
+  <FeatureCard
+    title="Private Feiern"
+    description="Geburtstage, Hochzeiten, Familientreffen — wir bringen Soul Food direkt zu Ihnen."
+    image={{ src: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&q=80', alt: 'Private event catering', width: 800, height: 600 }}
+    cta={{ label: 'Jetzt planen', href: '/contact' }}
+    reverse
+  />
+
+  <Footer slot="footer" />
+</Base>

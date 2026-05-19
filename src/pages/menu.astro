@@ -1,0 +1,164 @@
+---
+export const prerender = true;
+
+import Base from '@/layouts/Base.astro';
+import NavBar from '@/components/NavBar.astro';
+import Footer from '@/components/Footer.astro';
+import MenuItemCard from '@/components/MenuItemCard.astro';
+import { getCollection } from 'astro:content';
+
+/**
+ * MENU PAGE — D'ouro Soulfood Bistro
+ *
+ * Fetches all menu items from the KeystaticCMS menu_items collection,
+ * groups them by category, sorts by order within each category,
+ * and renders them as glassmorphic cards.
+ *
+ * Categories and their display order:
+ *   1. Tacos
+ *   2. Bowls
+ *   3. African Specials
+ *   4. Sides & Extras
+ *   5. Drinks
+ *
+ * Prices stored in EUR cents (1490 = €14.90), formatted via Intl.NumberFormat.
+ * Dietary badges: vegan, vegetarian, gluten-free, spicy, halal, dairy-free.
+ */
+
+type DietaryTag = 'vegan' | 'vegetarian' | 'gluten-free' | 'spicy' | 'halal' | 'dairy-free';
+
+/** Category display config — controls order and German labels */
+const categoryConfig: Record<string, { label: string; order: number; icon: string }> = {
+  'tacos':              { label: 'Tacos',              order: 10, icon: '🌮' },
+  'bowls':              { label: 'Bowls',              order: 20, icon: '🥘' },
+  'african-specials':   { label: 'African Specials',   order: 30, icon: '🌍' },
+  'sides':              { label: 'Sides & Extras',     order: 40, icon: '🧄' },
+  'drinks':             { label: 'Drinks',             order: 50, icon: '🍹' },
+};
+
+/** Fetch all menu items from KeystaticCMS */
+const allItems = await getCollection('menu_items');
+
+/** Filter to only available items, sort by category order then item order */
+const menuItems = allItems
+  .filter((item) => item.data.available !== false)
+  .sort((a, b) => {
+    const catA = categoryConfig[a.data.category]?.order ?? 99;
+    const catB = categoryConfig[b.data.category]?.order ?? 99;
+    if (catA !== catB) return catA - catB;
+    return (a.data.order ?? 0) - (b.data.order ?? 0);
+  });
+
+/** Group items by category */
+const grouped = menuItems.reduce<Record<string, typeof menuItems>>((acc, item) => {
+  const cat = item.data.category || 'other';
+  if (!acc[cat]) acc[cat] = [];
+  acc[cat].push(item);
+  return acc;
+}, {});
+
+/** Sort categories by their display order */
+const sortedCategories = Object.entries(grouped).sort(
+  ([a], [b]) => (categoryConfig[a]?.order ?? 99) - (categoryConfig[b]?.order ?? 99)
+);
+---
+
+<Base title="Speisekarte">
+  <NavBar slot="nav" />
+
+  <!-- ═══ HERO HEADER ═══ -->
+  <section class="py-16 md:py-24 px-4 md:px-8 max-w-7xl mx-auto">
+    <h1 class="text-[clamp(2rem,4vw,3rem)] font-bold text-brand-gold mb-4 font-display">
+      Speisekarte
+    </h1>
+    <p class="text-text-secondary max-w-[75ch] leading-relaxed">
+      Jedes Gericht wird frisch und von Hand zubereitet — mit den Aromen Brasiliens und der Wärme Afrikas.
+      Angela kocht alles selbst, mit Liebe und den besten Zutaten.
+    </p>
+
+    <!-- Quick category navigation -->
+    <nav class="flex flex-wrap gap-2 mt-8" aria-label="Menü-Kategorien">
+      {sortedCategories.map(([slug]) => {
+        const config = categoryConfig[slug];
+        if (!config) return null;
+        return (
+          <a
+            href={`#category-${slug}`}
+            class="inline-flex items-center gap-2 min-h-11 px-4 py-2.5 text-sm font-medium rounded-sm
+                   bg-surface-card border border-border-subtle text-text-secondary
+                   hover:bg-surface-elevated hover:border-border-default hover:text-text-primary
+                   active:bg-surface-primary
+                   focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold
+                   no-underline transition-colors duration-[var(--duration-fast)] ease-[var(--ease-spring)]"
+          >
+            <span aria-hidden="true">{config.icon}</span>
+            {config.label}
+          </a>
+        );
+      })}
+    </nav>
+  </section>
+
+  <!-- ═══ MENU CATEGORIES ═══ -->
+  {sortedCategories.map(([slug, items]) => {
+    const config = categoryConfig[slug] ?? { label: slug, order: 99, icon: '🍽️' };
+    return (
+      <section
+        id={`category-${slug}`}
+        class="py-8 md:py-12 px-4 md:px-8 max-w-7xl mx-auto scroll-mt-20"
+      >
+        {/* Category heading */}
+        <div class="flex items-center gap-3 mb-8">
+          <span class="text-2xl" aria-hidden="true">{config.icon}</span>
+          <h2 class="text-xl md:text-2xl font-semibold text-text-primary font-display">
+            {config.label}
+          </h2>
+          <div class="flex-1 h-px bg-border-subtle"></div>
+        </div>
+
+        {/* Menu items grid */}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+          {items.map((item) => (
+            <MenuItemCard
+              name={item.data.title}
+              description={item.data.description}
+              priceInCents={item.data.price}
+              dietary={item.data.dietary as DietaryTag[] | undefined}
+              available={item.data.available}
+              featured={item.data.featured}
+              imageSrc={item.data.image || undefined}
+              imageAlt={item.data.title}
+              imageWidth={400}
+              imageHeight={300}
+            />
+          ))}
+        </div>
+      </section>
+    );
+  })}
+
+  <!-- ═══ EMPTY STATE ═══ -->
+  {sortedCategories.length === 0 && (
+    <section class="py-16 px-4 md:px-8 max-w-7xl mx-auto text-center" aria-label="Leere Speisekarte">
+      <p class="text-text-tertiary text-lg py-20">
+        Die Speisekarte wird gerade aktualisiert. Bitte schauen Sie später vorbei!
+      </p>
+    </section>
+  )}
+
+  <!-- ═══ ALLERGEN NOTE ═══ -->
+  <section class="py-8 md:py-12 px-4 md:px-8 max-w-7xl mx-auto">
+    <div class="rounded-lg bg-surface-card border border-border-subtle p-6">
+      <h3 class="text-sm font-semibold text-text-tertiary uppercase tracking-wider mb-3">
+        Hinweis
+      </h3>
+      <p class="text-sm text-text-secondary leading-relaxed max-w-[75ch]">
+        Alle Gerichte können Spuren von Allergenen enthalten. Fragen Sie unser Team nach
+        detaillierten Zutaten- und Allergeninformationen. Die Preise verstehen sich inklusive
+        Mehrwertsteuer. Änderungen und Irrtümer vorbehalten.
+      </p>
+    </div>
+  </section>
+
+  <Footer slot="footer" />
+</Base>

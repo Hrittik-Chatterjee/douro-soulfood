@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="de" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>D'ouro Soulfood — Full Page (Branded)</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;0,9..144,900;1,9..144,400;1,9..144,600&display=swap" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style type="text/tailwindcss">
+    @theme {
+      --color-brand-terracotta: oklch(0.52 0.13 24);
+      --color-brand-terracotta-light: oklch(0.63 0.12 24);
+      --color-brand-terracotta-dark: oklch(0.38 0.12 22);
+      --color-brand-gold: oklch(0.68 0.14 70);
+      --color-brand-gold-light: oklch(0.78 0.12 70);
+      --color-brand-gold-dark: oklch(0.53 0.12 68);
+      --color-brand-forest: oklch(0.35 0.07 152);
+      --color-brand-forest-light: oklch(0.44 0.09 152);
+      --color-brand-sage: oklch(0.60 0.08 140);
+      --color-brand-cream: oklch(0.95 0.015 80);
+      --color-brand-cream-warm: oklch(0.93 0.02 75);
+      --color-brand-mist: oklch(0.97 0.008 80);
+      --color-brand-espresso: oklch(0.14 0.03 40);
+      --color-brand-charcoal: oklch(0.12 0.01 0);
+      --color-brand-smoke: oklch(0.17 0.01 0);
+      --color-brand-ember: oklch(0.38 0.12 22);
+      --color-surface-primary: oklch(0.06 0.01 0);
+      --color-surface-elevated: oklch(0.10 0.012 0);
+      --color-surface-card: oklch(0.13 0.014 0);
+      --color-surface-glass: oklch(0.13 0.014 0 / 0.72);
+      --color-text-primary: oklch(0.96 0.006 80);
+      --color-text-secondary: oklch(0.68 0.012 60);
+      --color-text-tertiary: oklch(0.50 0.01 50);
+      --color-text-inverse: oklch(0.14 0.02 40);
+      --color-text-brand: oklch(0.68 0.14 70);
+      --color-border-subtle: oklch(0.96 0.006 80 / 0.08);
+      --color-border-default: oklch(0.96 0.006 80 / 0.12);
+      --color-border-emphasis: oklch(0.96 0.006 80 / 0.24);
+      --font-display: 'Fraunces', 'Georgia', serif;
+      --font-body: 'DM Sans', system-ui, sans-serif;
+    }
+    * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    html { scroll-behavior: smooth; background-color: var(--color-surface-primary); color: var(--color-text-primary); }
+    body { font-family: var(--font-body); line-height: 1.6; overflow-x: hidden; background-color: var(--color-surface-primary); color: var(--color-text-primary); }
+    h1, h2, h3, h4, h5, h6 { font-family: var(--font-display); line-height: 1.15; letter-spacing: -0.02em; }
+  </style>
+</head>
+<body class="bg-surface-primary text-text-primary">
+
+  <!-- ═══ NAV ═══ -->
+  <nav aria-label="Main menu" class="sticky top-0 z-30 bg-surface-glass backdrop-blur-sm transition-all duration-300 border-b border-border-subtle">
+    <div class="mx-auto flex max-w-7xl items-center px-4 py-4 md:px-8 gap-2">
+      <div class="md:shrink-0">
+        <a href="/" class="flex items-center gap-1 no-underline">
+          <span class="text-xl font-bold text-text-brand" style="font-family: var(--font-display)">D'ouro</span>
+          <span class="text-sm text-text-secondary hidden sm:inline">Soulfood</span>
+        </a>
+      </div>
+      <div class="hidden flex-1 justify-end items-center min-w-0 md:flex">
+        <div class="relative w-full max-w-full">
+          <div class="flex items-center justify-end gap-2 p-2">
+            <div class="flex gap-2 items-center min-w-0">
+              <div class="flex gap-2 items-center">
+                <a href="/menu" class="flex min-h-10 items-center px-3 py-2 text-sm font-medium whitespace-nowrap text-text-secondary rounded-lg hover:bg-surface-elevated hover:text-text-primary no-underline transition-colors">Speisekarte</a>
+                <a href="/catering" class="flex min-h-10 items-center px-3 py-2 text-sm font-medium whitespace-nowrap text-text-secondary rounded-lg hover:bg-surface-elevated hover:text-text-primary no-underline transition-colors">Catering</a>
+                <a href="/ueber-uns" class="flex min-h-10 items-center px-3 py-2 text-sm font-medium whitespace-nowrap text-text-secondary rounded-lg hover:bg-surface-elevated hover:text-text-primary no-underline transition-colors">Über uns</a>
+                <a href="/kontakt" class="flex min-h-10 items-center px-3 py-2 text-sm font-medium whitespace-nowrap text-text-secondary rounded-lg hover:bg-surface-elevated hover:text-text-primary no-underline transition-colors">Kontakt</a>
+              </div>
+            </div>
+            <div class="flex gap-2 items-center shrink-0">
+              <a href="/reservierung" class="flex min-h-10 items-center px-3 py-2 text-sm font-medium rounded-lg border border-border-default bg-surface-elevated hover:bg-surface-card hover:border-border-emphasis text-text-secondary no-underline transition-colors">Reservierung</a>
+              <a href="/order" class="group flex min-h-10 items-center px-4 py-2 text-sm font-semibold rounded-lg bg-brand-gold hover:bg-brand-gold-light text-brand-espresso no-underline transition-colors duration-200" style="box-shadow: 0 0 40px oklch(0.68 0.14 70 / 0.15)">
+                <span class="flex items-center gap-1 whitespace-nowrap">Jetzt bestellen</span>
+                <svg class="ml-1 w-4 h-4 opacity-50 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"><line x1="70" y1="128" x2="216" y2="128" /><polyline points="144 56 216 128 144 200" /></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Mobile menu button -->
+      <div class="flex flex-1 justify-end items-center md:hidden">
+        <div class="flex shrink-0 items-center gap-2 p-1">
+          <button type="button" class="flex justify-center items-center w-10 h-10 rounded-lg hover:bg-surface-elevated transition-colors" aria-label="Open navigation menu">
+            <div class="flex flex-col gap-1.5 justify-center items-center w-6 h-6">
+              <span class="block h-0.5 w-6 bg-text-primary rounded-full"></span>
+              <span class="block h-0.5 w-6 bg-text-primary rounded-full"></span>
+              <span class="block h-0.5 w-6 bg-text-primary rounded-full"></span>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══ HERO ═══ -->
+  <header class="relative w-full overflow-hidden bg-surface-primary">
+    <div class="absolute top-0 left-0 w-full h-full overflow-hidden" role="region" aria-live="polite" aria-atomic="true" aria-label="Hero image carousel">
+      <div class="absolute top-0 left-0 w-full h-full">
+        <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1600&q=80" alt="D'ouro Soulfood Bistro — Afro-Latin cuisine in Salzburg" class="absolute top-0 left-0 w-full h-full object-cover object-center" loading="eager" />
+      </div>
+      <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent via-transparent to-surface-primary/75"></div>
+    </div>
+    <div class="max-w-7xl mx-auto mt-4 mb-4 flex flex-col items-center pt-0 md:min-h-160 min-h-125 md:h-screen">
+      <div class="relative w-full flex-1 flex flex-col">
+        <div class="max-w-full flex-1 flex flex-col justify-end gap-6 px-4 md:px-8 py-6">
+          <div class="max-w-7xl">
+            <div class="flex flex-col gap-2 lg:gap-3">
+              <h1 class="text-sm md:text-2xl lg:text-3xl font-semibold text-brand-gold leading-tight tracking-tight overflow-hidden text-ellipsis whitespace-nowrap inline-block max-w-full" style="font-family: var(--font-display)">Brasilianische Seele. Salzburgs Küche.</h1>
+              <span class="text-3xl md:text-5xl font-semibold text-text-primary leading-tight normal-case" style="font-family: var(--font-display)">Authentische Afro-Lateinische Küche, mit Liebe zubereitet</span>
+            </div>
+            <div class="hidden md:flex mt-6">
+              <a href="/order" class="group flex min-h-12 items-center px-4 py-3 text-base font-semibold rounded-lg bg-brand-gold hover:bg-brand-gold-light text-brand-espresso no-underline transition-colors duration-200" style="box-shadow: 0 0 40px oklch(0.68 0.14 70 / 0.15)">
+                <span class="flex items-center gap-1 whitespace-nowrap">Jetzt bestellen</span>
+                <svg class="ml-1 w-4 h-4 opacity-50 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"><line x1="70" y1="128" x2="216" y2="128" /><polyline points="144 56 216 128 144 200" /></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══ FOOD GALLERY ═══ -->
+  <section class="max-w-7xl mx-auto py-16 md:py-24 px-4 md:px-8">
+    <div class="flex flex-col gap-2">
+      <h2 class="text-2xl md:text-4xl font-semibold text-text-primary" style="font-family: var(--font-display)">D'ouro Soulfood</h2>
+      <p class="text-base text-text-secondary">Brasilianische Seele, Salzburgs Herz</p>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-4 mt-8" role="region" aria-label="Food gallery">
+      <button type="button" class="relative aspect-square rounded-xl overflow-hidden bg-surface-card focus-visible:ring-2 focus-visible:ring-brand-gold transition-transform duration-200 hover:scale-105"><img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&q=80" alt="Feijoada" class="w-full h-full object-cover" /></button>
+      <button type="button" class="relative aspect-square rounded-xl overflow-hidden bg-surface-card focus-visible:ring-2 focus-visible:ring-brand-gold transition-transform duration-200 hover:scale-105"><img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&q=80" alt="Coxinha" class="w-full h-full object-cover" /></button>
+      <button type="button" class="relative aspect-square rounded-xl overflow-hidden bg-surface-card focus-visible:ring-2 focus-visible:ring-brand-gold transition-transform duration-200 hover:scale-105"><img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&q=80" alt="Moqueca" class="w-full h-full object-cover" /></button>
+      <button type="button" class="relative aspect-square rounded-xl overflow-hidden bg-surface-card focus-visible:ring-2 focus-visible:ring-brand-gold transition-transform duration-200 hover:scale-105"><img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=400&q=80" alt="Pão de Queijo" class="w-full h-full object-cover" /></button>
+      <button type="button" class="relative aspect-square rounded-xl overflow-hidden bg-surface-card focus-visible:ring-2 focus-visible:ring-brand-gold transition-transform duration-200 hover:scale-105"><img src="https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?w=400&q=80" alt="Brigadeiro" class="w-full h-full object-cover" /></button>
+      <button type="button" class="relative aspect-square rounded-xl overflow-hidden bg-surface-card focus-visible:ring-2 focus-visible:ring-brand-gold transition-transform duration-200 hover:scale-105"><img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400&q=80" alt="Açaí Bowl" class="w-full h-full object-cover" /></button>
+    </div>
+  </section>
+
+  <!-- ═══ CATERING CARD (Glassmorphism) ═══ -->
+  <article class="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-24">
+    <div class="flex flex-col md:flex-row gap-6 md:gap-10 rounded-2xl bg-surface-glass backdrop-blur-sm border border-border-subtle p-6 md:p-8">
+      <div class="w-full md:w-1/2 shrink-0">
+        <div class="relative aspect-square md:aspect-auto md:h-full rounded-2xl overflow-hidden bg-surface-card">
+          <img src="https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?w=800&q=80" alt="Catering event" class="w-full h-full object-cover" />
+        </div>
+      </div>
+      <div class="flex flex-col justify-center gap-4 md:gap-6">
+        <h2 class="text-2xl md:text-4xl font-semibold text-text-primary" style="font-family: var(--font-display)">Catering & Events</h2>
+        <p class="text-base md:text-lg text-text-secondary leading-relaxed">Verleihen Sie Ihren Firmen- und Privatfeiern brasilianisches Flair mit unserem authentischen Catering-Service.</p>
+        <div>
+          <a href="/catering" class="inline-flex items-center gap-2 rounded-lg bg-brand-gold hover:bg-brand-gold-light px-6 py-3 text-base font-semibold text-brand-espresso no-underline transition-colors duration-200" style="box-shadow: 0 0 40px oklch(0.68 0.14 70 / 0.15)">Event planen <svg class="w-4 h-4" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"><line x1="70" y1="128" x2="216" y2="128" /><polyline points="144 56 216 128 144 200" /></svg></a>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- ═══ FEATURED MENU ═══ -->
+  <section class="max-w-7xl mx-auto py-16 md:py-24 px-4 md:px-8">
+    <div class="flex items-center justify-between gap-4 mb-8">
+      <h2 class="text-xl md:text-2xl font-semibold text-text-primary" style="font-family: var(--font-display)">Empfehlungen</h2>
+      <a href="/menu" class="flex items-center gap-2 text-sm font-medium text-text-secondary hover:text-brand-gold no-underline transition-colors">Speisekarte <svg class="w-4 h-4" viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"><line x1="70" y1="128" x2="216" y2="128" /><polyline points="144 56 216 128 144 200" /></svg></a>
+    </div>
+    <div class="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory pb-4 -mx-4 px-4">
+      <a href="/menu" class="flex flex-col gap-3 w-40 md:w-60 shrink-0 snap-start group no-underline"><div class="relative aspect-square rounded-xl overflow-hidden bg-surface-card"><img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&q=80" alt="Feijoada" class="w-full h-full object-cover" /></div><p class="text-sm md:text-base text-text-primary font-medium line-clamp-2 group-hover:text-brand-gold transition-colors">Feijoada</p></a>
+      <a href="/menu" class="flex flex-col gap-3 w-40 md:w-60 shrink-0 snap-start group no-underline"><div class="relative aspect-square rounded-xl overflow-hidden bg-surface-card"><img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&q=80" alt="Coxinha" class="w-full h-full object-cover" /></div><p class="text-sm md:text-base text-text-primary font-medium line-clamp-2 group-hover:text-brand-gold transition-colors">Coxinha</p></a>
+      <a href="/menu" class="flex flex-col gap-3 w-40 md:w-60 shrink-0 snap-start group no-underline"><div class="relative aspect-square rounded-xl overflow-hidden bg-surface-card"><img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&q=80" alt="Moqueca" class="w-full h-full object-cover" /></div><p class="text-sm md:text-base text-text-primary font-medium line-clamp-2 group-hover:text-brand-gold transition-colors">Moqueca</p></a>
+      <a href="/menu" class="flex flex-col gap-3 w-40 md:w-60 shrink-0 snap-start group no-underline"><div class="relative aspect-square rounded-xl overflow-hidden bg-surface-card"><img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=400&q=80" alt="Pão de Queijo" class="w-full h-full object-cover" /></div><p class="text-sm md:text-base text-text-primary font-medium line-clamp-2 group-hover:text-brand-gold transition-colors">Pão de Queijo</p></a>
+      <a href="/menu" class="flex flex-col gap-3 w-40 md:w-60 shrink-0 snap-start group no-underline"><div class="relative aspect-square rounded-xl overflow-hidden bg-surface-card"><img src="https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?w=400&q=80" alt="Brigadeiro" class="w-full h-full object-cover" /></div><p class="text-sm md:text-base text-text-primary font-medium line-clamp-2 group-hover:text-brand-gold transition-colors">Brigadeiro</p></a>
+    </div>
+  </section>
+
+  <!-- ═══ FAQ ═══ -->
+  <section class="max-w-7xl mx-auto py-16 md:py-24 px-4 md:px-8">
+    <h2 class="text-xl md:text-2xl font-semibold text-text-primary mb-8" style="font-family: var(--font-display)">Häufig gestellte Fragen</h2>
+    <div class="flex flex-col">
+      <details class="w-full border-b border-border-subtle group"><summary class="flex items-center justify-between py-6 cursor-pointer list-none text-text-primary font-medium"><span>Welche Küche bieten Sie an?</span><svg class="w-5 h-5 text-text-tertiary transition-transform duration-200 group-open:rotate-180" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7.5L10 12.5L15 7.5" /></svg></summary><div class="pb-6 text-text-secondary leading-relaxed">Authentische afro-lateinamerikanische Küche mit brasilianischen Wurzeln. Frisch und von Hand zubereitet.</div></details>
+      <details class="w-full border-b border-border-subtle group"><summary class="flex items-center justify-between py-6 cursor-pointer list-none text-text-primary font-medium"><span>Bieten Sie Lieferung an?</span><svg class="w-5 h-5 text-text-tertiary transition-transform duration-200 group-open:rotate-180" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7.5L10 12.5L15 7.5" /></svg></summary><div class="pb-6 text-text-secondary leading-relaxed">Ja! Lieferung und Abholung verfügbar. Online bestellen für den schnellsten Service.</div></details>
+      <details class="w-full border-b border-border-subtle group"><summary class="flex items-center justify-between py-6 cursor-pointer list-none text-text-primary font-medium"><span>Gibt es vegane Optionen?</span><svg class="w-5 h-5 text-text-tertiary transition-transform duration-200 group-open:rotate-180" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7.5L10 12.5L15 7.5" /></svg></summary><div class="pb-6 text-text-secondary leading-relaxed">Absolut! Von Açaí Bowl bis veganem Feijoada — bei D'ouro kommt jeder auf seine Kosten.</div></details>
+    </div>
+  </section>
+
+  <!-- ═══ LOCATION CARD (Glassmorphism) ═══ -->
+  <section class="max-w-7xl mx-auto py-16 md:py-24 px-4 md:px-8">
+    <h2 class="text-xl md:text-2xl font-semibold text-text-primary mb-8" style="font-family: var(--font-display)">Unser Standort</h2>
+    <article class="rounded-2xl overflow-hidden bg-surface-glass backdrop-blur-sm border border-border-subtle">
+      <div class="flex flex-col md:flex-row gap-2">
+        <div class="w-full md:w-1/3 rounded-xl overflow-hidden bg-surface-card min-h-64"><img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?w=600&q=80" alt="Karte" class="w-full h-full object-cover" /></div>
+        <div class="flex flex-col flex-1 gap-6 p-6 md:p-8">
+          <div class="flex flex-col gap-1"><span class="text-sm text-text-tertiary">Restaurant</span><h3 class="text-xl font-semibold text-text-primary" style="font-family: var(--font-display)">Salzburg, Österreich</h3></div>
+          <div class="flex flex-col sm:flex-row gap-8">
+            <div class="flex flex-col gap-1"><span class="text-sm text-text-tertiary">Adresse</span><address class="not-italic text-sm text-text-secondary"><p>Auerspergstraße 10</p><p>5020 Salzburg</p></address></div>
+            <div class="flex flex-col gap-1"><span class="text-sm text-text-tertiary">Kontakt</span><a href="tel:+436764231921" class="text-sm text-text-secondary hover:text-brand-gold no-underline transition-colors">+43 676 4231921</a><a href="mailto:hello@douro-soulfood.at" class="text-sm text-text-secondary hover:text-brand-gold no-underline transition-colors">hello@douro-soulfood.at</a></div>
+          </div>
+          <div class="border-t border-border-subtle pt-4 flex items-center justify-between"><span class="text-sm text-text-secondary">Heute: 11:00 – 22:00</span><a href="/order" class="inline-flex items-center gap-2 rounded-lg bg-brand-gold hover:bg-brand-gold-light px-5 py-2.5 text-sm font-semibold text-brand-espresso no-underline transition-colors duration-200" style="box-shadow: 0 0 40px oklch(0.68 0.14 70 / 0.15)">Jetzt bestellen</a></div>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="bg-surface-primary pt-2 pb-18 md:pb-4 border-t border-border-subtle">
+    <div class="max-w-7xl mx-auto px-4 md:px-8 py-16 md:py-20">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
+        <div class="flex flex-col gap-4">
+          <a href="/" class="inline-block no-underline"><span class="text-2xl font-bold text-text-brand" style="font-family: var(--font-display)">D'ouro</span><span class="text-sm text-text-secondary ml-1">Soulfood</span></a>
+          <p class="text-sm text-text-secondary max-w-xs leading-relaxed">Brasilianische Seele. Afro-Lateinische Aromen. Mitten in Salzburg.</p>
+        </div>
+        <div class="flex flex-col gap-4">
+          <h3 class="text-sm font-semibold text-text-tertiary uppercase tracking-wider">Navigation</h3>
+          <nav class="flex flex-col gap-3" aria-label="Footer navigation">
+            <a href="/menu" class="text-sm text-text-secondary hover:text-text-primary no-underline transition-colors">Speisekarte</a>
+            <a href="/catering" class="text-sm text-text-secondary hover:text-text-primary no-underline transition-colors">Catering & Events</a>
+            <a href="/ueber-uns" class="text-sm text-text-secondary hover:text-text-primary no-underline transition-colors">Über uns</a>
+            <a href="/kontakt" class="text-sm text-text-secondary hover:text-text-primary no-underline transition-colors">Kontakt</a>
+          </nav>
+        </div>
+        <div class="flex flex-col gap-4">
+          <a href="/order" class="inline-flex items-center justify-center rounded-lg bg-brand-gold hover:bg-brand-gold-light px-5 py-3 text-base font-semibold text-brand-espresso no-underline transition-colors duration-200" style="box-shadow: 0 0 40px oklch(0.68 0.14 70 / 0.15)">Jetzt bestellen</a>
+          <div class="flex flex-col gap-1"><span class="text-sm text-text-tertiary">Kontakt</span><address class="not-italic text-sm text-text-secondary"><p>Auerspergstraße 10, 5020 Salzburg</p><a href="tel:+436764231921" class="hover:text-brand-gold transition-colors">+43 676 4231921</a></address></div>
+        </div>
+      </div>
+      <div class="mt-16 pt-8 border-t border-border-subtle flex flex-col sm:flex-row items-center justify-between gap-4">
+        <nav class="flex items-center gap-4" aria-label="Legal links">
+          <a href="/impressum" class="text-xs text-text-tertiary hover:text-text-secondary no-underline transition-colors">Impressum</a>
+          <a href="/datenschutz" class="text-xs text-text-tertiary hover:text-text-secondary no-underline transition-colors">Datenschutz</a>
+        </nav>
+        <p class="text-xs text-text-tertiary">&copy; 2026 D'ouro Soulfood Bistro. Alle Rechte vorbehalten.</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

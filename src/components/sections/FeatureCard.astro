@@ -1,0 +1,82 @@
+---
+import { Image } from 'astro:assets';
+import Button from '@/components/ui/Button.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  image: { src: string; alt: string; width: number; height: number };
+  cta?: { label: string; href: string };
+  reverse?: boolean;
+  background_image?: { src: string; alt: string; width: number; height: number };
+  class?: string;
+}
+
+const {
+  title,
+  description,
+  image,
+  cta,
+  reverse = false,
+  background_image,
+  class: className = '',
+} = Astro.props;
+---
+
+<div class:list={['w-full', className]}>
+  <div class="relative flex md:min-h-[600px] md:items-center">
+    {background_image && (
+      <Image
+        src={background_image.src}
+        alt={background_image.alt}
+        width={background_image.width}
+        height={background_image.height}
+        format="webp"
+        quality={85}
+        class="absolute inset-0 w-full h-full object-cover object-center"
+        loading="lazy"
+      />
+    )}
+
+    <div class="max-w-7xl mx-auto w-full p-4 md:p-8">
+      <div class:list={[
+        'z-10 flex w-full items-stretch glass rounded-xl overflow-hidden shadow-lg',
+        'flex-col md:flex-row',
+        reverse && 'md:flex-row-reverse',
+      ]}>
+        {/* Image */}
+        <div class="flex w-full shrink-0 md:w-1/2 overflow-hidden">
+          <Image
+            src={image.src}
+            alt={image.alt}
+            width={image.width}
+            height={image.height}
+            format="webp"
+            quality={85}
+            class="w-full h-full object-cover min-h-[300px] transition-transform duration-[var(--duration-normal)] ease-[var(--ease-out-quart)] hover:scale-105"
+            loading="lazy"
+          />
+        </div>
+
+        {/* Content */}
+        <div class="flex w-full items-center md:w-1/2">
+          <div class="p-8 md:p-14 flex flex-col gap-6">
+            <h2 class="text-[clamp(1.5rem,3vw,2.25rem)] font-semibold text-text-primary leading-tight tracking-tight font-display">
+              {title}
+            </h2>
+            <p class="text-text-secondary leading-relaxed max-w-[75ch] whitespace-pre-wrap">
+              {description}
+            </p>
+            {cta && (
+              <div class="w-full md:w-fit">
+                <Button href={cta.href} variant="primary" size="lg" arrow>
+                  {cta.label}
+                </Button>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

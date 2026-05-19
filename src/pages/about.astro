@@ -1,0 +1,88 @@
+---
+export const prerender = true;
+
+import Base from '@/layouts/Base.astro';
+import NavBar from '@/components/NavBar.astro';
+import Footer from '@/components/Footer.astro';
+---
+
+<Base title="Über uns">
+  <NavBar slot="nav" />
+
+  <section class="py-16 md:py-24 px-4 md:px-8 max-w-7xl mx-auto">
+    <h1 class="text-[clamp(2rem,4vw,3rem)] font-bold text-brand-gold mb-4 font-display">Über uns</h1>
+    <p class="text-text-secondary max-w-[75ch] leading-relaxed">
+      Angela bringt ihre brasilianischen Wurzeln nach Salzburg.
+      Jedes Gericht bei D'ouro erzählt eine Geschichte von Wärme,
+      Gemeinschaft und authentischem Geschmack aus Lateinamerika und Afrika.
+    </p>
+
+    {/* Angela's Story */}
+    <div class="mt-12 md:mt-16 glass-gold rounded-2xl p-8 md:p-12 max-w-3xl">
+      <div class="flex items-center gap-4 mb-6">
+        <div class="w-16 h-16 rounded-full bg-brand-gold/20 flex items-center justify-center shrink-0" aria-hidden="true">
+          <svg
+            class="w-8 h-8 text-brand-gold"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+        </div>
+        <div>
+          <h2 class="text-xl md:text-2xl font-semibold text-text-primary font-display">Angela's Geschichte</h2>
+          <p class="text-sm text-text-tertiary">Founder & Chef</p>
+        </div>
+      </div>
+      <p class="text-text-secondary leading-relaxed max-w-[75ch]">
+        D'ouro begann während des Lockdowns, als Angela hausgemachtes brasilianisches Essen
+        an alle verteilte, die es haben wollten. Dieselbe Wärme steckt heute in jedem Gericht.
+        Was als Geste der Gemeinschaft begann, wurde zu Salzburgs erstem Afro-Lateinischen Soulfood-Restaurant.
+      </p>
+    </div>
+
+    {/* Values */}
+    <div class="mt-12 md:mt-16 grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="glass rounded-xl p-6 border border-border-subtle">
+        <div class="w-10 h-10 rounded-full bg-brand-forest/20 flex items-center justify-center mb-4" aria-hidden="true">
+          <svg class="w-5 h-5 text-brand-forest-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+          </svg>
+        </div>
+        <h3 class="text-base font-semibold text-text-primary font-display mb-2">Authentisch</h3>
+        <p class="text-sm text-text-secondary leading-relaxed">
+          Jedes Rezept stammt aus Angelas brasilianischer Küche — keine Kompromisse, kein Fusion-Theater.
+        </p>
+      </div>
+      <div class="glass rounded-xl p-6 border border-border-subtle">
+        <div class="w-10 h-10 rounded-full bg-brand-forest/20 flex items-center justify-center mb-4" aria-hidden="true">
+          <svg class="w-5 h-5 text-brand-forest-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          </svg>
+        </div>
+        <h3 class="text-base font-semibold text-text-primary font-display mb-2">Frisch</h3>
+        <p class="text-sm text-text-secondary leading-relaxed">
+          Alles wird täglich frisch zubereitet — von Hand, mit besten Zutaten, mit Liebe.
+        </p>
+      </div>
+      <div class="glass rounded-xl p-6 border border-border-subtle">
+        <div class="w-10 h-10 rounded-full bg-brand-gold/20 flex items-center justify-center mb-4" aria-hidden="true">
+          <svg class="w-5 h-5 text-brand-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
+          </svg>
+        </div>
+        <h3 class="text-base font-semibold text-text-primary font-display mb-2">Mit Herz</h3>
+        <p class="text-sm text-text-secondary leading-relaxed">
+          D'ouro ist mehr als ein Restaurant — es ist ein Ort der Gemeinschaft, Wärme und Verbundenheit.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <Footer slot="footer" />
+</Base>
