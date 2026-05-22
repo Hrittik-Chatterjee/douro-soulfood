@@ -55,7 +55,7 @@ const {
   ]}
   data-nav
 >
-  <div class="mx-auto flex max-w-7xl items-center px-4 py-4 md:px-8 gap-2">
+  <div class="mx-auto flex max-w-7xl items-center px-4 py-4 md:px-16 gap-2">
 
     <!-- Logo — Brand name in display font -->
     <div class="md:shrink-0">
@@ -75,10 +75,10 @@ const {
               {links.map((link) => (
                 <a
                   href={link.href}
-                  class="flex min-h-11 items-center px-3 py-2 text-sm font-medium whitespace-nowrap
+                  class="flex min-h-11 items-center px-4 py-2 text-base font-bold tracking-wider uppercase whitespace-nowrap
                          text-text-secondary rounded-sm hover:bg-surface-elevated hover:text-text-primary
                          focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold
-                         no-underline transition-colors duration-[var(--duration-fast)] ease-[var(--ease-spring)]"
+                         no-underline transition-all duration-[var(--duration-fast)] ease-[var(--ease-spring)]"
                 >
                   {link.label}
                 </a>
@@ -92,12 +92,12 @@ const {
             {ctaSecondary && (
               <a
                 href={ctaSecondary.href}
-                class="flex min-h-11 items-center px-3 py-2 text-sm font-medium rounded-sm
+                class="flex min-h-11 items-center px-4 py-2 text-base font-bold tracking-wider uppercase rounded-sm
                        border border-border-default bg-surface-elevated
                        hover:bg-surface-card hover:border-border-emphasis hover:text-text-primary
                        focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold
                        active:bg-surface-primary
-                       text-text-secondary no-underline transition-colors duration-[var(--duration-fast)] ease-[var(--ease-spring)]"
+                       text-text-secondary no-underline transition-all duration-[var(--duration-fast)] ease-[var(--ease-spring)]"
               >
                 {ctaSecondary.label}
               </a>
@@ -107,10 +107,10 @@ const {
             {ctaPrimary && (
               <a
                 href={ctaPrimary.href}
-                class="group flex min-h-11 items-center px-4 py-2 text-sm font-semibold rounded-sm
+                class="group flex min-h-11 items-center px-5 py-2 text-base font-bold tracking-wider uppercase rounded-sm
                        bg-brand-gold hover:bg-brand-gold-light active:bg-brand-gold-dark text-brand-espresso
                        focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold
-                       no-underline transition-colors duration-[var(--duration-fast)] ease-[var(--ease-spring)] shadow-glow-gold"
+                       no-underline transition-all duration-[var(--duration-fast)] ease-[var(--ease-spring)] shadow-glow-gold"
               >
                 <span class="flex items-center gap-1 whitespace-nowrap">{ctaPrimary.label}</span>
                 <svg
@@ -119,8 +119,7 @@ const {
                   stroke-width="24" stroke-linecap="round" stroke-linejoin="round"
                   aria-hidden="true"
                 >
-                  <line x1="70" y1="128" x2="216" y2="128" />
-                  <polyline points="144 56 216 128 144 200" />
+                  <polyline points="96 48 176 128 96 208" />
                 </svg>
               </a>
             )}
@@ -179,7 +178,7 @@ const {
         {ctaSecondary && (
           <a
             href={ctaSecondary.href}
-            class="flex min-h-12 items-center px-4 py-3 text-base font-medium
+            class="flex min-h-12 items-center px-4 py-3 text-lg font-bold tracking-wider uppercase
                    text-text-secondary rounded-sm hover:bg-surface-elevated hover:text-text-primary
                    focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold
                    active:bg-surface-card
@@ -191,7 +190,7 @@ const {
         {links.map((link) => (
           <a
             href={link.href}
-            class="flex min-h-12 items-center px-4 py-3 text-base font-medium
+            class="flex min-h-12 items-center px-4 py-3 text-lg font-bold tracking-wider uppercase
                    text-text-secondary rounded-sm hover:bg-surface-elevated hover:text-text-primary
                    focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold
                    active:bg-surface-card
@@ -205,7 +204,7 @@ const {
             href={ctaPrimary.href}
             class="mt-4 flex items-center justify-center min-h-12 rounded-sm
                    bg-brand-gold hover:bg-brand-gold-light active:bg-brand-gold-dark
-                   px-5 py-3 text-base font-semibold
+                   px-5 py-3 text-lg font-bold tracking-wider uppercase
                    text-brand-espresso no-underline transition-colors duration-[var(--duration-fast)] ease-[var(--ease-spring)]
                    shadow-glow-gold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold"
           >

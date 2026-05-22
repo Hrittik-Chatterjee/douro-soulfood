@@ -78,9 +78,9 @@
      with warmth." Not aggressive like red, not passive like
      brown — it's terracotta, the color of clay pots and
      sun-baked earth. */
-  --color-brand-terracotta: oklch(0.35 0.07 152);
-  --color-brand-terracotta-light: oklch(0.62 0.08 152);
-  --color-brand-terracotta-dark: oklch(0.28 0.06 152);
+  --color-brand-terracotta: oklch(0.48 0.18 142.67);
+  --color-brand-terracotta-light: oklch(0.6812 0.2208 142.67);
+  --color-brand-terracotta-dark: oklch(0.35 0.15 142.67);
 
   /* ── Brand Secondary: Warm Golden Yellow ──
      Brazilian sunshine, market energy, carnival warmth.
@@ -88,18 +88,18 @@
      and gradient endpoints. Evokes the golden hour light
      on Salzburg's old town. Pairs naturally with terracotta
      for warm-toned UI elements. */
-  --color-brand-gold: oklch(0.62 0.08 152);
-  --color-brand-gold-light: oklch(0.72 0.07 152);
-  --color-brand-gold-dark: oklch(0.52 0.09 152);
+  --color-brand-gold: oklch(0.6812 0.2208 142.67);
+  --color-brand-gold-light: oklch(0.78 0.16 142.67);
+  --color-brand-gold-dark: oklch(0.58 0.20 142.67);
 
   /* ── Brand Accent: Deep Forest / Olive Green ──
      African earth, freshness, natural vitality.
      Used sparingly for success states, vegetarian labels,
      freshness indicators. Provides contrast against the warm
      palette — a breath of cool air in a warm room. */
-  --color-brand-forest: oklch(0.35 0.07 152);
-  --color-brand-forest-light: oklch(0.62 0.08 152);
-  --color-brand-sage: oklch(0.65 0.07 140);
+  --color-brand-forest: oklch(0.6812 0.2208 142.67);
+  --color-brand-forest-light: oklch(0.78 0.16 142.67);
+  --color-brand-sage: oklch(0.75 0.10 142.67);
 
   /* ── Brand Neutral Warmth: Cream & Espresso ──
      The bookends of our palette. Cream is warm off-white —
@@ -111,7 +111,7 @@
   --color-brand-espresso: oklch(0.14 0.03 40);
   --color-brand-charcoal: oklch(0.12 0.01 0);
   --color-brand-smoke: oklch(0.17 0.01 0);
-  --color-brand-ember: oklch(0.28 0.06 152);
+  --color-brand-ember: oklch(0.28 0.12 142.67);
 
   /* ─────────────────────────────────────────────────────────────
      LEGACY TOKENS — Backward compatibility alias map
@@ -119,15 +119,15 @@
      These map to the same OKLCH values as brand-* tokens.
      Both namespaces coexist; new code should prefer brand-*.
      ───────────────────────────────────────────────────────────── */
-  --color-douro-gold: oklch(0.62 0.08 152);
-  --color-douro-gold-light: oklch(0.72 0.07 152);
-  --color-douro-gold-dark: oklch(0.52 0.09 152);
-  --color-douro-terracotta: oklch(0.35 0.07 152);
-  --color-douro-terracotta-light: oklch(0.62 0.08 152);
-  --color-douro-ember: oklch(0.28 0.06 152);
-  --color-douro-forest: oklch(0.35 0.07 152);
-  --color-douro-forest-light: oklch(0.62 0.08 152);
-  --color-douro-sage: oklch(0.65 0.07 140);
+  --color-douro-gold: oklch(0.6812 0.2208 142.67);
+  --color-douro-gold-light: oklch(0.78 0.16 142.67);
+  --color-douro-gold-dark: oklch(0.58 0.20 142.67);
+  --color-douro-terracotta: oklch(0.48 0.18 142.67);
+  --color-douro-terracotta-light: oklch(0.6812 0.2208 142.67);
+  --color-douro-ember: oklch(0.28 0.12 142.67);
+  --color-douro-forest: oklch(0.6812 0.2208 142.67);
+  --color-douro-forest-light: oklch(0.78 0.16 142.67);
+  --color-douro-sage: oklch(0.75 0.10 142.67);
   --color-douro-cream: oklch(0.95 0.015 80);
   --color-douro-cream-warm: oklch(0.93 0.02 75);
   --color-douro-espresso: oklch(0.14 0.03 40);
@@ -204,7 +204,7 @@
   /* ── Text: Brand ──
      The forest green accent for text links and highlighted brands,
      ensuring legible contrast against light cream backgrounds. */
-  --color-text-brand: oklch(0.35 0.07 152);
+  --color-text-brand: oklch(0.35 0.15 142.67);
 
 
   /* ─────────────────────────────────────────────────────────────
@@ -257,9 +257,9 @@
      These create a soft halo effect around accent elements.
      Use on CTA buttons, featured cards, and anything that
      needs to say "this glows with Brazilian sunshine." */
-  --shadow-glow-gold: 0 0 40px oklch(0.68 0.14 70 / 0.15);
-  --shadow-glow-terracotta: 0 0 40px oklch(0.35 0.07 152 / 0.12);
-  --shadow-glow-forest: 0 0 40px oklch(0.35 0.07 152 / 0.12);
+  --shadow-glow-gold: 0 0 40px oklch(0.6812 0.2208 142.67 / 0.15);
+  --shadow-glow-terracotta: 0 0 40px oklch(0.6812 0.2208 142.67 / 0.12);
+  --shadow-glow-forest: 0 0 40px oklch(0.6812 0.2208 142.67 / 0.12);
 
 
   /* ─────────────────────────────────────────────────────────────

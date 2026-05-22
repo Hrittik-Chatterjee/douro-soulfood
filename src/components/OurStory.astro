@@ -102,7 +102,7 @@ const {
 
 <!-- ═══ Interior Gallery ═══ -->
 {galleryImages.length > 0 && (
-  <section class="max-w-7xl mx-auto py-16 md:py-24 px-4 md:px-8">
+  <section class="max-w-7xl mx-auto py-16 md:py-24 px-4 md:px-16">
     <div class="flex flex-col gap-2">
       <h2 class="text-2xl md:text-4xl font-semibold text-text-primary font-display">
         {galleryTitle}
@@ -141,7 +141,7 @@ const {
 
 <!-- ═══ Featured Menu Items ═══ -->
 {featuredItems.length > 0 && (
-  <section class="max-w-7xl mx-auto py-16 md:py-24 px-4 md:px-8">
+  <section class="max-w-7xl mx-auto py-16 md:py-24 px-4 md:px-16">
     <div class="flex items-center justify-between gap-4 mb-8">
       <h2 class="text-xl md:text-2xl font-semibold text-text-primary font-display">
         {featuredTitle}
@@ -196,7 +196,7 @@ const {
 
 <!-- ═══ Gift Cards ═══ -->
 {giftCards && (
-  <article class="max-w-7xl mx-auto py-16 md:py-24 px-4 md:px-8">
+  <article class="max-w-7xl mx-auto py-16 md:py-24 px-4 md:px-16">
     <div class="flex flex-col md:flex-row gap-6 md:gap-10 rounded-2xl bg-surface-glass
                 backdrop-blur-sm border border-border-subtle p-6 md:p-8">
       <div class="w-full md:w-1/2 shrink-0">
@@ -247,7 +247,7 @@ const {
 
 <!-- ═══ FAQ Accordion ═══ -->
 {faqItems.length > 0 && (
-  <section class="max-w-7xl mx-auto py-16 md:py-24 px-4 md:px-8">
+  <section class="max-w-7xl mx-auto py-16 md:py-24 px-4 md:px-16">
     <h2 class="text-xl md:text-2xl font-semibold text-text-primary font-display mb-8">
       {faqTitle}
     </h2>
@@ -281,7 +281,7 @@ const {
 
 <!-- ═══ Location Card ═══ -->
 {location && (
-  <section class="max-w-7xl mx-auto py-16 md:py-24 px-4 md:px-8">
+  <section class="max-w-7xl mx-auto py-16 md:py-24 px-4 md:px-16">
     <h2 class="text-xl md:text-2xl font-semibold text-text-primary font-display mb-8">
       Unser Standort
     </h2>
@@ -302,9 +302,14 @@ const {
               loading="lazy"
             />
           ) : (
-            <div class="w-full h-full min-h-64 bg-surface-card flex items-center justify-center text-text-tertiary text-sm" role="img" aria-label="Karte wird geladen">
-              Karte laden...
-            </div>
+            <iframe
+              src="https://maps.google.com/maps?q=Auerspergstra%C3%9Fe%2010,%205020%20Salzburg&t=&z=15&ie=UTF8&iwloc=&output=embed"
+              class="w-full h-full min-h-64 border-0"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              title="D'ouro Soulfood Standort"
+            ></iframe>
           )}
         </div>
 
