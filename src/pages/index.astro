@@ -43,7 +43,7 @@ type DietaryTag = 'vegan' | 'vegetarian' | 'gluten-free' | 'spicy' | 'halal' | '
 const featuredItems = (await getCollection('menu_items'))
   .filter((item) => item.data.featured && item.data.available !== false)
   .sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0))
-  .slice(0, 3);
+  .slice(0, 6);
 
 /** FAQ entries from KeystaticCMS */
 const faqEntries = (await getCollection('faq'))

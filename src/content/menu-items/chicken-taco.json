@@ -6,6 +6,6 @@
   "category": "tacos",
   "dietary": [],
   "order": 20,
-  "featured": false,
+  "featured": true,
   "available": true
 }

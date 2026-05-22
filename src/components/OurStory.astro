@@ -1,5 +1,6 @@
 ---
 import { Image } from 'astro:assets';
+import UserReviews from './UserReviews.astro';
 
 /**
  * OurStory — Interior gallery, featured menu, Angela's story, gift cards,
@@ -244,6 +245,9 @@ const {
     </div>
   </article>
 )}
+
+<!-- ═══ Guest Reviews ═══ -->
+<UserReviews />
 
 <!-- ═══ FAQ Accordion ═══ -->
 {faqItems.length > 0 && (
