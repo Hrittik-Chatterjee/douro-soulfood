@@ -217,7 +217,7 @@ jobs:
           LHCI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           pnpm exec lhci autorun \
-            --config=.lighthouserc.js \
+            --config=.lighthouserc.cjs \
             --collect.url="${LHCI_URL}/" \
             --collect.url="${LHCI_URL}/menu" \
             --collect.url="${LHCI_URL}/about" \

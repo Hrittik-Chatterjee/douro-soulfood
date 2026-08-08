@@ -30,7 +30,7 @@ Reflects the actual CI/CD pipeline defined in `.github/workflows/deploy.yml` —
 1. **Build** (`build` job, all branches): `pnpm install --frozen-lockfile` → `pnpm build` → uploads `dist/` as a workflow artifact (3-day retention) so downstream jobs don't rebuild.
 2. **Deploy Preview** (`deploy-preview`, all branches): downloads the `dist/` artifact, deploys to Cloudflare Pages via `wrangler pages deploy dist/ --project-name=douro-soulfood` (branch-scoped, gets a unique preview URL). **The `--project-name` flag is load-bearing** — omitting it creates a stray, disconnected CF Pages project instead of deploying to the existing one.
 3. **Playwright E2E Tests** (`e2e-tests`, needs `deploy-preview`): runs the full Playwright suite (`tests/*.spec.ts`) against the just-deployed preview URL, not against a local server.
-4. **Lighthouse CI** (`lighthouse`, needs `deploy-preview`): runs `lhci autorun` against the preview URL for `/`, `/menu`, `/about`, `/catering`, `/contact` per `.lighthouserc.js`'s thresholds.
+4. **Lighthouse CI** (`lighthouse`, needs `deploy-preview`): runs `lhci autorun` against the preview URL for `/`, `/menu`, `/about`, `/catering`, `/contact` per `.lighthouserc.cjs`'s thresholds.
 5. **Deploy Production** (`deploy-production`, needs `[e2e-tests, lighthouse]`, `if: github.ref == 'refs/heads/main'` only): re-deploys the same `dist/` artifact to the production Cloudflare Pages target (`--branch=main`), then curls `https://douro-soulfood.com` to sanity-check it responds.
 
 ### Branch/environment behavior

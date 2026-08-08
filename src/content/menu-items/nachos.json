@@ -3,7 +3,7 @@
   "description": "Knusprige Maischips, serviert mit Guacamole.",
   "descriptionEn": "Crispy corn chips, served with guacamole.",
   "price": 890,
-  "image": "/images/menu/nachos.jpeg",
+  "image": "/images/menu/nachos.webp",
   "category": "appetizers",
   "dietary": [
     "vegetarian"

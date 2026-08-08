@@ -4,4 +4,21 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=()
   Strict-Transport-Security: max-age=31536000; includeSubDomains
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-gwK4Sir9v7DMjCO0dVG0DkKGwFce52gNsag5Y1Q3EqI=' 'sha256-YOnJn4jFEvyorh8WZNx+Svn+Ata81I+s6llaxF/ZV3c=' 'sha256-fSEd4KPsdcJ+H6pv5K3cV3Ylea85zU5dXyODDklUt+c=' 'sha256-IbsuYjbGcERkAkrQqNIEwL0md6gIP6Q0+hJ6oL+VuLU=' 'sha256-d2Q9PwyE36un5FH1fME0GedEoiyczjsK9C1uHiLPBGg=' 'sha256-N7GJp3wmFGmHw1IMnhXej9kp7rIhbM/JOMOHxKJFtK4=' 'sha256-ui4O1sf4gGd/lY5gsd12AbXlub1n/Ink7TuSfpoBRB4='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://images.unsplash.com; frame-src https://maps.google.com; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-gwK4Sir9v7DMjCO0dVG0DkKGwFce52gNsag5Y1Q3EqI=' 'sha256-YOnJn4jFEvyorh8WZNx+Svn+Ata81I+s6llaxF/ZV3c=' 'sha256-fSEd4KPsdcJ+H6pv5K3cV3Ylea85zU5dXyODDklUt+c=' 'sha256-IbsuYjbGcERkAkrQqNIEwL0md6gIP6Q0+hJ6oL+VuLU=' 'sha256-d2Q9PwyE36un5FH1fME0GedEoiyczjsK9C1uHiLPBGg=' 'sha256-N7GJp3wmFGmHw1IMnhXej9kp7rIhbM/JOMOHxKJFtK4=' 'sha256-ui4O1sf4gGd/lY5gsd12AbXlub1n/Ink7TuSfpoBRB4='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; frame-src https://maps.google.com; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'
+
+# Hashed build output — filename changes on every content change, safe to cache forever.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Self-hosted fonts — versioned by filename, effectively immutable.
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Hero background videos — large, rarely-changing assets.
+/*.mp4
+  Cache-Control: public, max-age=604800
+
+# CMS-uploaded photos — content can change without a filename change, so a
+# shorter max-age with revalidation avoids serving stale images after an edit.
+/images/*
+  Cache-Control: public, max-age=86400, must-revalidate

@@ -68,7 +68,7 @@ const Tag = href ? 'a' : 'div';
     sizeClasses[size],
     className,
   ]}
-  aria-label={`${rating} von ${maxRating} Sternen — ${reviewCount} ${source}`}
+  aria-label={`${rating.toFixed(1)} (${reviewCount.toLocaleString('de-AT')}) — ${rating.toFixed(1)} von ${maxRating} Sternen bei ${source}`}
   itemScope
   itemType="https://schema.org/AggregateRating"
 >

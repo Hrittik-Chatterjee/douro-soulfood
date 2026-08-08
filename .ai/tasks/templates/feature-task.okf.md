@@ -47,7 +47,7 @@ feature
 {Build passes, new/updated tests, `/dev/ui` visual check if UI is involved, Lighthouse URL list updated if a new route was added.}
 
 ## Benchmark impact
-{New route → must be added to `.lighthouserc.js` + `deploy.yml`. New JS → check against TBT budget.}
+{New route → must be added to `.lighthouserc.cjs` + `deploy.yml`. New JS → check against TBT budget.}
 
 ## Stop/ask conditions
 {Task-specific — e.g. "if this requires a new Keystatic field, confirm the schema change doesn't break existing content before implementing."}
