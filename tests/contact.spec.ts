@@ -23,14 +23,19 @@ test.describe('Contact page — content', () => {
   });
 
   test('address is visible with real street address', async ({ page }) => {
-    const address = page.locator('address', { hasText: 'Auerspergstraße 10' });
+    // Scoped to #main-content: the Footer renders the same address sitewide,
+    // so an unscoped `address` locator matches two elements and trips
+    // Playwright's strict mode. This asserts the contact page's own copy.
+    const address = page.locator('#main-content address').filter({ hasText: 'Auerspergstraße 10' });
     await expect(address).toBeVisible();
     await expect(address).toContainText('5020');
     await expect(address).toContainText('Salzburg');
   });
 
   test('phone number links to correct tel: href', async ({ page }) => {
-    const phoneLink = page.locator('a[href="tel:+436764231921"]');
+    // Scoped for the same reason: the phone number is also a tel: link in the
+    // Footer and in MobileBottomBar's "Jetzt anrufen" button (3 matches total).
+    const phoneLink = page.locator('#main-content a[href="tel:+436764231921"]');
     await expect(phoneLink).toBeVisible();
     await expect(phoneLink).toHaveText('+43 676 4231921');
   });
