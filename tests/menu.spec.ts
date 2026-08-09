@@ -31,24 +31,20 @@ test.describe('Menu page — content', () => {
   });
 
   test('at least one menu item with price (€) is visible', async ({ page }) => {
-    // MenuItemCard renders prices as "€14,90" via Intl.NumberFormat('de-AT')
-    // The price element uses class "text-brand-gold" with font-bold
-    const priceElements = page.locator('span.font-bold.text-brand-gold');
-    const count = await priceElements.count();
+    // Prices come from Intl.NumberFormat('de-AT', { style: 'currency' }), which
+    // renders the amount BEFORE the symbol and separates them with a
+    // NON-BREAKING space (U+00A0) — e.g. "8,90 €", not "€8,90". The regex
+    // below accepts either space kind so it survives an Intl/ICU data change.
+    //
+    // Matched by rendered text rather than by utility class: this assertion used
+    // to look for `span.font-bold.text-brand-gold`, and prices are neither
+    // spans nor gold any more, so it silently matched zero elements.
+    const priceRe = /\d+,\d{2}[\s ]*€/;
+    const pricedCards = page.locator('article').filter({ hasText: priceRe });
 
-    // At least one price should be present
-    expect(count).toBeGreaterThanOrEqual(1);
-
-    // Verify at least one contains the Euro sign
-    let foundEuroPrice = false;
-    for (let i = 0; i < count; i++) {
-      const text = await priceElements.nth(i).textContent();
-      if (text?.includes('€')) {
-        foundEuroPrice = true;
-        break;
-      }
-    }
-    expect(foundEuroPrice).toBe(true);
+    expect(await pricedCards.count()).toBeGreaterThanOrEqual(1);
+    await expect(pricedCards.first()).toBeVisible();
+    await expect(pricedCards.first()).toContainText(priceRe);
   });
 
   test('category navigation links are present', async ({ page }) => {
@@ -63,7 +59,9 @@ test.describe('Menu page — content', () => {
   });
 
   test('clicking a category link scrolls to that section', async ({ page }) => {
-    const firstCategoryLink = page.locator('nav[aria-label="Menü-Kategorien"] a[href^="#category-"]').first();
+    const firstCategoryLink = page
+      .locator('nav[aria-label="Menü-Kategorien"] a[href^="#category-"]')
+      .first();
     await expect(firstCategoryLink).toBeVisible();
 
     const href = await firstCategoryLink.getAttribute('href');
@@ -82,16 +80,21 @@ test.describe('Menu page — content', () => {
     const count = await itemNames.count();
     expect(count).toBeGreaterThanOrEqual(1);
 
-    // Each card should also have a description paragraph
-    const descriptions = page.locator('article p.text-text-secondary');
+    // Each card should also have a description paragraph. Not class-pinned:
+    // the previous `p.text-text-secondary` selector matched nothing, because
+    // card descriptions carry `font-sans font-medium break-words min-w-0`.
+    const descriptions = page.locator('article p');
     const descCount = await descriptions.count();
     expect(descCount).toBeGreaterThanOrEqual(1);
+    await expect(descriptions.first()).not.toBeEmpty();
   });
 
   test('allergen notice section is visible', async ({ page }) => {
-    // AllergenHeaderLegend renders "ALLERGENE / ALLERGENS:" as a label,
-    // not a heading - there is no "Hinweis" text anywhere on the page
-    const noticeSection = page.locator('text=ALLERGENE / ALLERGENS:');
+    // AllergenHeaderLegend renders "ALLERGENE / ALLERGENS:" as a label, not a
+    // heading — and once per category block, so it legitimately appears 8 times
+    // on the page. `.first()` keeps this out of strict-mode violation while
+    // still proving the legend renders.
+    const noticeSection = page.getByText('ALLERGENE / ALLERGENS:').first();
     await expect(noticeSection).toBeVisible();
   });
 
@@ -127,8 +130,8 @@ test.describe('Menu page — accessibility', () => {
             nodes: v.nodes.length,
           })),
           null,
-          2
-        )
+          2,
+        ),
       );
     }
 

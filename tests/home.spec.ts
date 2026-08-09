@@ -23,11 +23,14 @@ test.describe('Home page — content & visibility', () => {
   test('H1 "Afro-Latin Soul im Herzen von Salzburg" is visible', async ({ page }) => {
     const h1 = page.locator('h1');
     await expect(h1).toBeVisible();
-    await expect(h1).toHaveText("Afro-Latin Soul im Herzen von Salzburg");
+    await expect(h1).toHaveText('Afro-Latin Soul im Herzen von Salzburg');
   });
 
   // Desktop-only: hero CTAs live in a `hidden md:flex` container, not shown on mobile
-  test('primary CTA "Besuchen Sie uns" is visible and navigates to /contact', async ({ page, isMobile }) => {
+  test('primary CTA "Besuchen Sie uns" is visible and navigates to /contact', async ({
+    page,
+    isMobile,
+  }) => {
     test.skip(isMobile, 'Hero CTAs hidden on mobile viewport');
 
     const primaryCta = page.locator('a[href="/contact"]', { hasText: 'Besuchen Sie uns' });
@@ -40,7 +43,10 @@ test.describe('Home page — content & visibility', () => {
   test('secondary CTA "Speisekarte ansehen" navigates to /menu', async ({ page, isMobile }) => {
     test.skip(isMobile, 'Hero CTAs hidden on mobile viewport');
 
-    const secondaryCta = page.locator('a[href="/menu"]', { hasText: 'Speisekarte ansehen' });
+    // Exact-name match: three /menu links contain the substring
+    // "Speisekarte ansehen" (hero secondary, mobile hero CTA, and the
+    // "Komplette Speisekarte ansehen" section CTA), so `hasText` is ambiguous.
+    const secondaryCta = page.getByRole('link', { name: 'Speisekarte ansehen', exact: true });
     await expect(secondaryCta).toBeVisible();
 
     await secondaryCta.click();
@@ -52,13 +58,20 @@ test.describe('Home page — content & visibility', () => {
     const reviewBadge = page.locator('[aria-label*="4.8"]');
     await expect(reviewBadge).toBeVisible();
 
-    // Verify the numeric rating text
-    const ratingText = page.locator('span.font-semibold.text-brand-gold', { hasText: '4.8' });
-    await expect(ratingText).toBeVisible();
+    // Verify the numeric rating is actually rendered as visible text.
+    // Deliberately NOT pinned to a Tailwind colour utility: this assertion used
+    // to require `.text-brand-gold` and silently went stale when the token was
+    // changed to `text-brand-gold-ink` for AA contrast. Google's review-snippet
+    // policy cares that the rating is visible, not which class paints it.
+    await expect(reviewBadge).toContainText('4.8');
   });
 
   test('featured dishes section shows "Empfehlungen" heading', async ({ page }) => {
-    const eyebrow = page.locator('section[aria-label="Beliebte Gerichte"] span.text-brand-gold', { hasText: 'Empfehlungen' });
+    // Scoped by the section's accessible name rather than a colour utility
+    // class, for the same staleness reason as the review badge above.
+    const eyebrow = page
+      .locator('section[aria-label="Beliebte Gerichte"]')
+      .getByText('Empfehlungen', { exact: true });
     await expect(eyebrow).toBeVisible();
 
     const featuredHeading = page.locator('h2', { hasText: "Beliebte Gerichte im D'ouro Bistro" });
@@ -66,18 +79,20 @@ test.describe('Home page — content & visibility', () => {
   });
 
   test('"Komplette Speisekarte ansehen" CTA links to /menu', async ({ page }) => {
-    const fullMenuCta = page.locator('a[href="/menu"]', { hasText: 'Komplette Speisekarte ansehen' });
+    const fullMenuCta = page.locator('a[href="/menu"]', {
+      hasText: 'Komplette Speisekarte ansehen',
+    });
     await expect(fullMenuCta).toBeVisible();
   });
 
-  test('Unsere Geschichte section contains Angela\'s lockdown origin story', async ({ page }) => {
+  test("Unsere Geschichte section contains Angela's lockdown origin story", async ({ page }) => {
     const storySection = page.locator('section[aria-label="Unsere Geschichte"]');
     await expect(storySection).toBeVisible();
 
     // Verify the key narrative text
     await expect(storySection.locator('h2', { hasText: "Wie D'ouro begann" })).toBeVisible();
     await expect(
-      storySection.locator('p', { hasText: /D'ouro begann während des Lockdowns/ })
+      storySection.locator('p', { hasText: /D'ouro begann während des Lockdowns/ }),
     ).toBeVisible();
   });
 
@@ -140,10 +155,16 @@ test.describe('Home page — NavBar', () => {
   });
 
   // Desktop-only: nav links are hidden on mobile (md:flex breakpoint)
-  test('desktop nav link to /menu is clickable and navigates', async ({ page, browserName, isMobile }) => {
+  test('desktop nav link to /menu is clickable and navigates', async ({
+    page,
+    browserName,
+    isMobile,
+  }) => {
     test.skip(isMobile, 'Desktop nav links hidden on mobile viewport');
 
-    const menuLink = page.locator('nav[data-nav] a[href="/menu"]', { hasText: 'Speisekarte' }).first();
+    const menuLink = page
+      .locator('nav[data-nav] a[href="/menu"]', { hasText: 'Speisekarte' })
+      .first();
     await expect(menuLink).toBeVisible();
     await menuLink.click();
     await expect(page).toHaveURL(/\/menu/);
@@ -152,7 +173,9 @@ test.describe('Home page — NavBar', () => {
   test('desktop nav link to /contact is clickable and navigates', async ({ page, isMobile }) => {
     test.skip(isMobile, 'Desktop nav links hidden on mobile viewport');
 
-    const contactLink = page.locator('nav[data-nav] a[href="/contact"]', { hasText: 'Kontakt' }).first();
+    const contactLink = page
+      .locator('nav[data-nav] a[href="/contact"]', { hasText: 'Kontakt' })
+      .first();
     await expect(contactLink).toBeVisible();
     await contactLink.click();
     await expect(page).toHaveURL(/\/contact/);
@@ -202,7 +225,12 @@ test.describe('Home page — mobile menu', () => {
     await hamburgerBtn.click();
 
     const mobileMenu = page.locator('div#mobile-menu');
-    const menuLink = mobileMenu.locator('a[href="/menu"]', { hasText: 'Speisekarte' });
+    // Scoped to the drawer's nav: the drawer holds two /menu links containing
+    // "Speisekarte" (the nav item and the order CTA block), so an
+    // overlay-wide `hasText` match is ambiguous under strict mode.
+    const menuLink = mobileMenu.locator(
+      'nav[aria-label="Mobile Navigation Drawer"] a[href="/menu"]',
+    );
     await expect(menuLink).toBeVisible();
     await menuLink.click();
     await expect(page).toHaveURL(/\/menu/);
@@ -210,14 +238,19 @@ test.describe('Home page — mobile menu', () => {
 
   test('closing hamburger menu restores collapsed state', async ({ page }) => {
     const hamburgerBtn = page.locator('button#mobile-menu-btn');
+    const closeBtn = page.locator('button#mobile-menu-close-btn');
     const mobileMenu = page.locator('div#mobile-menu');
 
     // Open
     await hamburgerBtn.click();
     await expect(mobileMenu).toHaveAttribute('data-open', 'true');
 
-    // Close by clicking again
-    await hamburgerBtn.click();
+    // Close via the drawer's own close button. The open drawer (position:fixed,
+    // z-50) renders #mobile-menu-close-btn at the exact same coordinates as the
+    // hamburger, so #mobile-menu-btn is completely covered while open and
+    // cannot be clicked a second time. A real user's tap at that point lands on
+    // the close button, which is what this now exercises.
+    await closeBtn.click();
     await expect(mobileMenu).toHaveAttribute('data-open', 'false');
     await expect(hamburgerBtn).toHaveAttribute('aria-expanded', 'false');
   });
@@ -228,7 +261,9 @@ test.describe('Home page — mobile menu', () => {
     await expect(mobileMenu).toHaveJSProperty('inert', true);
   });
 
-  test('opening the drawer clears inert/aria-hidden and updates the hamburger label', async ({ page }) => {
+  test('opening the drawer clears inert/aria-hidden and updates the hamburger label', async ({
+    page,
+  }) => {
     const hamburgerBtn = page.locator('button#mobile-menu-btn');
     const mobileMenu = page.locator('div#mobile-menu');
 
@@ -305,8 +340,8 @@ test.describe('Home page — accessibility', () => {
             nodes: v.nodes.length,
           })),
           null,
-          2
-        )
+          2,
+        ),
       );
     }
 
@@ -382,8 +417,14 @@ test.describe('Home page — SEO meta tags', () => {
   });
 
   test('social preview image declares dimensions and alt text', async ({ page }) => {
-    await expect(page.locator('meta[property="og:image:width"]')).toHaveAttribute('content', '1200');
-    await expect(page.locator('meta[property="og:image:height"]')).toHaveAttribute('content', '630');
+    await expect(page.locator('meta[property="og:image:width"]')).toHaveAttribute(
+      'content',
+      '1200',
+    );
+    await expect(page.locator('meta[property="og:image:height"]')).toHaveAttribute(
+      'content',
+      '630',
+    );
     await expect(page.locator('meta[property="og:image:alt"]')).toHaveAttribute('content', /.+/);
   });
 
