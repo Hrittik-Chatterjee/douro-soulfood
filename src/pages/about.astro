@@ -6,7 +6,11 @@ import NavBar from '@/components/layout/NavBar.astro';
 import Footer from '@/components/layout/Footer.astro';
 ---
 
-<Base title="Über uns">
+<Base
+  title="Über uns"
+  description="Angela bringt ihre brasilianischen Wurzeln nach Salzburg. Wie aus einer Geste der Gemeinschaft während des Lockdowns Salzburgs erstes afro-lateinisches Soulfood-Restaurant wurde."
+  breadcrumb={[{ name: 'Über uns', path: '/about/' }]}
+>
   <NavBar slot="nav" />
 
   <section class="pt-28 md:pt-32 pb-16 md:pb-24 px-4 md:px-16 max-w-7xl mx-auto">

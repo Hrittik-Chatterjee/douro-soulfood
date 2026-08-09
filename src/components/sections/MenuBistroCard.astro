@@ -1,9 +1,7 @@
 ---
 import { Image } from 'astro:assets';
-import siteSettings from '@/content/settings/default.json';
 import FlagIcon from '@/components/ui/FlagIcon.astro';
-
-const orderHref = siteSettings.lieferando_url || 'https://www.lieferando.at/en/menu/douro';
+import { orderUrl as orderHref } from '@/lib/site';
 
 interface Props {
   name: string;

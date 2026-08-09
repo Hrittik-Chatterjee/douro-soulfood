@@ -5,28 +5,32 @@ type: "knowledge"
 title: "SEO"
 status: "approved"
 created: "unknown"
-updated: "unknown"
+updated: "2026-08-09"
 freshness: "current"
 lifecycle: "active"
 trust: "verified"
 provenance:
   source: "repo"
-  references: ["docs/prd.md", "src/layouts/Base.astro"]
+  references: ["docs/seo.md", "src/lib/seo/graph.ts", "src/layouts/Base.astro"]
 attestation:
   method: "agent"
-  checks: ["cross-checked against Base.astro's actual head tags and .ai/packs/security.okf.md's JSON-LD/CSP finding"]
-summary: "Schema.org Restaurant JSON-LD, OG/Twitter cards, canonical URLs, sitemap.xml. Fixed: JSON-LD was blocked by CSP script-src, now allowed via a SHA-256 hash. Verified: Googlebot's 2MB-per-resource crawl limit is not violated on any indexable page."
-load_when: "Meta tags, structured data, sitemap changes, or crawl-budget/page-size questions."
+  checks: ["parsed the built @graph on / and /menu/", "check:csp + check:hours pass", "lhci seo=100"]
+summary: "One schema.org @graph per page, built by src/lib/seo/graph.ts from Keystatic settings. Base.astro owns the head; description is REQUIRED. Inline-JSON-LD CSP hashes are generated at build, never committed. Canonical is trailing-slash. No i18n/hreflang yet — de-AT only."
+load_when: "Meta tags, structured data, canonical/sitemap changes, llms.txt, or crawl-budget questions."
 token_budget: 350
-related: ["docs/prd.md", ".ai/packs/security.okf.md"]
+related: ["docs/seo.md", ".ai/packs/security.okf.md"]
 ---
 
 # SEO
 
-`Base.astro`'s `<head>`: title/description meta, canonical URL, OpenGraph + Twitter cards, `Restaurant` JSON-LD (address, phone, cuisine, aggregate rating). Sitemap via `@astrojs/sitemap` (now filters out `/dev/*`). `robots.txt` disallows `/keystatic/` and `/dev/`.
+**Full detail: `docs/seo.md`.** This file is only the pointer.
 
-**Fixed** (see `.ai/packs/security.okf.md`): the JSON-LD `<script>` was dropped by CSP's `script-src 'self'` — now allowed via a SHA-256 hash, verified with a real headless-Chrome check.
+`Base.astro` owns the `<head>` and builds the `@graph` itself; pages pass just `breadcrumb` and `extraSchemaNodes`. `description` is **required** — it used to default to English prose that four German pages shipped.
 
-**Verified: Googlebot's 2MB-per-resource crawl limit** (uncompressed, per-file, [Google's current docs](https://developers.google.com/search/docs/crawling-indexing/googlebot#file-size)) **is not violated.** Measured every built HTML/CSS/JS asset directly: largest crawlable page (`/menu`) is ~148KB, largest public CSS ~64KB — both far under 2MB. One real outlier (`keystatic-page.*.js`, ~2.64MB) exists but is loaded only by `/keystatic` (the CMS admin route), already `Disallow`'d in `robots.txt` and excluded from the sitemap — unreachable by Googlebot. No action needed.
+Exactly ONE `ld+json` per page (a testable invariant). `Restaurant` is declared once at `…/#restaurant` and referenced by `@id`, replacing 7 hardcoded copies; values come from `src/lib/site.ts`, hours via `src/lib/hours.ts`. Plus `Menu`/`Offer` on `/menu`, `FAQPage` on `/`, `BreadcrumbList` on inner routes only.
 
-**Full detail**: `docs/prd.md`'s SEO Requirements section.
+**CSP coupling — read before touching structured data**: hashes are *generated* at build (`src/integrations/csp-hashes.mjs`) because CMS-derived JSON-LD makes committed hashes a silent-breakage trap. Always `pnpm build && pnpm check:csp`. See `.ai/packs/security.okf.md`.
+
+Canonical is trailing-slash; don't hand-set it per page. `/llms.txt` is generated from Keystatic, not static.
+
+**Not done**: no i18n, no `hreflang`. Crawl budget still fine.

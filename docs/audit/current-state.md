@@ -14,7 +14,7 @@
 
 ## 3. Design system — confirmed accurate
 - `src/styles/tokens.css` is the single source of design tokens (`--color-brand-gold`, `--radius-*`, `--ease-spring`, etc.), referenced via `var(--...)`. Confirmed zero hardcoded hex colors outside legitimate flag-SVG fills (re-verified in a prior audit pass this session, unchanged since).
-- Light theme is default (`<html lang="de" class="light">` in `Base.astro`) — confirmed.
+- Light theme is default (`<html lang="de-AT" class="light">` in `Base.astro`) — confirmed.
 
 ## 4. Known issues — status corrected from `CLAUDE.md`'s stated list
 `CLAUDE.md`'s `<known_issues>` block was written referencing a **prior** state of this repo. As of this audit, three of the six are already resolved:
@@ -31,7 +31,7 @@
 **Implication for the backlog below**: `OUTCOME-005`, `OUTCOME-006`, and `OUTCOME-007` are satisfied by existing work, verified against this audit's own acceptance criteria rather than re-implemented from scratch (re-doing already-correct work would be pure noise, contradicting `CLAUDE.md`'s own "smallest correct change" directive).
 
 ## 5. Routes — confirmed accurate
-`src/pages/`: `index.astro`, `menu.astro`, `about.astro`, `catering.astro`, `contact.astro` — 5 real routes, all `export const prerender = true`. `keystatic()` integration adds SSR-only `/keystatic` and `/api/keystatic` routes. No other routes exist prior to this audit (this backlog's `OUTCOME-004` adds `/dev/ui`).
+`src/pages/`: `index.astro`, `menu.astro`, `about.astro`, `catering.astro`, `contact.astro` — 5 real routes at the time of this audit, all `export const prerender = true`. (`impressum.astro` and `datenschutz.astro` were added later, bringing it to 7.) `keystatic()` integration adds SSR-only `/keystatic` and `/api/keystatic` routes. No other routes exist prior to this audit (this backlog's `OUTCOME-004` adds `/dev/ui`).
 
 ## 6. Outstanding, not part of this backlog
 - `impressum.astro`/`datenschutz.astro` exist only on the still-unmerged `claude/impressum-datenschutz` branch (PR #20), blocked on business-owner legal facts — unrelated to this backlog, unchanged.

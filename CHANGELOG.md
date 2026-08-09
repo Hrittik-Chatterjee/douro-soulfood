@@ -2,7 +2,48 @@
 
 ## [Unreleased]
 
+### Added
+- SEO layer for the German site: one schema.org `@graph` per page
+  (`src/lib/seo/graph.ts`) with a single `Restaurant` entity referenced by
+  `@id`, plus `WebSite`/`WebPage`, `BreadcrumbList` on inner routes,
+  `Menu`/`MenuItem`/`Offer` on `/menu` and `FAQPage` on the homepage — all
+  sourced from Keystatic rather than hardcoded. See `docs/seo.md`.
+- `/llms.txt`, generated from the CMS (not a static file, so it can't drift
+  from real opening hours) for AI and answer engines
+- `src/lib/site.ts` — the single, zod-validated reader of the settings
+  singleton, so a malformed CMS edit fails the build instead of rendering
+  `undefined` into a meta tag
+- `src/lib/hours.ts` — the one place German day labels are understood; feeds
+  both the visible hours summary and `openingHoursSpecification`, so they
+  can't disagree
+- `pnpm check:csp` and `pnpm check:hours`
+
 ### Changed
+- **CSP inline-script hashes are now generated at build**
+  (`src/integrations/csp-hashes.mjs`) instead of committed. Necessary because
+  JSON-LD is CMS-derived: a client editing an opening hour would invalidate a
+  pinned hash and break scripts with no build error, no test failure and no
+  visible symptom. `public/_headers` keeps an over-restrictive placeholder so a
+  missing hook fails closed. See `docs/security.md`.
+- The one remote image (`images.unsplash.com`) is now self-hosted;
+  `remotePatterns` and the CSP `img-src` allowlist were dropped accordingly
+
+### Fixed
+- Four pages (`/menu`, `/about`, `/catering`, `/contact`) shipped an
+  **English** meta description on a German site, inherited from an optional
+  default. `description` is now a required `Base` prop and all seven pages pass
+  real German copy.
+- The homepage advertised three different URLs for itself (canonical without a
+  trailing slash; sitemap and JSON-LD with). All three now agree.
+- `ReviewBadge` emitted an orphan `AggregateRating` microdata entity that
+  declared no subject and duplicated the JSON-LD rating; removed.
+- 18 images were alt'd `"Spezialität 1…9"` / `"Showcase 1…3"`. Replaced with
+  descriptions written after opening each file — most of the gallery is
+  interior/exterior photography, not dishes, so the old text was wrong as well
+  as unhelpful.
+- CMS menu photos can now carry authored alt text (`imageAlt`, added to both
+  content schemas); `MenuItemCard` previously dropped `descriptionEn` entirely
+  for the 11 categories it renders.
 - Migrated CMS from TinaCMS to Keystatic
 - Rewrote homepage copy to German
 - Migrated delivery link-out from Foodora to Lieferando

@@ -4,12 +4,16 @@ export const prerender = true;
 import Base from '@/layouts/Base.astro';
 import NavBar from '@/components/layout/NavBar.astro';
 import Footer from '@/components/layout/Footer.astro';
-import siteSettings from '@/content/settings/default.json';
+import { settings as siteSettings } from '@/lib/site';
 
 const { phone, email, address_line1, city, postal_code, country } = siteSettings;
 ---
 
-<Base title="Impressum" description="Impressum von D'ouro Soulfood Bistro gemäß §5 ECG und §25 Mediengesetz.">
+<Base
+  title="Impressum"
+  description="Impressum von D'ouro Soulfood Bistro gemäß §5 ECG und §25 Mediengesetz."
+  breadcrumb={[{ name: 'Impressum', path: '/impressum/' }]}
+>
   <NavBar slot="nav" />
 
   <section class="pt-28 md:pt-32 pb-16 md:pb-24 px-4 md:px-16 max-w-3xl mx-auto">

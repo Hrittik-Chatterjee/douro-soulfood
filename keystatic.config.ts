@@ -35,6 +35,16 @@ export default config({
           directory: 'public/images/menu',
           publicPath: '/images/menu',
         }),
+        // Optional. When empty, components fall back to the dish title, which is
+        // an acceptable alt but describes the NAME rather than the photo. Filling
+        // this in ("Feijoada im Tontopf mit Reis und Farofa") is better for
+        // screen-reader users and for image search.
+        // NOTE: mirrored in src/content.config.ts — the two schemas are
+        // hand-synced (see .ai/decisions/keystatic-sync.okf.md).
+        imageAlt: fields.text({
+          label: 'Dish Photo — Alt Text (German)',
+          description: 'Describes what the photo shows. Leave empty to fall back to the dish title.',
+        }),
         category: fields.select({
           label: 'Category',
           options: [

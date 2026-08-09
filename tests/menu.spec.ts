@@ -135,3 +135,55 @@ test.describe('Menu page — accessibility', () => {
     expect(results.violations).toEqual([]);
   });
 });
+
+/* ═══════════════════════════════════════════════════════════════
+   SECTION: SEO & structured data
+   ═══════════════════════════════════════════════════════════════ */
+
+test.describe('Menu page — SEO & structured data', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/menu');
+  });
+
+  test('has a German meta description', async ({ page }) => {
+    // This page used to inherit Base.astro's English default description on a
+    // German site, because it passed none.
+    const metaDesc = page.locator('meta[name="description"]');
+    await expect(metaDesc).toHaveAttribute('content', /Speisekarte|Tacos|Bowls/);
+  });
+
+  test('has canonical URL with trailing slash', async ({ page }) => {
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+      'href',
+      'https://douro-soulfood.com/menu/',
+    );
+  });
+
+  test('declares exactly one JSON-LD block', async ({ page }) => {
+    await expect(page.locator('script[type="application/ld+json"]')).toHaveCount(1);
+  });
+
+  test('JSON-LD includes a Menu node and a breadcrumb', async ({ page }) => {
+    const content = await page.locator('script[type="application/ld+json"]').first().textContent();
+    const parsed = JSON.parse(content!);
+    const byType = (type: string) =>
+      parsed['@graph'].find((node: { '@type': string }) => node['@type'] === type);
+
+    const menu = byType('Menu');
+    expect(menu).toBeDefined();
+    expect(menu.hasMenuSection.length).toBeGreaterThan(0);
+
+    const firstItem = menu.hasMenuSection[0].hasMenuItem[0];
+    expect(firstItem['@type']).toBe('MenuItem');
+    expect(firstItem.offers.priceCurrency).toBe('EUR');
+    // Prices are stored as EUR cents and shown to visitors as de-AT "€18,90";
+    // JSON-LD requires a plain decimal with a dot.
+    expect(firstItem.offers.price).toMatch(/^\d+\.\d{2}$/);
+
+    // Inner routes DO get a breadcrumb (unlike the homepage).
+    const crumbs = byType('BreadcrumbList');
+    expect(crumbs).toBeDefined();
+    expect(crumbs.itemListElement).toHaveLength(2);
+    expect(crumbs.itemListElement[1].item).toBe('https://douro-soulfood.com/menu/');
+  });
+});

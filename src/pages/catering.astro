@@ -7,7 +7,11 @@ import Footer from '@/components/layout/Footer.astro';
 import FeatureCard from '@/components/sections/FeatureCard.astro';
 ---
 
-<Base title="Catering & Events">
+<Base
+  title="Catering & Events"
+  description="Catering von D'ouro Soulfood in Salzburg: von Team-Lunches und Firmenfeiern bis zu Geburtstagen, Hochzeiten und Familientreffen — brasilianisches und afrikanisches Soul Food direkt zu Ihrem Event."
+  breadcrumb={[{ name: 'Catering & Events', path: '/catering/' }]}
+>
   <NavBar slot="nav" />
 
   <section class="pt-28 md:pt-32 pb-16 md:pb-24 px-4 md:px-16 max-w-7xl mx-auto">

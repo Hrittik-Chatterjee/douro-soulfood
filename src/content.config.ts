@@ -22,6 +22,11 @@ const menuItems = defineCollection({
     descriptionEn: z.string().optional(),
     price: z.number().min(0),
     image: z.string().nullable().optional(),
+    /**
+     * Alt text for `image`. Optional — consumers fall back to `title`.
+     * Mirrored in keystatic.config.ts; the two schemas are hand-synced.
+     */
+    imageAlt: z.string().nullable().optional(),
     category: z.enum([
       'appetizers',
       'quesadillas',

@@ -12,7 +12,7 @@ Route by task type. Load only the listed packs — not everything.
 | React island task | `.ai/packs/react-islands.okf.md`, `.ai/packs/performance.okf.md`, `.ai/packs/components.okf.md`, `.ai/decisions/no-global-react.okf.md` |
 | Prebuilt component task | `.ai/packs/prebuilt-components.okf.md`, `.ai/packs/design-system.okf.md`, `.ai/packs/visual-outcomes.okf.md` |
 | Benchmark task | `.ai/packs/performance.okf.md`, `benchmarks/README.md`, `evals/README.md` |
-| SEO task | `.ai/packs/seo.okf.md`, `.ai/packs/architecture.okf.md` |
+| SEO task | `.ai/packs/seo.okf.md`, `docs/seo.md`, `.ai/packs/security.okf.md` (structured data is coupled to the CSP hash generator — not obvious, don't skip) |
 | Docs-only task | The specific `docs/*.md` file being changed, plus its pack if one exists — nothing else |
 | First task in a new session | `.ai/packs/repo-overview.okf.md`, `okf/audit/current-state.okf.md` |
 

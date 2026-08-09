@@ -69,13 +69,16 @@ const Tag = href ? 'a' : 'div';
     className,
   ]}
   aria-label={`${rating.toFixed(1)} (${reviewCount.toLocaleString('de-AT')}) — ${rating.toFixed(1)} von ${maxRating} Sternen bei ${source}`}
-  itemScope
-  itemType="https://schema.org/AggregateRating"
 >
-  {/* Schema.org meta tags */}
-  <meta itemProp="ratingValue" content={String(rating)} />
-  <meta itemProp="bestRating" content={String(maxRating)} />
-  <meta itemProp="reviewCount" content={String(reviewCount)} />
+  {/* No microdata here on purpose. This element used to carry
+      itemtype="AggregateRating" with three <meta itemprop> children, but nothing
+      declared WHAT was being rated — an orphan entity, and a second, rival
+      declaration of the same 4.8/978 already asserted by the page's JSON-LD.
+      Attaching it properly would mean maintaining a parallel microdata
+      vocabulary alongside the @graph. The JSON-LD Restaurant node
+      (src/lib/seo/graph.ts) is now the single source for ratings; this component
+      stays purely presentational. The visible rating is what satisfies Google's
+      "must be visible on the page" requirement. */}
 
   {/* Star icons — brand gold */}
   <div class="flex items-center gap-0.5" role="img" aria-hidden="true">

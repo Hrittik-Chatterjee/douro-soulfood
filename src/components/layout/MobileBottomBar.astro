@@ -9,11 +9,9 @@
  * - Automatic safe area bottom padding adjustment.
  */
 
-import siteSettings from '@/content/settings/default.json';
+import { settings, phoneHref, orderUrl as orderHref } from '@/lib/site';
 
-const phone = siteSettings.phone || '+43 676 4231921';
-const phoneHref = `tel:${phone.replace(/\s+/g, '')}`;
-const orderHref = siteSettings.lieferando_url || 'https://www.lieferando.at/en/menu/douro';
+const phone = settings.phone;
 ---
 
 <nav data-mobile-bottom-bar aria-label="Schnellzugriff: Anrufen und Bestellen" class="mobile-bottom-bar fixed bottom-0 left-0 right-0 z-[60] flex lg:hidden gap-2 p-3 rounded-none bg-brand-espresso/98 backdrop-blur-md shadow-2xl border-t border-white/10">

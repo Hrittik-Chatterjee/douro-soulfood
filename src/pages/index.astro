@@ -15,29 +15,32 @@ import FaqAccordion from '@/components/sections/FaqAccordion.astro';
 import MapEmbed from '@/components/ui/MapEmbed.astro';
 import Footer from '@/components/layout/Footer.astro';
 import { getCollection } from 'astro:content';
-import siteSettings from '@/content/settings/default.json';
+import { settings as siteSettings, phoneHref, absoluteUrl, hours as parsedHours } from '@/lib/site';
+import { formatHoursSummary, toClientHours } from '@/lib/hours';
+import { faqNode } from '@/lib/seo/graph';
 
-const { address_line1, city, postal_code, phone, hours } = siteSettings;
-const phoneHref = `tel:${phone.replace(/[^+\d]/g, '')}`;
+const { address_line1, city, postal_code, phone } = siteSettings;
 
 /**
- * Pre-JS fallback for the "today" hours widget below: since this page is
- * statically prerendered (no per-visitor server render), we can't know the
- * visitor's actual "today" at build time. Rather than assert a specific
- * (likely wrong) day's hours, summarize the whole week into groups of
- * consecutive identical times — always factually correct — and let the
- * client-side script replace it with the real "Heute: ..." once it knows
- * the visitor's local day.
+ * Pre-JS fallback for the "today" hours widget below: this page is statically
+ * prerendered, so the visitor's actual "today" isn't knowable at build time.
+ * Rather than assert one (likely wrong) day, render the whole week grouped by
+ * identical hours — always factually correct — and let the client script narrow
+ * it to "Heute: …" once it knows the local day.
+ *
+ * Both this summary and the JSON-LD `openingHoursSpecification` come from the
+ * same `src/lib/hours.ts` parse, so the visible text and the machine-readable
+ * hours cannot drift apart.
  */
-const hoursSummary = hours
-  .reduce<{ time: string; days: string[] }[]>((groups, { day, time }) => {
-    const last = groups[groups.length - 1];
-    if (last && last.time === time) last.days.push(day);
-    else groups.push({ time, days: [day] });
-    return groups;
-  }, [])
-  .map((g) => `${g.days.length > 1 ? `${g.days[0]}–${g.days[g.days.length - 1]}` : g.days[0]}: ${g.time}`)
-  .join(' · ');
+const hoursSummary = formatHoursSummary(parsedHours);
+
+/**
+ * Payload for the widget. Carries day INDEXES, not German day names: the old
+ * script matched `Intl.DateTimeFormat('de-AT', {weekday:'long'})` output against
+ * the CMS labels as raw strings, which silently produced nothing as soon as the
+ * formatting locale wasn't German.
+ */
+const clientHours = toClientHours(parsedHours);
 
 /**
  * HOME PAGE — D'ouro Soulfood Bistro
@@ -66,17 +69,25 @@ const popularDishes = [
   { src: '/images/menu/brisa-do-mar.webp', alt: 'Brisa do Mar', width: 300, height: 300 },
 ];
 
-/** 9 Photos for Galerie section. width/height match each source file's actual dimensions. */
+/**
+ * 9 Photos for Galerie section. width/height match each source file's actual
+ * dimensions.
+ *
+ * Alt text describes what each photo actually shows, verified by opening the
+ * files. They were previously alt'd "D'ouro Bistro Spezialität 1…9", which was
+ * both useless to screen readers and factually wrong — most of these are
+ * interior/exterior atmosphere shots, not dishes.
+ */
 const galleryImages = [
-  { src: '/images/gallery/1.webp', alt: 'D\'ouro Bistro Spezialität 1', width: 680, height: 510 },
-  { src: '/images/gallery/2.webp', alt: 'D\'ouro Bistro Spezialität 2', width: 594, height: 510 },
-  { src: '/images/gallery/3.webp', alt: 'D\'ouro Bistro Spezialität 3', width: 382, height: 510 },
-  { src: '/images/gallery/4.webp', alt: 'D\'ouro Bistro Spezialität 4', width: 382, height: 510 },
-  { src: '/images/gallery/5.webp', alt: 'D\'ouro Bistro Spezialität 5', width: 382, height: 510 },
-  { src: '/images/gallery/6.webp', alt: 'D\'ouro Bistro Spezialität 6', width: 382, height: 510 },
-  { src: '/images/gallery/7.webp', alt: 'D\'ouro Bistro Spezialität 7', width: 382, height: 510 },
-  { src: '/images/gallery/8.webp', alt: 'D\'ouro Bistro Spezialität 8', width: 382, height: 510 },
-  { src: '/images/gallery/9.webp', alt: 'D\'ouro Bistro Spezialität 9', width: 680, height: 510 },
+  { src: '/images/gallery/1.webp', alt: 'Gastraum des D\'ouro mit Fahrrad-Tisch, bunt gemusterten Kissen auf der Fensterbank und Orchidee', width: 680, height: 510 },
+  { src: '/images/gallery/2.webp', alt: 'Gäste an einem Holztisch im D\'ouro, davor bunte Getränkeflaschen und ein Weinregal', width: 594, height: 510 },
+  { src: '/images/gallery/3.webp', alt: 'Drei Tacos mit Guacamole auf schwarzer Platte, daneben ein grüner Cocktail', width: 382, height: 510 },
+  { src: '/images/gallery/4.webp', alt: 'Paella mit Garnelen, Muscheln und Paprika in der Pfanne, dazu ein Beilagenteller', width: 382, height: 510 },
+  { src: '/images/gallery/5.webp', alt: 'In der offenen Küche des D\'ouro wird frisch gekocht, mit brasilianischer Flagge auf der Kochmütze', width: 382, height: 510 },
+  { src: '/images/gallery/6.webp', alt: 'Fensterbank mit bunten Patchwork-Kissen und Pflanzen, Blick auf die Salzburger Straße', width: 382, height: 510 },
+  { src: '/images/gallery/7.webp', alt: 'Tisch am Fenster mit Palme und Blick auf die Salzburger Altbaufassaden', width: 382, height: 510 },
+  { src: '/images/gallery/8.webp', alt: 'Außenansicht: das Schild „D\'ouro Soul Food“ über dem Eingang in der Auerspergstraße', width: 382, height: 510 },
+  { src: '/images/gallery/9.webp', alt: 'Weinregal im D\'ouro mit Flaschen aus Chile und Portugal', width: 680, height: 510 },
 ];
 
 /** FAQ entries from KeystaticCMS */
@@ -89,7 +100,11 @@ const faqItems = faqEntries.map((item) => ({
 }));
 
 // SEO CONFIG
-const SITE_URL = 'https://douro-soulfood.com';
+// No `canonical` override here on purpose. Base.astro defaults it to
+// Astro.url.href, which under build.format:'directory' yields the trailing-slash
+// form `https://douro-soulfood.com/` — the same form the sitemap's <loc> and the
+// JSON-LD `url` already emit. Hand-setting the slashless variant here used to
+// make one page advertise three different URLs for itself.
 const PAGE_TITLE = "Afro-Lateinamerikanische Küche in Salzburg";
 const PAGE_DESCRIPTION =
   "Frische brasilianische & afrikanische Soulfood-Spezialitäten von Angela in Salzburg. Tacos, Bowls, Feijoada & afrikanische Gerichte. Auerspergstraße 10.";
@@ -98,7 +113,7 @@ const PAGE_DESCRIPTION =
 <Base
   title={PAGE_TITLE}
   description={PAGE_DESCRIPTION}
-  canonical={SITE_URL}
+  extraSchemaNodes={[faqNode(faqItems, absoluteUrl('/', Astro.site))]}
 >
   {/* 1. NAVBAR */}
   <NavBar slot="nav" />
@@ -370,7 +385,9 @@ const PAGE_DESCRIPTION =
               <span class="text-[11px] text-text-tertiary block">Öffnungszeiten</span>
               <span
                 id="today-hours"
-                data-hours={JSON.stringify(hours)}
+                data-hours={JSON.stringify(clientHours)}
+                data-tpl-open="Heute: {time} Uhr"
+                data-tpl-closed="Heute geschlossen"
                 class="text-xs md:text-sm font-medium text-text-primary"
               >
                 {hoursSummary}
@@ -390,12 +407,36 @@ const PAGE_DESCRIPTION =
 </Base>
 
 <script>
+  // Narrows the server-rendered week summary to just today's hours.
+  //
+  // Deliberately contains NO human-readable strings: the labels arrive via
+  // data-tpl-* and the day is resolved by INDEX, not by matching a localized
+  // weekday name against the CMS labels (which is what silently broke before).
+  // Keeping this script string-free means it stays byte-identical no matter what
+  // language the page is in — so adding a locale costs zero extra CSP hashes.
   const el = document.getElementById('today-hours');
-  const hours = el ? JSON.parse(el.dataset.hours ?? '[]') : [];
-  const today = new Intl.DateTimeFormat('de-AT', { timeZone: 'Europe/Vienna', weekday: 'long' }).format(new Date());
-  const entry = hours.find((h: { day: string; time: string }) => h.day === today);
 
-  if (el && entry) {
-    el.textContent = entry.time === 'Geschlossen' ? 'Heute geschlossen' : `Heute: ${entry.time} Uhr`;
+  if (el) {
+    const hours: { d: number; closed: boolean; time: string }[] = JSON.parse(el.dataset.hours ?? '[]');
+
+    // 'en-US' short weekday is a stable, locale-independent key. The timeZone
+    // stays Europe/Vienna on purpose: the relevant "today" is the restaurant's,
+    // not the visitor's.
+    const code = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'Europe/Vienna',
+      weekday: 'short',
+    }).format(new Date());
+
+    const ISO_DAY: Record<string, number> = {
+      Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6, Sun: 7,
+    };
+
+    const entry = hours.find((h) => h.d === ISO_DAY[code]);
+
+    if (entry) {
+      el.textContent = entry.closed
+        ? (el.dataset.tplClosed ?? el.textContent)
+        : (el.dataset.tplOpen ?? '').replace('{time}', entry.time);
+    }
   }
 </script>

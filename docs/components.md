@@ -189,12 +189,18 @@ Persistent bottom action bar shown on mobile, rendered directly by `Base.astro` 
 | Prop | Type | Description |
 |------|------|-------------|
 | title | string | Page title |
-| description | string? | Meta description |
+| description | string | **Required.** Meta description. Was optional with an English-prose default that four German pages silently shipped |
 | image | string? | OG/Twitter image URL |
-| canonical | string? | Canonical URL |
+| imageAlt | string? | Alt text for the OG/Twitter image |
+| canonical | string? | Canonical URL. **Don't pass it** — the default (`Astro.url.href`) produces the trailing-slash form the sitemap and JSON-LD already use |
 | type | 'website' \| 'article' | OG type |
+| noindex | boolean? | Emits `robots: noindex, nofollow` and skips structured data |
+| breadcrumb | `{name,path}[]?` | Trail **excluding** "Startseite". Omit on the homepage — a one-item trail is noise |
+| extraSchemaNodes | `object[]?` | Page-specific `@graph` nodes, e.g. `menuNode(...)` on `/menu`, `faqNode(...)` on `/` |
 
-Handles `<head>` (SEO meta, fonts, Schema.org `Restaurant` JSON-LD), global CSS import, and renders `MobileBottomBar` plus `nav`/`footer`/default slots. Does **not** import `NavBar`/`Footer` itself — each page imports and slots them individually.
+**Slots:** `nav`, `footer`, default, plus `head` for page-specific head tags.
+
+Handles `<head>` (SEO meta, fonts, and the page's schema.org `@graph` built by `src/lib/seo/graph.ts`), global CSS import, and renders `MobileBottomBar` plus `nav`/`footer`/default slots. Does **not** import `NavBar`/`Footer` itself — each page imports and slots them individually.
 
 ---
 
