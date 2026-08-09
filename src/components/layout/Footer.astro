@@ -13,11 +13,7 @@
 
 import Button from '@/components/ui/Button.astro';
 import { settings as siteSettings } from '@/lib/site';
-
-interface FooterLink {
-  label: string;
-  href: string;
-}
+import { FOOTER_NAV_LINKS, type NavLink as FooterLink } from '@/lib/nav';
 
 interface Props {
   tagline?: string;
@@ -34,13 +30,11 @@ const currentYear = new Date().getFullYear();
 
 const {
   tagline = 'Brasilianische Seele. Afro-Lateinische Aromen. Mitten in Salzburg. Mit Liebe gekocht, mit Herz serviert.',
-  links = [
-    { label: 'Speisekarte', href: '/menu' },
-    { label: 'Catering & Events', href: '/catering' },
-    { label: 'Über uns', href: '/about' },
-    { label: 'Kontakt', href: '/contact' },
-  ],
-  cta = { label: 'Jetzt bestellen', href: siteSettings.lieferando_url || 'https://www.lieferando.at/en/menu/douro' },
+  links = FOOTER_NAV_LINKS,
+  cta = {
+    label: 'Jetzt bestellen',
+    href: siteSettings.lieferando_url || 'https://www.lieferando.at/en/menu/douro',
+  },
   address = [`${siteSettings.address_line1}, ${siteSettings.postal_code} ${siteSettings.city}`],
   phone = siteSettings.phone || '+43 676 4231921',
   phoneHref = `tel:${(siteSettings.phone || '+43 676 4231921').replace(/[^+\d]/g, '')}`,
@@ -54,13 +48,14 @@ const {
 
 <footer class="bg-surface-primary pt-8 pb-16 md:pb-12 border-t border-border-subtle">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
     <!-- Main Floating Medium Silver Metallic Capsule Card -->
-    <div class="bg-zinc-300/90 border border-zinc-300/90 backdrop-blur-md rounded-2xl p-6 sm:p-8 md:p-10 shadow-xl transition-all duration-300">
-
+    <div
+      class="bg-zinc-300/90 border border-zinc-300/90 backdrop-blur-md rounded-2xl p-6 sm:p-8 md:p-10 shadow-xl transition-all duration-300"
+    >
       <!-- Top Row: Logo, Nav Links, Order CTA -->
-      <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 lg:gap-12">
-
+      <div
+        class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 lg:gap-12"
+      >
         <!-- Left: Logo & Tagline -->
         <div class="flex flex-col gap-3 max-w-sm shrink-0">
           <a
@@ -82,19 +77,18 @@ const {
         </div>
 
         <!-- Middle: Navigation Links -->
-        <nav
-          class="flex flex-wrap items-center gap-x-6 gap-y-3"
-          aria-label="Footer Navigation"
-        >
-          {links.map((link) => (
-            <a
-              href={link.href}
-              class="inline-flex items-center min-h-12 md:min-h-0 text-sm md:text-base font-bold text-zinc-900 hover:text-brand-gold-ink
+        <nav class="flex flex-wrap items-center gap-x-6 gap-y-3" aria-label="Footer Navigation">
+          {
+            links.map((link) => (
+              <a
+                href={link.href}
+                class="inline-flex items-center min-h-12 md:min-h-0 text-sm md:text-base font-bold text-zinc-900 hover:text-brand-gold-ink
                      no-underline transition-colors duration-200 rounded-sm"
-            >
-              {link.label}
-            </a>
-          ))}
+              >
+                {link.label}
+              </a>
+            ))
+          }
         </nav>
 
         <!-- Right: Primary Order CTA Button (D'ouro Brand Gold) -->
@@ -118,15 +112,17 @@ const {
 
       <!-- Inner Bottom Row: Legal Links -->
       <div class="flex flex-wrap items-center gap-6">
-        {legalLinks.map((link) => (
-          <a
-            href={link.href}
-            class="inline-flex items-center min-h-12 md:min-h-0 text-xs md:text-sm font-bold text-zinc-700 hover:text-zinc-950
+        {
+          legalLinks.map((link) => (
+            <a
+              href={link.href}
+              class="inline-flex items-center min-h-12 md:min-h-0 text-xs md:text-sm font-bold text-zinc-700 hover:text-zinc-950
                    no-underline transition-colors duration-200"
-          >
-            {link.label}
-          </a>
-        ))}
+            >
+              {link.label}
+            </a>
+          ))
+        }
       </div>
     </div>
 
@@ -134,8 +130,9 @@ const {
     <slot />
 
     <!-- Outer Bottom Bar: Social Icons, Copyright, Contact -->
-    <div class="mt-8 pt-4 flex flex-col md:flex-row items-center justify-between gap-4 text-text-tertiary text-xs md:text-sm">
-
+    <div
+      class="mt-8 pt-4 flex flex-col md:flex-row items-center justify-between gap-4 text-text-tertiary text-xs md:text-sm"
+    >
       <!-- Left: Social Media Icons -->
       <div class="flex items-center gap-1.5">
         <!-- Instagram -->
@@ -146,10 +143,19 @@ const {
           class="p-3 text-text-tertiary hover:text-brand-gold transition-colors duration-200"
           aria-label="Instagram"
         >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
-            <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
-            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-            <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+            <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
           </svg>
         </a>
 
@@ -161,8 +167,17 @@ const {
           class="p-3 text-text-tertiary hover:text-brand-gold transition-colors duration-200"
           aria-label="Facebook"
         >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
           </svg>
         </a>
 
@@ -178,7 +193,8 @@ const {
       <!-- Center: Copyright Notice -->
       <div class="text-center">
         <p class="text-text-tertiary">
-          &copy; {currentYear} {copyrightName}. Alle Rechte vorbehalten.
+          &copy; {currentYear}
+          {copyrightName}. Alle Rechte vorbehalten.
         </p>
       </div>
 

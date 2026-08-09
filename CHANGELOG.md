@@ -17,6 +17,18 @@
   both the visible hours summary and `openingHoursSpecification`, so they
   can't disagree
 - `pnpm check:csp` and `pnpm check:hours`
+- i18n infrastructure (Phase 2 — de-AT remains the only *live* locale; no
+  English/Chinese/Portuguese content ships in this change). `LIVE_LOCALES`
+  (`src/lib/i18n/locales.ts`) is the single gate a future locale flips to go
+  live; `astro.config.mjs`'s `i18n` config and the sitemap's `i18n.locales`
+  map both derive from it, so with one live locale `hreflang`/`<xhtml:link>`
+  structurally cannot appear yet — verified against the installed
+  `@astrojs/sitemap` source, not assumed. `src/lib/nav.ts` de-duplicates the
+  primary nav (previously hand-typed independently in `NavBar.astro` and
+  `Footer.astro`); `src/lib/i18n/ui.ts` replaces two hardcoded German
+  `aria-label` strings that lived inside `MobileNavDrawer.astro`'s inline
+  `<script>`. `pnpm check:i18n` fails the build if a live locale is missing
+  UI-string keys. See `docs/i18n.md`.
 
 ### Changed
 - **CSP inline-script hashes are now generated at build**

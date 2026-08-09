@@ -8,11 +8,8 @@
  */
 
 import MobileNavDrawer from './MobileNavDrawer.astro';
-
-interface NavLink {
-  label: string;
-  href: string;
-}
+import { NAV_LINKS, type NavLink } from '@/lib/nav';
+import { t } from '@/lib/i18n/ui';
 
 interface Props {
   links?: NavLink[];
@@ -22,12 +19,7 @@ interface Props {
 }
 
 const {
-  links = [
-    { label: 'Speisekarte', href: '/menu' },
-    { label: 'Catering', href: '/catering' },
-    { label: 'Über uns', href: '/about' },
-    { label: 'Kontakt', href: '/contact' },
-  ],
+  links = NAV_LINKS,
   ctaPrimary = { label: 'Jetzt bestellen', href: 'https://www.lieferando.at/en/menu/douro' },
   ctaSecondary = { label: 'Reservierung', href: '/contact' },
   class: className = '',
@@ -47,10 +39,10 @@ const {
   <div
     data-scrolled-bg
     class="absolute inset-0 bg-brand-espresso/95 backdrop-blur-md border-b border-white/10 shadow-2xl transition-opacity duration-300 ease-out pointer-events-none -z-10 opacity-0"
-  ></div>
+  >
+  </div>
 
   <div class="relative z-10 mx-auto flex max-w-7xl items-center justify-between px-4 md:px-12">
-
     <!-- Left: Logo Image Only -->
     <div class="shrink-0">
       <a
@@ -76,59 +68,67 @@ const {
       >
         <!-- Nav links -->
         <div class="flex items-center gap-1">
-          {links.map((link) => (
-            <a
-              href={link.href}
-              class="px-3.5 py-2 text-sm font-bold tracking-wider uppercase text-white hover:text-brand-gold
+          {
+            links.map((link) => (
+              <a
+                href={link.href}
+                class="px-3.5 py-2 text-sm font-bold tracking-wider uppercase text-white hover:text-brand-gold
                      no-underline transition-colors duration-200 rounded-sm"
-            >
-              {link.label}
-            </a>
-          ))}
+              >
+                {link.label}
+              </a>
+            ))
+          }
         </div>
 
         <!-- Secondary Button (Reservierung — SSOT: rounded-sm = 10px) -->
-        {ctaSecondary && (
-          <a
-            href={ctaSecondary.href}
-            class="px-4 py-2 text-sm font-bold tracking-wider uppercase text-white rounded-sm border border-white/20
+        {
+          ctaSecondary && (
+            <a
+              href={ctaSecondary.href}
+              class="px-4 py-2 text-sm font-bold tracking-wider uppercase text-white rounded-sm border border-white/20
                    hover:bg-white/10 hover:border-white/40 no-underline transition-all duration-200"
-          >
-            {ctaSecondary.label}
-          </a>
-        )}
+            >
+              {ctaSecondary.label}
+            </a>
+          )
+        }
 
         <!-- Primary CTA (D'ouro Brand Gold — SSOT: rounded-sm = 10px) -->
-        {ctaPrimary && (
-          <a
-            href={ctaPrimary.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="group inline-flex items-center gap-1.5 px-5 py-2 text-sm font-extrabold tracking-wider uppercase rounded-sm
+        {
+          ctaPrimary && (
+            <a
+              href={ctaPrimary.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group inline-flex items-center gap-1.5 px-5 py-2 text-sm font-extrabold tracking-wider uppercase rounded-sm
                    bg-brand-gold hover:bg-brand-gold-light active:bg-brand-gold-dark text-brand-espresso
                    no-underline transition-all duration-200 shadow-md hover:shadow-lg hover:scale-[1.02]"
-          >
-            <span>{ctaPrimary.label}</span>
-            <svg
-              class="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
             >
-              <polyline points="9 18 15 12 9 6" />
-            </svg>
-          </a>
-        )}
+              <span>{ctaPrimary.label}</span>
+              <svg
+                class="w-4 h-4 transition-transform duration-200 group-hover:translate-x-0.5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </a>
+          )
+        }
       </div>
     </div>
 
     <!-- Mobile Navigation Capsule (SSOT: rounded-md container, rounded-sm button) -->
     <div class="flex lg:hidden items-center">
-      <div class="flex items-center gap-2 bg-brand-espresso/90 border border-white/15 backdrop-blur-md rounded-md px-2.5 py-1.5 shadow-2xl">
+      <div
+        class="flex items-center gap-2 bg-brand-espresso/90 border border-white/15 backdrop-blur-md rounded-md px-2.5 py-1.5 shadow-2xl"
+      >
         <!-- German "Speisekarte" Link Button (SSOT: rounded-sm = 10px) -->
         <a
           href="/menu"
@@ -143,13 +143,21 @@ const {
           id="mobile-menu-btn"
           type="button"
           class="flex justify-center items-center w-11 h-11 rounded-sm text-white focus:outline-none"
-          aria-label="Navigationsmenü öffnen"
+          aria-label={t('nav.drawer.open')}
+          data-label-open={t('nav.drawer.open')}
+          data-label-close={t('nav.drawer.close')}
           aria-expanded="false"
         >
           <div class="flex flex-col gap-1.5 justify-center items-center w-5 h-5">
-            <span class="block h-0.5 w-5 bg-white rounded-full transition-all duration-200" data-line-top></span>
-            <span class="block h-0.5 w-5 bg-white rounded-full transition-all duration-200" data-line-mid></span>
-            <span class="block h-0.5 w-5 bg-white rounded-full transition-all duration-200" data-line-bot></span>
+            <span
+              class="block h-0.5 w-5 bg-white rounded-full transition-all duration-200"
+              data-line-top></span>
+            <span
+              class="block h-0.5 w-5 bg-white rounded-full transition-all duration-200"
+              data-line-mid></span>
+            <span
+              class="block h-0.5 w-5 bg-white rounded-full transition-all duration-200"
+              data-line-bot></span>
           </div>
         </button>
       </div>

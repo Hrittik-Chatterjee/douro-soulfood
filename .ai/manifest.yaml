@@ -122,6 +122,14 @@ docs:
     token_budget: 1200
     status: approved
 
+  - id: i18n
+    path: docs/i18n.md
+    type: knowledge
+    summary: LIVE_LOCALES gate, Astro i18n/sitemap wiring, nav.ts dedup, verify-i18n.mjs, why de-AT is still the only live locale.
+    load_when: Adding a locale, touching astro.config.mjs i18n/sitemap, nav/UI-string changes, hreflang questions.
+    token_budget: 900
+    status: approved
+
   - id: release
     path: docs/release.md
     type: knowledge
