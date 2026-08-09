@@ -481,9 +481,26 @@
 @font-face {
   font-family: 'DM Sans';
   font-style: italic;
-  font-weight: 400 500;
+  /*
+   * A single weight, not a range: this used to be the full 400-700 variable
+   * font (76 KB) shipped for italic text that only ever renders at the
+   * ambient weight 400 (no `italic` usage in this codebase pairs with a
+   * font-medium/font-semibold utility). Chrome's preload scanner fetches an
+   * @font-face file for ANY matching text anywhere in the initial HTML,
+   * regardless of scroll position, at very-high priority — so this file was
+   * competing directly with the hero's critical CSS/poster on every homepage
+   * load for the sake of two testimonial quotes. Re-instanced to a static
+   * weight-400 instance and subset to Latin + Latin-1 Supplement + Latin
+   * Extended-A (covers German/French/Portuguese/Spanish diacritics, since
+   * testimonial text is CMS-editable and not fixed to today's content) via
+   * `fonttools varLib.instancer` + `pyftsubset`: 76 KB -> 11.8 KB. If a
+   * future edit ever applies a bolder weight to italic text, the browser
+   * synthesizes it from this face rather than failing — acceptable
+   * degradation for a case that doesn't exist in the codebase today.
+   */
+  font-weight: 400;
   font-display: swap;
-  src: url('/fonts/dm-sans-italic-variable.woff2') format('woff2');
+  src: url('/fonts/dm-sans-italic-static.woff2') format('woff2');
 }
 
 @font-face {

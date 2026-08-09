@@ -33,6 +33,24 @@ interface Props {
   videoSrcMobile?: string;
   /** Hero background images (fallback source) */
   images?: HeroImage[];
+  /**
+   * Poster frame shown before/instead of the video. ONE file, deliberately
+   * shared by both the mobile and desktop <video> elements.
+   *
+   * `poster` must stay a real, static HTML attribute — it's what a no-JS
+   * visitor sees permanently, and what everyone sees during the gap before the
+   * viewport-detection script (below) runs, so it can't be assigned by that
+   * script the way `src` is. But `<video>` has no `srcset`, and since a static
+   * attribute is parsed before any CSS applies, giving each viewport's video
+   * its OWN poster means BOTH get fetched unconditionally regardless of which
+   * one is visually hidden — this repo already hit that exact class of bug for
+   * `src` (see the comment on the <video> tags below) and it recurs here
+   * because `poster` has no script-mediated equivalent. One right-sized WebP
+   * (1280w, 55 KB — replacing what was a 1600x900, 178 KB JPEG served
+   * unchanged to a 375px phone) costs one fetch either way, so sharing it is a
+   * straight improvement over two viewport-specific files that both load.
+   */
+  poster?: string;
   /** Primary CTA config */
   ctaPrimary: { label: string; href: string };
   /** Secondary CTA config */
@@ -46,6 +64,7 @@ const {
   videoSrc = '/douroherovideo.mp4',
   videoSrcMobile = '/douroheromobile.mp4',
   images = [],
+  poster = '/images/hero-fallback-1280.webp',
   ctaPrimary,
   ctaSecondary,
 } = Astro.props;
@@ -77,7 +96,7 @@ const heroImage = images[0];
         <video
           data-hero-video="mobile"
           data-video-src={videoSrcMobile}
-          poster={heroImage?.src}
+          poster={poster}
           loop
           muted
           playsinline
@@ -88,7 +107,7 @@ const heroImage = images[0];
         <video
           data-hero-video="desktop"
           data-video-src={videoSrc}
-          poster={heroImage?.src}
+          poster={poster}
           loop
           muted
           playsinline
