@@ -56,7 +56,7 @@ outputs:
 | Time to Interactive      | < 3500ms  | warn              |
 | Speed Index              | < 3000ms  | warn              |
 
-Pages covered: `/`, `/menu`, `/about`, `/catering`, `/contact` (per both `.lighthouserc.cjs`'s local `collect.url` list and `deploy.yml`'s `--collect.url` flags — **new pages must be added to both, kept in sync**, per `docs/test-plan.md`'s §4 acceptance criteria on this exact point).
+Pages covered: `/`, `/menu/`, `/about/`, `/catering/`, `/contact/` — defined **in one place**, `.lighthouserc.cjs`'s `collect.url` list. The workflow no longer duplicates them as `--collect.url` flags, so the old "keep both in sync" requirement is gone. Trailing slashes are required (`trailingSlash: 'always'`); without one the audit measures a 301 hop.
 
 ## 4. Constraints
 
@@ -66,7 +66,7 @@ Pages covered: `/`, `/menu`, `/about`, `/catering`, `/contact` (per both `.light
 
 ## 5. Acceptance Criteria
 
-- Given a new page is added under `src/pages/`, when it ships, then it must be added to both `.lighthouserc.cjs` and `deploy.yml`'s Lighthouse URL lists in the same change.
+- Given a new page is added under `src/pages/`, when it ships, then it must be added to `.lighthouserc.cjs`'s `collect.url` list (one place), with a trailing slash.
 - Given a React island is proposed (per `docs/adr/react-islands.md`), when implemented, then its Lighthouse impact on Total Blocking Time must be checked before merging — a regression past 200ms on any of the 5 audited pages is a blocker, not a warning to note later.
 - Given CI's Lighthouse job fails, when investigated, then the fix must address the actual metric regression, never the threshold itself.
 
@@ -74,5 +74,5 @@ Pages covered: `/`, `/menu`, `/about`, `/catering`, `/contact` (per both `.light
 
 - MUST: treat this document's thresholds as sourced from `.lighthouserc.cjs`, not invented — if `.lighthouserc.cjs` changes, update this document in the same change.
 - MUST: evaluate any new client-side JavaScript (React islands, third-party scripts) against the Total Blocking Time budget before merging.
-- MUST NOT: weaken an `error`-level Lighthouse assertion to unblock a failing PR.
-- MUST NOT: add a new route without adding it to both Lighthouse URL lists.
+- MUST NOT: weaken an `error`-level Lighthouse assertion to unblock a failing PR. The mobile LCP breach recorded in §2 is the live test of this rule.
+- MUST NOT: add a new route without adding it to `.lighthouserc.cjs`'s `collect.url` list.

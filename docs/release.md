@@ -59,12 +59,12 @@ Reflects the actual CI/CD pipeline defined in `.github/workflows/deploy.yml` —
 
 ## 4. Acceptance Criteria
 
-- Given a PR is opened, when CI runs, then `Build` passing is the reliable per-PR signal; `Deploy Preview`/`e2e-tests`/`lighthouse` failing due to the missing token is expected and not blocking, per the documented gap above.
+- Given a PR is opened, when CI runs, then `Build`, `Playwright E2E Tests`, and `Lighthouse CI` are all reliable per-PR signals and must be read as real results. Only `Deploy Preview`/`Deploy to Production` failing on the missing token is expected and non-blocking.
 - Given a PR merges to `main`, when the pipeline completes, then production at `https://douro-soulfood.com` should reflect the merge within the workflow's total runtime (Build + Preview + E2E + Lighthouse + Production, each with its own `timeout-minutes`).
 - Given the `CLOUDFLARE_API_TOKEN`/`CLOUDFLARE_ACCOUNT_ID` secrets are eventually configured, when the next PR runs, then `Deploy Preview` should go green and this document's "Known, verified environment gap" section should be updated to reflect that (per `CLAUDE.md`'s doc-sync convention).
 
 ## 5. Agent Execution Rules
 
-- MUST: treat `Build` job status as the real per-PR signal in this repo until the `CLOUDFLARE_API_TOKEN` gap is closed; do not block a merge decision on `Deploy Preview`/`e2e-tests`/`lighthouse` failing for that specific, already-diagnosed reason.
+- MUST: treat `Build`, `e2e-tests`, and `lighthouse` as real per-PR signals. Only `Deploy Preview`/`Deploy to Production` may be discounted, and only for the diagnosed token gap. **Never dismiss an `e2e-tests` or `lighthouse` failure as "the known CI gap"** — that reasoning was valid only while they were skipped, and it is exactly how 17 stale assertions survived on `main`.
 - MUST: verify a CI failure's root cause (read the actual job log) before classifying it as "the known gap" — a failure that looks similar but has a different actual cause is not automatically safe to ignore.
-- MUST NOT: strip or bypass `--project-name` flags, `timeout-minutes` limits, or the `needs:` job-dependency gating as a way to "fix" a CI failure faster.
+- MUST NOT: strip or bypass `--project-name` flags, `timeout-minutes` limits, or the `needs:` job-dependency gating as a way to "fix" a CI failure faster. In particular, do not re-point `e2e-tests`/`lighthouse` at `deploy-preview`: that is what made both gates unreachable.
