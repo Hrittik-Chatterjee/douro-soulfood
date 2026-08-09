@@ -2,11 +2,12 @@
 
 Environment/tooling failures seen more than once in this repo's session history — expected, not surprising, when they recur.
 
-- **`Deploy Preview` GitHub Actions job fails on every PR**, due to a missing `CLOUDFLARE_API_TOKEN` repository secret. Confirmed across dozens of PRs in this repo's history. `Build` job status is the reliable per-PR signal instead. This is a repo-configuration gap (needs a repo-admin to add the secret), not something any single code change can fix.
+- ~~`Deploy Preview` GitHub Actions job fails on every PR~~ — **no longer recurs**: the `deploy-preview`/`deploy-production` jobs were deleted in PR #56 rather than fixed (they were redundant with Cloudflare's own Git integration, which deploys independently, and were separately broken regardless of the missing token). `.github/workflows/deploy.yml` is now a 3-job quality-gate-only pipeline; `Build`, `e2e-tests`, and `lighthouse` are all reliable per-PR signals with no known gap among them. See `docs/release.md`.
 - **`wrangler pages dev` fails to start locally** in at least one sandboxed agent environment (`workerd` module resolution error). Recurs identically every time it's attempted in that environment — not worth re-attempting without first checking whether the environment has changed.
 - **Playwright's browser binary is missing** in that same environment, so `npx playwright test` (full run) fails, while `npx playwright test --list` (no browser needed) succeeds. Use the `--list` fallback for static verification when a full run isn't possible.
 
 ## If a "recurring failure" stops recurring
+
 If any of the above suddenly works (e.g. a future environment has a working Chromium binary), update this file to say so — don't keep treating a fixed limitation as still-broken.
 
 - **Date**: 2026-08-06
@@ -29,7 +30,7 @@ If any of the above suddenly works (e.g. a future environment has a working Chro
 - **Source**: manual entry via memory-append.mjs
 - **Type**: recurring-failure
 - **Insight**: A CSP policy documented as a 'known SEO-only gap' (JSON-LD blocked) turned out on investigation to be a much more severe, currently-live functional bug: ALL inline scripts on the site were CSP-blocked, including the mobile hamburger menu toggle and the Google Maps consent-gate button -- both silently did nothing for real production visitors.
-- **Evidence**: Headless-Chrome click test before the fix: clicking #mobile-menu-btn left #mobile-menu's data-open attribute at 'false'. After adding all 5 script hashes to public/_headers: data-open became 'true' and the map consent-gate iframe loaded on click, zero CSP console violations.
+- **Evidence**: Headless-Chrome click test before the fix: clicking #mobile-menu-btn left #mobile-menu's data-open attribute at 'false'. After adding all 5 script hashes to public/\_headers: data-open became 'true' and the map consent-gate iframe loaded on click, zero CSP console violations.
 - **Recommended behavior**: When a backlog item says a CSP/security gap only affects SEO or a narrow feature, verify that scope directly (grep for ALL inline <script> tags site-wide, not just the one named in the note) before assuming the blast radius is as documented -- the actual impact here was much larger than what was written down
 - **Status**: active
 
@@ -38,7 +39,7 @@ If any of the above suddenly works (e.g. a future environment has a working Chro
 - **Type**: recurring-failure
 - **Insight**: Content added to a thin OKF pack (.ai/packs/security.okf.md) during a real fix expanded it past its own frontmatter token_budget without anyone re-checking node .ai/scripts/token-report.mjs afterward -- the pack grew from a 350-token pointer to a 686-token near-duplicate of docs/security.md's full narrative before this was caught.
 - **Evidence**: node .ai/scripts/token-report.mjs before fix: security.okf.md 686 tokens vs 500 budget, OVER BUDGET; after trimming back to a pointer: 498/500, ok
-- **Recommended behavior**: Run node .ai/scripts/token-report.mjs as a matter of course after editing any .ai/packs/*.okf.md file, not just when told to -- packs are meant to stay thin pointers to docs/*.md, and it is easy to accidentally duplicate full narrative content into them while documenting a fix in the moment
+- **Recommended behavior**: Run node .ai/scripts/token-report.mjs as a matter of course after editing any .ai/packs/_.okf.md file, not just when told to -- packs are meant to stay thin pointers to docs/_.md, and it is easy to accidentally duplicate full narrative content into them while documenting a fix in the moment
 - **Status**: active
 
 - **Date**: 2026-08-06

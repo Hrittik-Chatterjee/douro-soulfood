@@ -10,16 +10,15 @@ D'ouro Soulfood Bistro site — Astro 6 + Tailwind v4 + Keystatic, deployed to C
 
 SEO Phase 1 (German-only) landed: build-time CSP hash generation, one schema.org `@graph` per page, required meta descriptions, trailing-slash canonicals, generated `/llms.txt`, real image alt text — see `docs/seo.md`.
 
-i18n Phase 2 landed: `LIVE_LOCALES` gate, `astro.config.mjs` i18n + sitemap config, `nav.ts` de-dup, `verify-i18n.mjs`. **de-AT remains the only *live* locale — no English/Chinese/Portuguese content ships.** `hreflang`/`<xhtml:link>` structurally cannot appear with one live locale (verified). **Phases 3-4 (English activation, zh/pt) are NOT started** — see `docs/i18n.md`.
+i18n Phase 2 landed: `LIVE_LOCALES` gate, `astro.config.mjs` i18n + sitemap config, `nav.ts` de-dup, `verify-i18n.mjs`. **de-AT remains the only _live_ locale — no English/Chinese/Portuguese content ships.** `hreflang`/`<xhtml:link>` structurally cannot appear with one live locale (verified). **Phases 3-4 (English activation, zh/pt) are NOT started** — see `docs/i18n.md`.
 
 ## Next best action
 
-Fix the mobile LCP breach (see blockers) — it is the only `error`-level budget failing, and it is now a red CI gate rather than a silent one. See `.ai/next-action.md`.
+Phase 1 (SEO) and Phase 2 (i18n infrastructure) are both landed on `main`. Phase 3 (English activation) is gated, not scheduled — see `docs/i18n.md` for entry criteria (100% `en` key coverage, 4/4 FAQ translated, 43/43 `descriptionEn`, prose for 5 pages), none of which are met yet.
 
 ## Current blockers
 
-- **Mobile LCP exceeds budget**: ~4131 ms on `/` and ~2863 ms on `/menu/` against 2500 ms, and `/` scores 0.86 against the 0.90 performance floor. Measured against a Brotli-serving origin, so it is genuine and not a compression artifact. Cause is the render-blocking CSS. **Do not resolve by relaxing a threshold.**
-- **`CLOUDFLARE_API_TOKEN` secret is unset**, so `Deploy Preview`/`Deploy to Production` fail. Needs repo-admin access. The Actions deploy path is _additionally_ broken (Pages command against a Workers build, `dist/` instead of `dist/client`, wrangler 3 vs 4) and redundant — Cloudflare's Git integration is what actually deploys.
+None currently open. The former `deploy-preview`/`deploy-production` GitHub Actions jobs (blocked on a never-configured `CLOUDFLARE_API_TOKEN`) were deleted rather than fixed — see "Recently resolved". `.github/workflows/deploy.yml` is now a 3-job quality-gate-only pipeline (`build` → `e2e-tests`, `lighthouse`); it does not deploy anything. Production deploys happen via Cloudflare's own Git integration on every push to `main`, independently of this workflow and with no manual-approval gate in front of it today — see `docs/release.md`.
 
 Environment-only gaps (sandbox-specific):
 
@@ -30,6 +29,8 @@ Environment-only gaps (sandbox-specific):
 
 ## Recently resolved
 
+- **Mobile LCP budget breach fixed**: homepage 4131 ms → 2481 ms, `/menu/` 2863 ms → 2487 ms, both now under the 2500 ms budget. Cause was render-blocking CSS.
+- **Broken/redundant Actions deploy jobs removed** (PR #56): `deploy-preview`/`deploy-production` always failed on a never-configured `CLOUDFLARE_API_TOKEN`, and were separately broken regardless (wrong Cloudflare product — Pages command against a Workers build; wrong artifact path — `dist/` instead of `dist/client`; wrong wrangler major version). Deleted rather than fixed, since Cloudflare's own Git integration already deploys every push independently and needs no repo secret. Workflow renamed `Deploy` → `CI` to match what it actually does now (quality gates only).
 - **Impressum/Datenschutz pages** (PR #20, merged) — real legal-compliance gap closed. Legal-form/UID/Firmenbuchnummer fields remain bracketed placeholders (business-owner-supplied facts, not agent-actionable, per explicit research documented in the PR).
 - **Google Fonts self-hosted** — was loading from Google's servers (GDPR/IP-transmission exposure, per the LG München ruling, Az. 3 O 17493/20). Now `.woff2` files under `public/fonts/`, `@font-face` in `tokens.css`.
 - **Google Maps consent-gated** — `MapEmbed.astro` implements the two-click pattern; no request to Google fires until the visitor clicks through.
