@@ -1,52 +1,57 @@
 # ═══════════════════════════════════════════════════════════════════
-# D'OURO SOULFOOD BISTRO — CI/CD Pipeline
+# D'OURO SOULFOOD BISTRO — CI Pipeline
 #
-# Production-grade GitHub Actions workflow for Astro v6 + Cloudflare Pages.
+# GitHub Actions workflow for Astro v6 + Cloudflare Workers.
 #
 # Flow:
-#   1. Build (uploads dist/ as an artifact for every downstream job)
-#   2. In parallel, all three consuming only the artifact:
-#        - Deploy to Cloudflare Pages Preview (ALL branches)
+#   1. Build (uploads dist/ as an artifact for both downstream jobs)
+#   2. In parallel, both consuming only the artifact:
 #        - Playwright E2E tests   against a locally served build
 #        - Lighthouse CI          against a locally served build
-#   3. If main branch AND tests/lighthouse pass → Promote to Production
 #
-# The two quality gates deliberately do NOT depend on the preview deploy.
-# They used to, which meant a missing CLOUDFLARE_API_TOKEN skipped both on
-# every single run — the gates existed but never once executed. Reading the
-# build artifact instead makes them credential-free, fork-safe, faster, and
-# tied to the exact bytes that were built.
+# Deployment is NOT done here. Cloudflare's own Git integration ("Workers
+# Builds") watches this repository directly and deploys every push itself,
+# using credentials stored on Cloudflare's side — it needs nothing from this
+# workflow and nothing from a GitHub Actions secret. This file used to also
+# run `deploy-preview`/`deploy-production` jobs via `wrangler pages deploy`,
+# authenticating with a `CLOUDFLARE_API_TOKEN` repo secret that was never
+# configured, so those jobs failed on every single run. Removed rather than
+# fixed, because even a valid token wouldn't have made them correct: they ran
+# a Pages command (`wrangler pages deploy`) against what `@astrojs/cloudflare`
+# actually emits — a Workers build (`dist/server/wrangler.json`, `main:
+# entry.mjs`) — passed `dist/` instead of `dist/client` (which has no root
+# `index.html`, and would place `_headers` at the wrong path, silently
+# disabling the CSP), and pinned wrangler 3.x against a repo on wrangler
+# ^4.92.0. Two independent, half-working deploy paths to one project was a
+# footgun; the one that already works is enough.
 #
-# Environment separation:
-#   - Push to main     → Production (project: douro-soulfood)
-#   - Push to feature  → Preview URL (unique per branch)
-#
-# CRITICAL: Every wrangler pages deploy command includes
-# --project-name douro-soulfood. Without this flag, Wrangler
-# creates a new project on every fresh CI runner.
+# The two quality gates deliberately do NOT depend on a deploy. They used to
+# depend on the (broken) preview deploy, which meant they were skipped on
+# every single run — the gates existed but never once executed, which is how
+# 17 E2E assertions drifted stale on `main` unnoticed and why Lighthouse
+# never produced a result in 90+ runs. Reading the build artifact instead
+# makes them credential-free, fork-safe, faster, and tied to the exact bytes
+# that were built.
 # ═══════════════════════════════════════════════════════════════════
 
-name: Deploy
+name: CI
 
 on:
   push:
     branches:
       - main
-      - '**' # All branches get preview deployments
-  # Allow manual trigger for re-deploys
+      - '**'
   workflow_dispatch:
 
 concurrency:
-  # Only one deployment per branch at a time.
-  # Cancel in-progress runs for the same branch to save minutes.
-  group: deploy-${{ github.ref }}
+  # Only one run per branch at a time; a new push cancels the in-progress one.
+  group: ci-${{ github.ref }}
   cancel-in-progress: true
 
-# Minimum permissions — principle of least privilege
+# Minimum permissions — principle of least privilege. No `deployments: write`
+# or `statuses: write`: this workflow no longer creates GitHub Deployments.
 permissions:
   contents: read
-  deployments: write
-  statuses: write
 
 env:
   NODE_VERSION: '22'
@@ -93,56 +98,10 @@ jobs:
           if-no-files-found: error
 
   # ═══════════════════════════════════════════════════════════════
-  # JOB 2: Deploy Preview
-  # Deploys to Cloudflare Pages as a preview deployment.
-  # Runs for ALL branches (including main) so we can test
-  # before promoting to production.
-  # ═══════════════════════════════════════════════════════════════
-  deploy-preview:
-    name: Deploy Preview
-    needs: build
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-
-    outputs:
-      preview-url: ${{ steps.deploy.outputs.url }}
-
-    steps:
-      - name: Download build artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: dist
-          path: dist/
-
-      - name: Deploy to Cloudflare Pages (Preview)
-        id: deploy
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: >
-            pages deploy dist/
-            --project-name=douro-soulfood
-            --branch=${{ github.head_ref || github.ref_name }}
-
-      - name: Output preview URL
-        run: |
-          echo "Preview URL: ${{ steps.deploy.outputs.url }}"
-          echo "preview_url=${{ steps.deploy.outputs.url }}" >> "$GITHUB_STEP_SUMMARY"
-
-  # ═══════════════════════════════════════════════════════════════
-  # JOB 3: E2E Tests
+  # JOB 2: E2E Tests
   # Runs Playwright against the build artifact, served locally by
   # scripts/serve-dist.mjs (started automatically by playwright.config.ts).
   # Tests validate content, navigation, accessibility, and SEO.
-  #
-  # This job used to `needs: deploy-preview` and take its baseURL from that
-  # job's output. Because the preview deploy fails without the
-  # CLOUDFLARE_API_TOKEN secret, GitHub skipped this job on EVERY run — so the
-  # suite never gated a merge, and 17 assertions silently went stale on main.
-  # Depending on `build` instead means the gate runs on every push and on PRs
-  # from forks, with no credential at all, against the exact artifact `build`
-  # produced.
   # ═══════════════════════════════════════════════════════════════
   e2e-tests:
     name: Playwright E2E Tests
@@ -202,14 +161,11 @@ jobs:
           retention-days: 3
 
   # ═══════════════════════════════════════════════════════════════
-  # JOB 4: Lighthouse CI
+  # JOB 3: Lighthouse CI
   # Audits performance, accessibility, best practices, and SEO against the
   # build artifact. Fails the pipeline if any budget threshold is not met.
-  #
-  # Skipped on every run for the same reason as the E2E job (see above), which
-  # is why Lighthouse never produced a result in 90+ workflow runs. With no
-  # LHCI_URL set, .lighthouserc.cjs serves ./dist/client via staticDistDir and
-  # audits it directly, so no deploy and no credential are needed.
+  # With no LHCI_URL set, .lighthouserc.cjs serves ./dist/client via a local
+  # server, so no deploy and no credential are needed.
   # ═══════════════════════════════════════════════════════════════
   lighthouse:
     name: Lighthouse CI
@@ -267,51 +223,3 @@ jobs:
           name: lighthouse-results
           path: .lighthouseci/
           retention-days: 7
-
-  # ═══════════════════════════════════════════════════════════════
-  # JOB 5: Deploy Production
-  # Only runs on pushes to main AFTER E2E tests and Lighthouse
-  # both pass. Promotes the preview build to production.
-  # ═══════════════════════════════════════════════════════════════
-  deploy-production:
-    name: Deploy to Production
-    needs: [e2e-tests, lighthouse]
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-
-    environment:
-      name: production
-      url: https://douro-soulfood.com
-
-    steps:
-      - name: Download build artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: dist
-          path: dist/
-
-      - name: Deploy to Cloudflare Pages (Production)
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: >
-            pages deploy dist/
-            --project-name=douro-soulfood
-            --branch=main
-
-      - name: Verify production deployment
-        run: |
-          echo "Production URL: https://douro-soulfood.com"
-          echo "---"
-          # Wait a moment for Cloudflare edge propagation
-          sleep 5
-          # Check that the production URL responds
-          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://douro-soulfood.com 2>/dev/null || echo "000")
-          echo "Production HTTP status: $HTTP_STATUS"
-          if [ "$HTTP_STATUS" -ge 200 ] && [ "$HTTP_STATUS" -lt 400 ]; then
-            echo "Production deployment verified successfully"
-          else
-            echo "Warning: Production URL returned status $HTTP_STATUS (may need a few seconds to propagate)"
-          fi
