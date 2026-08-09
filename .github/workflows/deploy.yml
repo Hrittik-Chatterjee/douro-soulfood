@@ -4,11 +4,18 @@
 # Production-grade GitHub Actions workflow for Astro v6 + Cloudflare Pages.
 #
 # Flow:
-#   1. Build → Lint → Type Check
-#   2. Deploy to Cloudflare Pages Preview (ALL branches)
-#   3. Run Playwright E2E tests against preview URL
-#   4. Run Lighthouse CI against preview URL
-#   5. If main branch AND tests/lighthouse pass → Promote to Production
+#   1. Build (uploads dist/ as an artifact for every downstream job)
+#   2. In parallel, all three consuming only the artifact:
+#        - Deploy to Cloudflare Pages Preview (ALL branches)
+#        - Playwright E2E tests   against a locally served build
+#        - Lighthouse CI          against a locally served build
+#   3. If main branch AND tests/lighthouse pass → Promote to Production
+#
+# The two quality gates deliberately do NOT depend on the preview deploy.
+# They used to, which meant a missing CLOUDFLARE_API_TOKEN skipped both on
+# every single run — the gates existed but never once executed. Reading the
+# build artifact instead makes them credential-free, fork-safe, faster, and
+# tied to the exact bytes that were built.
 #
 # Environment separation:
 #   - Push to main     → Production (project: douro-soulfood)
@@ -125,12 +132,21 @@ jobs:
 
   # ═══════════════════════════════════════════════════════════════
   # JOB 3: E2E Tests
-  # Runs Playwright against the Cloudflare preview URL.
+  # Runs Playwright against the build artifact, served locally by
+  # scripts/serve-dist.mjs (started automatically by playwright.config.ts).
   # Tests validate content, navigation, accessibility, and SEO.
+  #
+  # This job used to `needs: deploy-preview` and take its baseURL from that
+  # job's output. Because the preview deploy fails without the
+  # CLOUDFLARE_API_TOKEN secret, GitHub skipped this job on EVERY run — so the
+  # suite never gated a merge, and 17 assertions silently went stale on main.
+  # Depending on `build` instead means the gate runs on every push and on PRs
+  # from forks, with no credential at all, against the exact artifact `build`
+  # produced.
   # ═══════════════════════════════════════════════════════════════
   e2e-tests:
     name: Playwright E2E Tests
-    needs: deploy-preview
+    needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
@@ -155,15 +171,19 @@ jobs:
       - name: Install Playwright browsers
         run: pnpm exec playwright install --with-deps chromium
 
-      - name: Run Playwright tests against preview URL
-        env:
-          BASE_URL: ${{ needs.deploy-preview.outputs.preview-url }}
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      # BASE_URL is deliberately NOT set: playwright.config.ts then starts
+      # scripts/serve-dist.mjs on 8788 and tears it down afterwards.
+      - name: Run Playwright tests
         run: |
           pnpm exec playwright test \
             --reporter=github,line \
             --timeout=30000
-        # Override baseURL in Playwright config with the live preview URL
-        # by setting the BASE_URL env var and using it in config
 
       - name: Upload Playwright report
         uses: actions/upload-artifact@v4
@@ -183,13 +203,17 @@ jobs:
 
   # ═══════════════════════════════════════════════════════════════
   # JOB 4: Lighthouse CI
-  # Audits performance, accessibility, best practices, and SEO
-  # against the preview URL. Fails the pipeline if any budget
-  # threshold is not met.
+  # Audits performance, accessibility, best practices, and SEO against the
+  # build artifact. Fails the pipeline if any budget threshold is not met.
+  #
+  # Skipped on every run for the same reason as the E2E job (see above), which
+  # is why Lighthouse never produced a result in 90+ workflow runs. With no
+  # LHCI_URL set, .lighthouserc.cjs serves ./dist/client via staticDistDir and
+  # audits it directly, so no deploy and no credential are needed.
   # ═══════════════════════════════════════════════════════════════
   lighthouse:
     name: Lighthouse CI
-    needs: deploy-preview
+    needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
@@ -211,18 +235,30 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      # Serves the build with br/gzip so the audit sees production-equivalent
+      # transfer sizes (see the note in .lighthouserc.cjs). Backgrounded, then
+      # polled until it answers — `sleep` alone would be a race.
+      - name: Serve the build
+        run: |
+          node scripts/serve-dist.mjs --port 8788 &
+          for i in $(seq 1 30); do
+            if curl -fsS -o /dev/null http://127.0.0.1:8788/; then
+              echo "server up"; exit 0
+            fi
+            sleep 1
+          done
+          echo "server did not start within 30s"; exit 1
+
       - name: Run Lighthouse CI
         env:
-          LHCI_URL: ${{ needs.deploy-preview.outputs.preview-url }}
           LHCI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          pnpm exec lhci autorun \
-            --config=.lighthouserc.cjs \
-            --collect.url="${LHCI_URL}/" \
-            --collect.url="${LHCI_URL}/menu" \
-            --collect.url="${LHCI_URL}/about" \
-            --collect.url="${LHCI_URL}/catering" \
-            --collect.url="${LHCI_URL}/contact"
+        run: pnpm exec lhci autorun --config=.lighthouserc.cjs
 
       - name: Upload Lighthouse results
         uses: actions/upload-artifact@v4

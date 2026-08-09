@@ -3,16 +3,28 @@ import { defineConfig, devices } from '@playwright/test';
 /**
  * Playwright configuration for D'ouro Soulfood Bistro.
  *
- * Target: Astro + Cloudflare Pages (wrangler dev on port 8788).
- * NOT astro dev — wrangler dev is the production-like local server
- * that simulates the Cloudflare Workers runtime.
+ * Serves the built output from `dist/client` on port 8788 via
+ * `scripts/serve-dist.mjs` and starts it automatically (see webServer below),
+ * so `pnpm build && pnpm exec playwright test` is all that's needed.
+ *
+ * Every public route is prerendered, so the served files are byte-for-byte the
+ * HTML that ships. `wrangler pages dev` would additionally emulate the Workers
+ * runtime, but it cannot start in every environment and no assertion in this
+ * suite depends on it. Header behaviour from `_headers` is NOT reproduced here —
+ * it's applied by Cloudflare at the edge, and covered by
+ * `scripts/checks/verify-csp-hashes.mjs` instead.
  *
  * Both desktop and mobile projects use Chromium to avoid needing
  * WebKit/Firefox installs in CI. Mobile uses iPhone-like viewport.
- *
- * Run `npx wrangler pages dev dist --port 8788` before executing tests,
- * or use `npm run test:e2e` which handles server lifecycle.
  */
+
+/*
+ * An explicitly supplied base URL means "test that server instead", so the
+ * local one must not be started — that's how a run can target a deployed
+ * preview or an already-running dev server.
+ */
+const externalBaseURL = process.env.BASE_URL || process.env.PLAYWRIGHT_BASE_URL;
+const PORT = 8788;
 export default defineConfig({
   testDir: './tests',
   fullyParallel: true,
@@ -23,21 +35,33 @@ export default defineConfig({
     ? [['github'], ['html', { open: 'never' }]]
     : [['list'], ['html', { open: 'never' }]],
 
-  /*
-   * Base URL: In CI, use the Cloudflare Pages preview URL (BASE_URL env var).
-   * Locally, use wrangler dev on port 8788 (NOT astro dev — wrangler dev
-   * simulates the Cloudflare Workers runtime).
-   */
   use: {
-    baseURL: process.env.BASE_URL || process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:8788',
+    baseURL: externalBaseURL || `http://127.0.0.1:${PORT}`,
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
   },
 
-  /* No webServer auto-start — wrangler dev is started separately
-   * via `npm run test:e2e` script or manually.
-   * This avoids port conflicts with wrangler's persistent process. */
+  /*
+   * Starts the static server for the built output, unless BASE_URL points
+   * somewhere else. `reuseExistingServer` outside CI means a server you already
+   * have on 8788 is left alone instead of causing a port conflict; in CI the
+   * port is always free and a stray listener should be treated as an error.
+   */
+  ...(externalBaseURL
+    ? {}
+    : {
+        webServer: {
+          // Relative to this config's directory (the repo root), which is where
+          // Playwright resolves webServer.cwd from by default.
+          command: `node scripts/serve-dist.mjs --port ${PORT}`,
+          url: `http://127.0.0.1:${PORT}/`,
+          reuseExistingServer: !process.env.CI,
+          timeout: 60_000,
+          stdout: 'ignore',
+          stderr: 'pipe',
+        },
+      }),
 
   projects: [
     {
