@@ -32,15 +32,27 @@ module.exports = {
        */
       url: process.env.LHCI_URL
         ? [process.env.LHCI_URL]
-        : ['http://localhost:8788/', 'http://localhost:8788/menu', 'http://localhost:8788/about', 'http://localhost:8788/catering', 'http://localhost:8788/contact'],
+        : [
+            'http://localhost:8788/',
+            'http://localhost:8788/menu',
+            'http://localhost:8788/about',
+            'http://localhost:8788/catering',
+            'http://localhost:8788/contact',
+          ],
       numberOfRuns: 3,
       /*
        * Use staticDistDir only for local development when no URL is set.
        * In CI, LHCI_URL is always provided from the preview deployment.
        */
-      ...(process.env.LHCI_URL
-        ? {}
-        : { staticDistDir: './dist' }),
+      ...(process.env.LHCI_URL ? {} : { staticDistDir: './dist/client' }),
+      /*
+       * --no-sandbox: standard for any containerized/CI Chrome launch
+       * (GitHub Actions runners, Docker-based agents) where the kernel
+       * sandbox primitives Chrome wants aren't available/permitted.
+       */
+      settings: {
+        chromeFlags: '--no-sandbox --disable-gpu',
+      },
     },
 
     assert: {
@@ -56,7 +68,7 @@ module.exports = {
         'largest-contentful-paint': ['error', { maxNumericValue: 2500 }],
         'cumulative-layout-shift': ['error', { maxNumericValue: 0.1 }],
         'total-blocking-time': ['error', { maxNumericValue: 200 }],
-        'interactive': ['warn', { maxNumericValue: 3500 }],
+        interactive: ['warn', { maxNumericValue: 3500 }],
 
         /* ── Performance details ── */
         'speed-index': ['warn', { maxNumericValue: 3000 }],
@@ -71,26 +83,34 @@ module.exports = {
         'meta-description': ['error', { minLength: 50 }],
         'html-has-lang': 'error',
         'html-lang-valid': 'error',
-        'viewport': 'error',
+        viewport: 'error',
         'color-contrast': 'error',
 
         /* ── SEO specifics ── */
-        'canonical': 'warn',
+        canonical: 'warn',
         'crawlable-anchors': 'warn',
-        'hreflang': 'warn',
+        hreflang: 'warn',
         'robots-txt': 'warn',
-        'tap-targets': 'warn',
+        /* 'tap-targets' was removed from Lighthouse (no longer a known
+           audit as of this Lighthouse version) — tap-target sizing is
+           independently enforced via the min-h-12 (48px) convention
+           audited elsewhere in this repo's design-system checks. */
       },
     },
 
     upload: {
-      target: 'lhci',
-      serverBaseUrl: process.env.LHCI_SERVER_URL || '',
-      token: process.env.LHCI_TOKEN || '',
       /*
-       * If no LHCI server is configured, results are saved locally.
-       * The CI workflow uploads results as artifacts regardless.
+       * target: 'lhci' requires a server + token; this project has never
+       * run an LHCI server, so that combination always fails the upload
+       * step (and therefore `lhci autorun` as a whole) with "Must provide
+       * token for LHCI target". Fall back to 'filesystem' (writes
+       * .lighthouseci/ locally, which the CI workflow already uploads as
+       * a build artifact) unless a real server is actually configured.
        */
+      target: process.env.LHCI_SERVER_URL ? 'lhci' : 'filesystem',
+      ...(process.env.LHCI_SERVER_URL
+        ? { serverBaseUrl: process.env.LHCI_SERVER_URL, token: process.env.LHCI_TOKEN || '' }
+        : {}),
     },
   },
 };

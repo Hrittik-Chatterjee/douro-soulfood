@@ -12,12 +12,6 @@ export default defineConfig({
     imageService: 'compile',
   }),
 
-  image: {
-    remotePatterns: [
-      { protocol: 'https', hostname: 'images.unsplash.com' },
-    ],
-  },
-
   integrations: [
     sitemap({
       // Exclude the internal /dev/ui component-preview route (404s outside

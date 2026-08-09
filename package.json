@@ -26,9 +26,12 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.3",
+    "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.60.0",
+    "lighthouse": "^13.4.1",
     "prettier": "^3.4.0",
     "prettier-plugin-astro": "^0.14.0",
+    "sharp": "^0.35.3",
     "typescript": "^5.7.0",
     "wrangler": "^4.92.0"
   },

@@ -115,7 +115,7 @@ The home page's copy (hero headline, story text, gallery images) is currently ha
 
 ## 8. Performance Targets
 
-- Lighthouse CI runs against `/`, `/menu`, `/about`, `/catering`, `/contact` (`.lighthouserc.js`, `.github/workflows/deploy.yml`)
+- Lighthouse CI runs against `/`, `/menu`, `/about`, `/catering`, `/contact` (`.lighthouserc.cjs`, `.github/workflows/deploy.yml`)
 - No client-side JS framework — this is a fully static/prerendered site, keeping JS payload minimal by construction
 
 ---
