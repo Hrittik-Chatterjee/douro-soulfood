@@ -26,6 +26,13 @@ playwright-report/
 
 # Lighthouse CI
 .lighthouseci/
+# `lhci autorun` with the filesystem target also drops a report pair per run per
+# URL plus a manifest.json into the working directory. .lighthouserc.cjs now
+# redirects those into .lighthouseci/reports, but these patterns keep an older
+# lhci version (or a bare `lhci upload`) from littering the repo root.
+*.report.html
+*.report.json
+/manifest.json
 
 # Use pnpm, not npm
 package-lock.json

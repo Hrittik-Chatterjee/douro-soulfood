@@ -5,8 +5,10 @@
  * Runs in CI after deployment to verify quality gates.
  *
  * Usage:
- *   pnpm lhci            — local autorun (needs staticDistDir or url)
- *   CI: lhci autorun     — triggered by deploy.yml workflow
+ *   pnpm build && pnpm serve:dist   — in one shell
+ *   pnpm lhci                       — in another
+ *   CI: same two steps, in deploy.yml's `lighthouse` job
+ *   LHCI_URL=https://…  pnpm lhci   — audit a deployed origin instead
  *
  * Key design decisions:
  * - Performance: 0.9 min — Astro SSG should easily hit this
@@ -27,24 +29,25 @@ module.exports = {
   ci: {
     collect: {
       /*
-       * In CI, we collect against the live preview URL (set via LHCI_URL env var).
-       * For local runs, use staticDistDir to serve the built dist/ folder.
+       * Audits the five public routes on a locally served build (start it with
+       * `pnpm serve:dist`), or against LHCI_URL when auditing a real deployment.
+       *
+       * NOT staticDistDir, which is what this used to fall back to: lhci's own
+       * static server sends everything UNCOMPRESSED, while Cloudflare serves
+       * Brotli. On this site that is the difference between a 70.9 KB and a
+       * 10.3 KB render-blocking stylesheet, which moved the homepage
+       * performance score from 0.86 to 0.50 — i.e. it manufactured budget
+       * failures that do not exist in production. scripts/serve-dist.mjs
+       * negotiates br/gzip so the measurement reflects what visitors get.
+       *
+       * Trailing slashes are required: the site sets `trailingSlash: 'always'`,
+       * so '/menu' answers 301 and auditing it measures a redirect hop.
        */
-      url: process.env.LHCI_URL
-        ? [process.env.LHCI_URL]
-        : [
-            'http://localhost:8788/',
-            'http://localhost:8788/menu',
-            'http://localhost:8788/about',
-            'http://localhost:8788/catering',
-            'http://localhost:8788/contact',
-          ],
+      url: (() => {
+        const origin = (process.env.LHCI_URL || 'http://127.0.0.1:8788').replace(/\/$/, '');
+        return ['/', '/menu/', '/about/', '/catering/', '/contact/'].map((p) => origin + p);
+      })(),
       numberOfRuns: 3,
-      /*
-       * Use staticDistDir only for local development when no URL is set.
-       * In CI, LHCI_URL is always provided from the preview deployment.
-       */
-      ...(process.env.LHCI_URL ? {} : { staticDistDir: './dist/client' }),
       /*
        * --no-sandbox: standard for any containerized/CI Chrome launch
        * (GitHub Actions runners, Docker-based agents) where the kernel
@@ -110,7 +113,16 @@ module.exports = {
       target: process.env.LHCI_SERVER_URL ? 'lhci' : 'filesystem',
       ...(process.env.LHCI_SERVER_URL
         ? { serverBaseUrl: process.env.LHCI_SERVER_URL, token: process.env.LHCI_TOKEN || '' }
-        : {}),
+        : {
+            /*
+             * Without an explicit outputDir the filesystem target writes one
+             * <host>-<timestamp>.report.{html,json} pair per run per URL into
+             * the CURRENT directory — 30 untracked files in the repo root for a
+             * 5-URL, 3-run audit. Keep them inside the already-gitignored
+             * .lighthouseci/ directory, which the workflow uploads as an artifact.
+             */
+            outputDir: '.lighthouseci/reports',
+          }),
     },
   },
 };
