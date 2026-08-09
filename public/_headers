@@ -4,7 +4,18 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=()
   Strict-Transport-Security: max-age=31536000; includeSubDomains
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-gwK4Sir9v7DMjCO0dVG0DkKGwFce52gNsag5Y1Q3EqI=' 'sha256-YOnJn4jFEvyorh8WZNx+Svn+Ata81I+s6llaxF/ZV3c=' 'sha256-fSEd4KPsdcJ+H6pv5K3cV3Ylea85zU5dXyODDklUt+c=' 'sha256-IbsuYjbGcERkAkrQqNIEwL0md6gIP6Q0+hJ6oL+VuLU=' 'sha256-d2Q9PwyE36un5FH1fME0GedEoiyczjsK9C1uHiLPBGg=' 'sha256-N7GJp3wmFGmHw1IMnhXej9kp7rIhbM/JOMOHxKJFtK4=' 'sha256-ui4O1sf4gGd/lY5gsd12AbXlub1n/Ink7TuSfpoBRB4='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; frame-src https://maps.google.com; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'
+  # script-src 'self' below is a PLACEHOLDER that is widened at build time.
+  # src/integrations/csp-hashes.mjs computes a SHA-256 for every inline <script>
+  # in the real build output and injects them into dist/client/_headers (the
+  # copy Cloudflare actually serves). Hashes are deliberately NOT committed
+  # here: JSON-LD is derived from Keystatic content, so a routine CMS edit
+  # changes the rendered bytes, and a stale hash breaks scripts with no build
+  # error, no test failure and no visible symptom — only a console violation.
+  # Keep the literal string "script-src 'self'" intact; the build fails loudly
+  # if that placeholder is missing. If the hook ever fails to run, the shipped
+  # policy is over-restrictive rather than permissive — it fails closed.
+  # Verified independently post-build by scripts/checks/verify-csp-hashes.mjs.
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; frame-src https://maps.google.com; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'
 
 # Hashed build output — filename changes on every content change, safe to cache forever.
 /_astro/*

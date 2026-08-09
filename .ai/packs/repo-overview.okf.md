@@ -25,7 +25,7 @@ related: ["docs/prd.md", "okf/audit/current-state.okf.md"]
 
 D'ouro Soulfood Bistro — a Brazilian/Latin/African fusion restaurant website at Auerspergstraße 10, Salzburg, Austria. Owner: Angela. Goal: drive online orders (via a Lieferando link-out), showcase the menu, build local brand presence.
 
-**5 real routes**: `/`, `/menu`, `/about`, `/catering`, `/contact`, all prerendered, wrapped by `src/layouts/Base.astro`. **No accounts, no cart, no checkout, no contact form** — verified, not assumed.
+**7 real routes**: `/`, `/menu`, `/about`, `/catering`, `/contact`, `/impressum`, `/datenschutz`, all prerendered, wrapped by `src/layouts/Base.astro`. **No accounts, no cart, no checkout, no contact form** — verified, not assumed.
 
 **Content**: Keystatic-managed `menu_items` and `faq` collections, plus a `settings` singleton (address/phone/hours/social) — editable at `/keystatic` without a developer.
 

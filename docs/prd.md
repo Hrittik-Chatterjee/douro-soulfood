@@ -94,7 +94,7 @@ The home page's copy (hero headline, story text, gallery images) is currently ha
 | CMS | Keystatic (Git-backed, local storage mode) |
 | Hosting | Cloudflare Pages (free tier) |
 | Styling | Tailwind CSS v4 + custom design token system |
-| i18n | German (primary) + English (some fields) |
+| i18n | de-AT only. No locale routing or hreflang. `menu_items` carries optional `descriptionEn`/`prepTimeEn` (39/43 populated), shown beside the German text on `/menu` |
 | Accessibility | Playwright + `@axe-core/playwright` accessibility assertions in E2E tests |
 | Security headers | CSP, HSTS, X-Frame-Options, etc. via `public/_headers` |
 | Images | Astro `<Image>` used by menu-card/feature components; raw `<img>` still used in page-level image grids |
@@ -104,12 +104,16 @@ The home page's copy (hero headline, story text, gallery images) is currently ha
 
 ## 7. SEO Requirements
 
-- Schema.org `Restaurant` structured data (`Base.astro`)
-- OpenGraph + Twitter cards per page
-- Canonical URLs
-- Sitemap.xml via `@astrojs/sitemap`
-- `robots.txt` with `/keystatic/` disallowed
-- Meta descriptions for all pages
+See **`docs/seo.md`** for how this actually works — it is the source of truth. In brief:
+
+- One schema.org `@graph` per page (`src/lib/seo/graph.ts`): a single `Restaurant` entity by `@id`, plus `WebSite`, `WebPage`, `BreadcrumbList` on inner routes, `Menu`/`Offer` on `/menu`, `FAQPage` on `/`
+- OpenGraph + Twitter cards per page, incl. image dimensions and alt
+- Canonical URLs — trailing-slash form, set by `Base.astro`, never per page
+- Sitemap via `@astrojs/sitemap` (the `/dev/` filter is load-bearing)
+- `robots.txt` disallows `/keystatic/` and `/dev/`
+- Meta descriptions required on every page (a required `Base` prop)
+- `/llms.txt` generated from Keystatic for AI/answer engines
+- Inline-JSON-LD CSP hashes are generated at build, never committed — see `docs/security.md`
 
 ---
 

@@ -2,9 +2,7 @@
 import { Image } from 'astro:assets';
 import DietaryBadge from '@/components/ui/DietaryBadge.astro';
 import AllergenBadge from '@/components/ui/AllergenBadge.astro';
-import siteSettings from '@/content/settings/default.json';
-
-const orderHref = siteSettings.lieferando_url || 'https://www.lieferando.at/en/menu/douro';
+import { orderUrl as orderHref } from '@/lib/site';
 
 /**
  * MenuItemCard — Responsive card component for a single menu item.

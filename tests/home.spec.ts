@@ -335,17 +335,59 @@ test.describe('Home page — SEO meta tags', () => {
 
   test('page has canonical URL', async ({ page }) => {
     const canonical = page.locator('link[rel="canonical"]');
-    await expect(canonical).toHaveAttribute('href', 'https://douro-soulfood.com');
+    // Trailing slash: build.format is 'directory', so Astro, the sitemap <loc>
+    // and the JSON-LD `url` all emit this form. The homepage used to hand-set
+    // the slashless variant, leaving one page advertising three URLs for itself.
+    await expect(canonical).toHaveAttribute('href', 'https://douro-soulfood.com/');
   });
 
-  test('page has Schema.org Restaurant JSON-LD', async ({ page }) => {
-    const jsonLd = page.locator('script[type="application/ld+json"]');
-    const count = await jsonLd.count();
-    expect(count).toBeGreaterThanOrEqual(1);
+  test('page declares exactly one JSON-LD block', async ({ page }) => {
+    // One @graph per page is an invariant, not an accident: it keeps the
+    // Restaurant entity single-sourced and bounds the CSP hash count.
+    await expect(page.locator('script[type="application/ld+json"]')).toHaveCount(1);
+  });
 
-    // Parse and verify it's valid JSON with Restaurant type
-    const content = await jsonLd.first().textContent();
+  test('JSON-LD @graph describes the restaurant, the page and the FAQ', async ({ page }) => {
+    const content = await page.locator('script[type="application/ld+json"]').first().textContent();
     const parsed = JSON.parse(content!);
-    expect(parsed['@type']).toBe('Restaurant');
+
+    expect(Array.isArray(parsed['@graph'])).toBe(true);
+    const byType = (type: string) =>
+      parsed['@graph'].find((node: { '@type': string }) => node['@type'] === type);
+
+    // One canonical Restaurant entity, referenced by @id from the other nodes
+    // rather than redeclared per page (which is what used to happen).
+    const restaurant = byType('Restaurant');
+    expect(restaurant).toBeDefined();
+    expect(restaurant['@id']).toBe('https://douro-soulfood.com/#restaurant');
+    expect(restaurant.telephone).toBeTruthy();
+    expect(restaurant.address['@type']).toBe('PostalAddress');
+
+    // Opening hours are derived from the CMS via src/lib/hours.ts — German day
+    // labels mapped to schema.org DayOfWeek IRIs.
+    expect(restaurant.openingHoursSpecification.length).toBeGreaterThan(0);
+    expect(restaurant.openingHoursSpecification[0].dayOfWeek[0]).toContain('schema.org/');
+
+    expect(byType('WebSite')).toBeDefined();
+    expect(byType('WebPage').about['@id']).toBe(restaurant['@id']);
+
+    // FAQPage mirrors the visible accordion, one entry per Q&A.
+    const faq = byType('FAQPage');
+    expect(faq).toBeDefined();
+    expect(faq.mainEntity.length).toBeGreaterThan(0);
+    expect(faq.mainEntity[0]['@type']).toBe('Question');
+
+    // The homepage deliberately has NO breadcrumb: a single-item trail is noise.
+    expect(byType('BreadcrumbList')).toBeUndefined();
+  });
+
+  test('social preview image declares dimensions and alt text', async ({ page }) => {
+    await expect(page.locator('meta[property="og:image:width"]')).toHaveAttribute('content', '1200');
+    await expect(page.locator('meta[property="og:image:height"]')).toHaveAttribute('content', '630');
+    await expect(page.locator('meta[property="og:image:alt"]')).toHaveAttribute('content', /.+/);
+  });
+
+  test('document language is Austrian German', async ({ page }) => {
+    await expect(page.locator('html')).toHaveAttribute('lang', 'de-AT');
   });
 });

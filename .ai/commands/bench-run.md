@@ -4,7 +4,7 @@
 
 **Purpose**: collect real performance metrics for the current repo state — the Benchmark Analyst role's job.
 
-**Inputs required**: none (defaults to all 5 real routes) or a specific route.
+**Inputs required**: none (defaults to all 7 real routes) or a specific route.
 
 **Context to load**: `benchmarks/reports/PERF-POST-MIGRATION.okf.md` for the proven collection method and its caveats.
 

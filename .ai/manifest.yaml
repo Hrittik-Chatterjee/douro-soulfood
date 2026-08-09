@@ -114,6 +114,14 @@ docs:
     token_budget: 800
     status: approved
 
+  - id: seo
+    path: docs/seo.md
+    type: knowledge
+    summary: Base.astro head contract, one-@graph-per-page rule, build-time CSP hash coupling, trailing-slash canonicals, generated llms.txt, facts awaiting business confirmation.
+    load_when: Meta tags, structured data, canonical/sitemap, llms.txt, image alt text.
+    token_budget: 1200
+    status: approved
+
   - id: release
     path: docs/release.md
     type: knowledge

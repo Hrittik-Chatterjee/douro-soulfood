@@ -134,7 +134,7 @@ pnpm build (= astro build)
   │
   ├── Reads content collections (getCollection('menu_items'),
   │   getCollection('faq')) + settings singleton (direct JSON import)
-  ├── Pre-renders all 5 real routes to static HTML
+  ├── Pre-renders all 7 real routes to static HTML
   ├── Bundles Keystatic's admin UI/API as SSR routes
   ├── Tree-shakes unused Tailwind utilities
   ├── Compiles/optimizes images via the Cloudflare adapter's image service

@@ -3,6 +3,7 @@ import cloudflare from '@astrojs/cloudflare';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import keystatic from '@keystatic/astro';
+import cspHashes from './src/integrations/csp-hashes.mjs';
 
 export default defineConfig({
   site: 'https://douro-soulfood.com',
@@ -19,6 +20,9 @@ export default defineConfig({
       filter: (page) => !page.includes('/dev/'),
     }),
     keystatic(),
+    // Must stay LAST: its astro:build:done hook rewrites dist/client/_headers
+    // using the final rendered HTML.
+    cspHashes(),
   ],
 
   vite: {

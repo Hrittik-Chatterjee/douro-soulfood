@@ -2,29 +2,73 @@
 import '@/styles/global.css';
 import MobileBottomBar from '@/components/layout/MobileBottomBar.astro';
 import FlagSprites from '@/components/ui/FlagSprites.astro';
+import { settings, SITE_LANGUAGE, OG_LOCALE } from '@/lib/site';
+import { buildPageGraph } from '@/lib/seo/graph';
 
 interface Props {
   title: string;
-  description?: string;
+  /**
+   * REQUIRED on purpose. This used to be optional with an English-prose default,
+   * and four of the seven pages (/menu, /about, /catering, /contact) silently
+   * shipped that English fallback on a German site. Making it required turns
+   * "someone forgot a description" into a build-time type error.
+   */
+  description: string;
   image?: string;
+  /** Alt text for the OG/Twitter image. */
+  imageAlt?: string;
   canonical?: string;
   type?: 'website' | 'article';
+  /** Excludes the page from indexing. Used by the dev-only component preview. */
+  noindex?: boolean;
+  /**
+   * Breadcrumb trail for this page, EXCLUDING "Startseite" (prepended
+   * automatically). Omit on the homepage — a single-item trail says nothing.
+   */
+  breadcrumb?: { name: string; path: string }[];
+  /**
+   * Page-specific schema.org nodes appended to the `@graph` — e.g. the `Menu`
+   * node on /menu, `FAQPage` on the homepage. Built with the helpers in
+   * `src/lib/seo/graph.ts`.
+   */
+  extraSchemaNodes?: Record<string, unknown>[];
 }
 
 const {
   title,
-  description = "D'ouro Soulfood Bistro — Brazilian & Latin soul food in Salzburg, Austria. Fresh, flavorful, made with love.",
+  description,
   image = '/images/og-default.jpg',
+  imageAlt = "D'ouro Soulfood Bistro in Salzburg",
   canonical = Astro.url.href,
   type = 'website',
+  noindex = false,
+  breadcrumb,
+  extraSchemaNodes,
 } = Astro.props;
 
-const siteName = "D'ouro Soulfood Bistro";
+const siteName = settings.site_name;
 const fullTitle = title === siteName ? title : `${siteName} | ${title}`;
+const imageUrl = new URL(image, Astro.site).href;
+
+// Built here rather than in every page: Base already holds title, description,
+// canonical and image, which is all the graph needs beyond the page-specific
+// breadcrumb and extra nodes. A noindex page gets no structured data — there is
+// nothing to describe to a crawler that isn't allowed to index it.
+const structuredData = noindex
+  ? undefined
+  : buildPageGraph({
+      site: Astro.site,
+      url: canonical,
+      name: title,
+      description,
+      image: imageUrl,
+      breadcrumb,
+      extraNodes: extraSchemaNodes,
+    });
 ---
 
 <!doctype html>
-<html lang="de" class="light">
+<html lang={SITE_LANGUAGE} class="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -36,21 +80,28 @@ const fullTitle = title === siteName ? title : `${siteName} | ${title}`;
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
 
     <!-- Open Graph -->
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={new URL(image, Astro.site)} />
+    <meta property="og:image" content={imageUrl} />
+    <!-- Declared dimensions let platforms lay out the card before the image
+         loads. og-default.jpg is 1200x630, the standard 1.91:1 ratio. -->
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={imageAlt} />
     <meta property="og:url" content={canonical} />
     <meta property="og:type" content={type} />
     <meta property="og:site_name" content={siteName} />
-    <meta property="og:locale" content="de_AT" />
+    <meta property="og:locale" content={OG_LOCALE} />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={new URL(image, Astro.site)} />
+    <meta name="twitter:image" content={imageUrl} />
+    <meta name="twitter:image:alt" content={imageAlt} />
 
     <!-- Fonts: Fraunces (display/headings) + DM Sans (body/labels) -->
     <!-- Self-hosted (src/styles/tokens.css @font-face) rather than loaded
@@ -60,38 +111,21 @@ const fullTitle = title === siteName ? title : `${siteName} | ${title}`;
     <link rel="preload" href="/fonts/dm-sans-normal-variable.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/fraunces-normal-variable.woff2" as="font" type="font/woff2" crossorigin />
 
-    <!-- Restaurant Schema.org
-         WARNING: public/_headers' CSP allows this exact inline block via a
-         SHA-256 hash (not 'unsafe-inline') — CSP's script-src blocks every
-         inline script element regardless of its type attribute. This only
-         works because the block below is byte-identical on every real page
-         today (no page overrides Base.astro's `image` prop, and Astro.site
-         is a fixed config value). If that ever changes, or if any inline
-         script in the site changes at all, run
-         `pnpm build && node scripts/checks/verify-csp-hashes.mjs` to find
-         the new hash(es) needed in public/_headers' script-src. -->
-    <script type="application/ld+json" set:html={JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "Restaurant",
-      "name": "D'ouro Soulfood Bistro",
-      "image": new URL(image, Astro.site),
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "Auerspergstraße 10",
-        "addressLocality": "Salzburg",
-        "postalCode": "5020",
-        "addressCountry": "AT"
-      },
-      "telephone": "+43 676 4231921",
-      "servesCuisine": ["Brazilian", "Latin American", "African"],
-      "priceRange": "€€",
-      "url": Astro.site,
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "reviewCount": "978"
-      }
-    })} />
+    <!-- schema.org @graph — exactly ONE ld+json block per page, built by
+         src/lib/seo/graph.ts from the Keystatic settings singleton.
+         The business is declared once with a stable @id and referenced by
+         every other node, rather than each page redeclaring it.
+
+         CSP: script-src has no 'unsafe-inline' and blocks inline <script>
+         regardless of type, so this block is allowed by SHA-256 hash. Those
+         hashes are computed from the real build output by
+         src/integrations/csp-hashes.mjs and injected into dist/client/_headers
+         — they are NOT hand-maintained, precisely because this content now
+         varies with CMS edits. Verify with `pnpm build && pnpm check:csp`. -->
+    {structuredData && <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />}
+
+    <!-- Lets a page add its own head tags (e.g. a preload for its LCP image). -->
+    <slot name="head" />
 
     <!-- Reduced motion respect -->
     <style>

@@ -2,16 +2,25 @@
 /**
  * verify-csp-hashes.mjs — checks that every inline <script> in the built
  * output (application/ld+json and type="module") has its SHA-256 hash
- * present in public/_headers' CSP script-src directive.
+ * present in the SHIPPED _headers' CSP script-src directive.
  *
- * public/_headers' CSP intentionally has no 'unsafe-inline' for scripts —
- * inline scripts are allowed individually by exact-content hash instead.
- * Astro auto-inlines small page scripts (NavBar/MobileNavDrawer/MapEmbed
- * interactivity, the JSON-LD block) rather than externalizing them, and
- * their minified byte content can change on ANY toolchain update (Astro/
- * Vite/esbuild version bump), not just a hand-edited source change — so a
- * stale hash fails silently in the browser (console-only CSP violation,
- * no build error) unless this script catches it first.
+ * The CSP intentionally has no 'unsafe-inline' for scripts — inline scripts are
+ * allowed individually by exact-content hash instead. Astro auto-inlines small
+ * page scripts (NavBar/MobileNavDrawer/MapEmbed interactivity, the JSON-LD
+ * block) rather than externalizing them, and their minified byte content can
+ * change on ANY toolchain update (Astro/Vite/esbuild version bump) or any
+ * Keystatic content edit that feeds the JSON-LD — so a stale hash fails
+ * silently in the browser (console-only CSP violation, no build error) unless
+ * this script catches it first.
+ *
+ * Reads dist/client/_headers, NOT public/_headers: the hashes are injected at
+ * build time by src/integrations/csp-hashes.mjs, so the shipped file is the only
+ * one that reflects what browsers will actually enforce. public/_headers holds a
+ * deliberately over-restrictive `script-src 'self'` placeholder.
+ *
+ * This check re-derives the hashes independently of that integration on purpose
+ * — two implementations agreeing is the signal. Do not refactor them to share
+ * extraction code.
  *
  * Usage: pnpm build && node scripts/checks/verify-csp-hashes.mjs
  */
@@ -20,7 +29,7 @@ import { createHash } from 'node:crypto';
 import { join } from 'node:path';
 
 const DIST = 'dist/client';
-const HEADERS_PATH = 'public/_headers';
+const HEADERS_PATH = 'dist/client/_headers';
 
 function findHtmlFiles(dir) {
   const results = [];

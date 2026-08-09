@@ -19,7 +19,7 @@ Read `AGENTS.md` first. This file is the second thing to read, always. It tells 
 | React islands | `.ai/packs/react-islands.okf.md` → `docs/adr/react-islands.md` | Any interactive-component decision | ~300 + full doc |
 | Prebuilt components | `.ai/packs/prebuilt-components.okf.md` → `docs/prebuilt-components.md` | Borrowing an external component pattern | ~300 + full doc |
 | Visual outcomes | `.ai/packs/visual-outcomes.okf.md` → `src/pages/dev/ui.astro` | Any UI component change needing visual verification | ~300 |
-| SEO | `.ai/packs/seo.okf.md` → `docs/prd.md`'s SEO section | Meta tags, structured data, sitemap changes | ~300 |
+| SEO | `.ai/packs/seo.okf.md` → `docs/seo.md` | Meta tags, structured data, canonical/sitemap, llms.txt, image alt | ~300 + full |
 
 ## Where things live
 - **Active tasks**: `.ai/tasks/active/` — in-progress outcome tasks, OKF format.

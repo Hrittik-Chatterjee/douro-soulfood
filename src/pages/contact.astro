@@ -6,13 +6,16 @@ import NavBar from '@/components/layout/NavBar.astro';
 import Footer from '@/components/layout/Footer.astro';
 import Button from '@/components/ui/Button.astro';
 import MapEmbed from '@/components/ui/MapEmbed.astro';
-import siteSettings from '@/content/settings/default.json';
+import { settings as siteSettings, phoneHref } from '@/lib/site';
 
 const { address_line1, address_line2, city, postal_code, phone, hours } = siteSettings;
-const phoneHref = `tel:${phone.replace(/[^+\d]/g, '')}`;
 ---
 
-<Base title="Kontakt">
+<Base
+  title="Kontakt"
+  description="D'ouro Soulfood Bistro in der Auerspergstraße 10, 5020 Salzburg. Adresse, Telefonnummer, Öffnungszeiten und Anfahrt zu unserem afro-lateinamerikanischen Bistro."
+  breadcrumb={[{ name: 'Kontakt', path: '/contact/' }]}
+>
   <NavBar slot="nav" />
 
   <section class="pt-28 md:pt-32 pb-16 md:pb-24 px-4 md:px-16 max-w-7xl mx-auto">
