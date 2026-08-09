@@ -8,6 +8,8 @@
  * logic here talks to that button by id regardless of component
  * boundaries — safe to keep as two separate components.
  */
+import { t } from '@/lib/i18n/ui';
+
 interface NavLink {
   label: string;
   href: string;
@@ -36,11 +38,19 @@ const { links } = Astro.props;
   <!-- Top Bar inside open mobile menu (padding matches NavBar's row exactly, so logo/button don't shift on open) -->
   <div class="flex items-center justify-between w-full shrink-0 px-4 md:px-12 py-3 md:py-4">
     <a href="/" class="flex items-center no-underline">
-      <img src="/dourologo.webp" alt="D'ouro Soulfood Logo" width="292" height="139" class="h-10 md:h-12 w-auto object-contain" />
+      <img
+        src="/dourologo.webp"
+        alt="D'ouro Soulfood Logo"
+        width="292"
+        height="139"
+        class="h-10 md:h-12 w-auto object-contain"
+      />
     </a>
 
     <!-- Capsule with Speisekarte + Close X Icon (SSOT: rounded-md container, rounded-sm button) -->
-    <div class="flex items-center gap-2 bg-brand-espresso/90 border border-white/15 backdrop-blur-md rounded-md px-2.5 py-1.5 shadow-2xl">
+    <div
+      class="flex items-center gap-2 bg-brand-espresso/90 border border-white/15 backdrop-blur-md rounded-md px-2.5 py-1.5 shadow-2xl"
+    >
       <a
         href="/menu"
         class="flex min-h-12 items-center px-3 py-1 text-xs font-extrabold tracking-wide text-white border border-white/20 rounded-sm no-underline"
@@ -51,26 +61,39 @@ const { links } = Astro.props;
         id="mobile-menu-close-btn"
         type="button"
         class="flex justify-center items-center w-11 h-11 text-white focus:outline-none"
-        aria-label="Navigationsmenü schließen"
+        aria-label={t('nav.drawer.close')}
       >
-        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="18" y1="6" x2="6" y2="18" />
-          <line x1="6" y1="6" x2="18" y2="18" />
+        <svg
+          class="w-6 h-6"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
         </svg>
       </button>
     </div>
   </div>
 
   <!-- Main Navigation Links List (Top-Left Aligned) -->
-  <nav aria-label="Mobile Navigation Drawer" class="flex flex-col items-start text-left gap-6 px-4 md:px-12 pt-8 pb-28">
-    {links.map((link) => (
-      <a
-        href={link.href}
-        class="text-2xl font-bold tracking-wide uppercase text-white hover:text-brand-gold no-underline transition-colors"
-      >
-        {link.label}
-      </a>
-    ))}
+  <nav
+    aria-label="Mobile Navigation Drawer"
+    class="flex flex-col items-start text-left gap-6 px-4 md:px-12 pt-8 pb-28"
+  >
+    {
+      links.map((link) => (
+        <a
+          href={link.href}
+          class="text-2xl font-bold tracking-wide uppercase text-white hover:text-brand-gold no-underline transition-colors"
+        >
+          {link.label}
+        </a>
+      ))
+    }
   </nav>
 </div>
 
@@ -94,7 +117,12 @@ const { links } = Astro.props;
       menu.setAttribute('aria-hidden', 'false');
     }
     btn?.setAttribute('aria-expanded', 'true');
-    btn?.setAttribute('aria-label', 'Navigationsmenü schließen');
+    // Read from data-label-close (server-rendered by NavBar.astro via
+    // src/lib/i18n/ui.ts), not a hardcoded literal — a hardcoded string here
+    // would render German aria-labels on any future non-German page, and
+    // would cost this CSP-hash-pinned script a new hash per locale, since its
+    // bytes would then differ per language (see nav.ts's module comment).
+    if (btn?.dataset.labelClose) btn.setAttribute('aria-label', btn.dataset.labelClose);
     document.body.style.overflow = 'hidden';
     closeBtn?.focus();
   }
@@ -107,7 +135,7 @@ const { links } = Astro.props;
       menu.setAttribute('aria-hidden', 'true');
     }
     btn?.setAttribute('aria-expanded', 'false');
-    btn?.setAttribute('aria-label', 'Navigationsmenü öffnen');
+    if (btn?.dataset.labelOpen) btn.setAttribute('aria-label', btn.dataset.labelOpen);
     document.body.style.overflow = '';
   }
 

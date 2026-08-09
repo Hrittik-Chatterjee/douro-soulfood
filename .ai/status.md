@@ -8,7 +8,9 @@ D'ouro Soulfood Bistro site — Astro 6 + Tailwind v4 + Keystatic, deployed to C
 
 ## Active task
 
-SEO Phase 1 (German-only) landed: build-time CSP hash generation, one schema.org `@graph` per page, required meta descriptions, trailing-slash canonicals, generated `/llms.txt`, real image alt text. **Phases 2-4 (i18n infrastructure, English activation, zh/pt) are NOT started** — see `docs/seo.md` and the plan.
+SEO Phase 1 (German-only) landed: build-time CSP hash generation, one schema.org `@graph` per page, required meta descriptions, trailing-slash canonicals, generated `/llms.txt`, real image alt text — see `docs/seo.md`.
+
+i18n Phase 2 landed: `LIVE_LOCALES` gate, `astro.config.mjs` i18n + sitemap config, `nav.ts` de-dup, `verify-i18n.mjs`. **de-AT remains the only *live* locale — no English/Chinese/Portuguese content ships.** `hreflang`/`<xhtml:link>` structurally cannot appear with one live locale (verified). **Phases 3-4 (English activation, zh/pt) are NOT started** — see `docs/i18n.md`.
 
 ## Next best action
 

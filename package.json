@@ -16,7 +16,8 @@
     "serve:dist": "node scripts/serve-dist.mjs",
     "lhci": "lhci autorun",
     "check:csp": "node scripts/checks/verify-csp-hashes.mjs",
-    "check:hours": "node --experimental-strip-types scripts/checks/verify-hours.mjs"
+    "check:hours": "node --experimental-strip-types scripts/checks/verify-hours.mjs",
+    "check:i18n": "node --experimental-strip-types scripts/checks/verify-i18n.mjs"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^13.0.0",

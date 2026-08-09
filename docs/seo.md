@@ -18,12 +18,12 @@ attestation:
 summary: "How SEO works in this repo: Base.astro's head contract, the one-@graph-per-page rule, the build-time CSP hash coupling, trailing-slash canonicals, generated llms.txt, and the facts still awaiting business confirmation."
 load_when: "Meta tags, structured data, canonical/sitemap changes, llms.txt, image alt text."
 token_budget: 1200
-related: [".ai/packs/seo.okf.md", "docs/security.md", "src/lib/site.ts", "src/lib/hours.ts"]
+related: [".ai/packs/seo.okf.md", "docs/security.md", "docs/i18n.md", "src/lib/site.ts", "src/lib/hours.ts"]
 ---
 
 # SEO: D'ouro Soulfood
 
-Single locale today: **de-AT**. There is no i18n routing, no `hreflang`, no `og:locale:alternate`. See the i18n rollout plan before adding any.
+Single locale today: **de-AT**. `astro.config.mjs` does have `i18n` and sitemap `i18n` config (Phase 2, see `docs/i18n.md`), but with one live locale it structurally cannot emit `hreflang` or `<xhtml:link>` — verified, not assumed. No `og:locale:alternate` either. See `docs/i18n.md` before adding a locale.
 
 ## The head contract (`src/layouts/Base.astro`)
 

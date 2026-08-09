@@ -20,6 +20,7 @@ Read `AGENTS.md` first. This file is the second thing to read, always. It tells 
 | Prebuilt components | `.ai/packs/prebuilt-components.okf.md` → `docs/prebuilt-components.md` | Borrowing an external component pattern | ~300 + full doc |
 | Visual outcomes | `.ai/packs/visual-outcomes.okf.md` → `src/pages/dev/ui.astro` | Any UI component change needing visual verification | ~300 |
 | SEO | `.ai/packs/seo.okf.md` → `docs/seo.md` | Meta tags, structured data, canonical/sitemap, llms.txt, image alt | ~300 + full |
+| i18n | `.ai/packs/i18n.okf.md` → `docs/i18n.md` | Adding a locale, i18n/sitemap config, nav/UI strings, hreflang | ~350 + full |
 
 ## Where things live
 - **Active tasks**: `.ai/tasks/active/` — in-progress outcome tasks, OKF format.

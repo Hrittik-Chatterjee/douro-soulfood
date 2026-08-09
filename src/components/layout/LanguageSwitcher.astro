@@ -1,0 +1,27 @@
+---
+/**
+ * LanguageSwitcher — renders nothing while `LIVE_LOCALES` holds fewer than 2
+ * entries.
+ *
+ * This is deliberate, not a placeholder: a switcher with one option is worse
+ * than no switcher (a control that does nothing on click). No consumer needs
+ * to guard the import with a live-locale check — the guard lives here, once,
+ * so a future Phase 3 that adds `en` to `LIVE_LOCALES` makes this component
+ * start rendering automatically, with no call-site change required.
+ */
+import { LIVE_LOCALES, LOCALE_REGISTRY } from '@/lib/i18n/locales';
+
+const liveLocales = LOCALE_REGISTRY.filter((l) => LIVE_LOCALES.includes(l.code));
+---
+
+{
+  liveLocales.length >= 2 && (
+    <nav aria-label="Sprache wählen" class="flex items-center gap-2">
+      {liveLocales.map((locale) => (
+        <a href={`/${locale.code}/`} hreflang={locale.code} class="text-sm no-underline">
+          {locale.label}
+        </a>
+      ))}
+    </nav>
+  )
+}
