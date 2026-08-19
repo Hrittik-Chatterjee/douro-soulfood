@@ -24,7 +24,7 @@
     "coordinates": "REQUIRES_CLIENT_CONFIRMATION"
   },
   "contact": {
-    "phone": "+43 676 4231921",
+    "phone": "+43 677 63130499",
     "instagram": "@dourosoulfoodsalzburg",
     "email": "REQUIRES_CLIENT_CONFIRMATION",
     "website": "REQUIRES_CLIENT_CONFIRMATION"
@@ -99,7 +99,7 @@
   "cta": {
     "primary": {
       "text": "Reserve a table",
-      "action": "Call +43 676 4231921",
+      "action": "Call +43 677 63130499",
       "type": "phone_call"
     },
     "secondary": {

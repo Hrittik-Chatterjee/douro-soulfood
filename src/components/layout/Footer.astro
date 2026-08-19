@@ -36,8 +36,9 @@ const {
     href: siteSettings.lieferando_url || 'https://www.lieferando.at/en/menu/douro',
   },
   address = [`${siteSettings.address_line1}, ${siteSettings.postal_code} ${siteSettings.city}`],
-  phone = siteSettings.phone || '+43 676 4231921',
-  phoneHref = `tel:${(siteSettings.phone || '+43 676 4231921').replace(/[^+\d]/g, '')}`,
+  // Original fallback: phone = siteSettings.phone || '+43 676 4231921',
+  phone = siteSettings.phone || '+43 677 63130499',
+  phoneHref = `tel:${(siteSettings.phone || '+43 677 63130499').replace(/[^+\d]/g, '')}`,
   legalLinks = [
     { label: 'Impressum', href: '/impressum' },
     { label: 'Datenschutz', href: '/datenschutz' },
