@@ -18,6 +18,7 @@ Astro 6 + Tailwind v4 + Keystatic CMS restaurant marketing site for D'ouro Soulf
 - `class:list={[...]}` for conditional classes. No `cn()`/`clsx` helper exists — don't reintroduce one.
 - `keystatic.config.ts` and `src/content.config.ts` define the same content shapes independently — keep them hand-synced on any schema change.
 - Astro `<Image>` for all `src/pages/` image usage (achieved as of IMG-01/CMS-01) — don't reintroduce raw `<img>` in page-level grids.
+- No unrequested UI resizing or layout changes — keep verified component dimensions and typography (e.g. `MobileBottomBar`'s compact `min-h-11` and `text-sm`) intact unless explicitly instructed.
 
 ## Where to read next (load only what the task needs)
 - `.ai/INDEX.md` — full doc map, token budgets, routing by task type. **Load this second, always.**

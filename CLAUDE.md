@@ -39,3 +39,12 @@ Playwright and Lighthouse both need a Chromium binary and may not run in a sandb
 - **Images**: `src/pages/**` uses Astro's `<Image>` component, not raw `<img>`, for page-level grids.
 - **Ordering flow**: no cart/checkout in this codebase — the site's only "order" action hands off to an external Lieferando link.
 - **Docs**: deeper technical/design/content decisions live in `docs/` (architecture, design-system, components, prd) and `.ai/decisions/*.okf.md` (settled calls — check before proposing to redo one). `.ai/INDEX.md` is the router into all of it.
+
+## UI & Visual Stability Rules (DO NOT BREAK UI)
+
+- **No Unrequested UI Resizing or Refactoring**: Never arbitrarily alter established component dimensions, heights, paddings, fonts, or component hierarchy (e.g., in `MobileBottomBar`, `NavBar`, `HeroSection`) unless explicitly instructed by the user.
+- **Preserve Tested Component Sizing**:
+  - `MobileBottomBar.astro`: Keep buttons at the compact `min-h-11` (44px) height and `text-sm` (14px) typography. Do not inflate buttons or alter their brand styling.
+  - Maintain verified responsive breakpoints (`lg:hidden` on mobile/tablet bar, `lg:flex` on desktop nav).
+- **Avoid Speculative "Improvements"**: Do not make speculative adjustments to touch targets, typography scales, or layouts under the guise of general audits without explicit user approval.
+- **Visual Verification**: Before finishing any UI task, verify layout integrity across mobile (<768px), tablet (768–1023px), and desktop (1024px+) viewports.
