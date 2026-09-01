@@ -35,9 +35,9 @@ test.describe('Contact page — content', () => {
   test('phone number links to correct tel: href', async ({ page }) => {
     // Scoped for the same reason: the phone number is also a tel: link in the
     // Footer and in MobileBottomBar's "Jetzt anrufen" button (3 matches total).
-    const phoneLink = page.locator('#main-content a[href="tel:+4367763130499"]');
+    const phoneLink = page.locator('#main-content a[href="tel:+436764231921"]');
     await expect(phoneLink).toBeVisible();
-    await expect(phoneLink).toHaveText('+43 677 63130499');
+    await expect(phoneLink).toHaveText('+43 676 4231921');
   });
 
   test('opening hours list is visible with all 7 days', async ({ page }) => {
